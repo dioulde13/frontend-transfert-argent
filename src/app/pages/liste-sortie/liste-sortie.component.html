@@ -1,0 +1,763 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card bg-transparent">
+          <div class="card-body p-0">
+            <div class="profile-image relative">
+              <img
+              src="/assets/images/transfert.jpg"
+              class="img-fluid rounded w-full"
+              alt="profile-image"
+              style="height: 200px; object-fit: cover;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row m-0">
+      <div class="col-lg-12 card-profile">
+        <div class="card card-stretch h-full">
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex flex-wrap items-center justify-between breadcrumb-content"
+                    >
+                      <h5>Liste des Sorties</h5>
+                      <div>
+                        <a
+                          href="#"
+                          class="btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#modifier-devise-modal"
+                          >Devise</a
+                        >
+                      </div>
+                      <div>
+                        <a
+                          href="#"
+                          class="btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#annuler-entre-modal"
+                          >Annuler Sortie</a
+                        >
+                      </div>
+                      <div>
+                        <a
+                          href="#"
+                          class="btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#valider-sortie-modal"
+                          >Valider Sortie</a
+                        >
+                      </div>
+                      <div
+                        class="d-flex flex-wrap items-center justify-between"
+                      >
+                        <div class="pl-3 btn-new border-left">
+                          <a
+                            href="#"
+                            class="btn btn-primary"
+                            data-target="#new-project-modal"
+                            data-toggle="modal"
+                            >Ajouter nouveau</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-3 d-flex mb-3 mb-md-0">
+                  <input
+                    type="date"
+                    id="startDate"
+                    class="form-control"
+                    placeholder="Date Début"
+                    style="border-radius: 25px"
+                  />
+                </div>
+                <div class="col-md-3 d-flex mb-3 mb-md-0">
+                  <input
+                    type="date"
+                    id="endDate"
+                    class="form-control"
+                    placeholder="Date Fin"
+                    style="border-radius: 25px"
+                  />
+                </div>
+                <div class="col-md-3 d-flex">
+                  <button
+                    id="btnFilter"
+                    class="btn btn-primary"
+                    (click)="filtrerSortieDates()"
+                    style="
+                      border-radius: 60px;
+                      padding: 5px 10px;
+                      font-size: 14px;
+                    "
+                  >
+                    Filtrer
+                  </button>
+                </div>
+                <div class="col-md-3">
+                  <div style="font-weight: bold; margin-top: 10px">
+                    Total Montant : {{ totalMontant | number }} GNF
+                  </div>
+                  <div style="font-weight: bold; margin-top: 2px">
+                    Total Montant : {{ totalMontantDevise | number }} XOF
+                  </div>
+                </div>
+              </div>
+
+              <table
+                id="datatable"
+                class="w-full border-collapse border border-gray-300"
+              >
+                <thead>
+                  <tr class="bg-blue-500 text-white">
+                    <th>Code generer</th>
+                    <th>code</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Pays</th>
+                    <th>Expéditeur</th>
+                    <th>Receveur</th>
+                    <th>Téléphone Recev</th>
+                    <th>Montant XOF</th>
+                    <th>Prix GNF</th>
+                    <th>Montant GNF</th>
+                    <th class="p-1 border">Montant payé (GNF)</th>
+                    <th class="p-1 border">Montant restant (GNF)</th>
+                    <th>Status</th>
+                    <!-- <th>Action</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let result of allresultat"
+                    class="hover:bg-gray-100"
+                  >
+                    <td class="text-center">{{ result.code }}</td>
+                    <td class="text-center">{{ result.codeEnvoyer }}</td>
+                    <td class="p-1 border">{{ result.nomCLient }}</td>
+                    <td>
+                      {{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}
+                    </td>
+                    <td class="text-center">{{ result.pays_exp }}</td>
+                    <td class="text-center">{{ result.expediteur }}</td>
+                    <td class="text-center">{{ result.receveur }}</td>
+                    <td class="text-center">{{ result.telephone_receveur }}</td>
+                    <td class="text-center">
+                      {{ result.montant | currency : "" : "" : "1.0-0" }}
+                      {{ result.signe_2 }}
+                    </td>
+                    <td class="text-center">
+                      {{ result.prix_2 | currency : "" : "" : "1.0-0" }}
+                      {{ result.signe_1 }}
+                    </td>
+                    <td class="p-1 border">
+                      {{
+                        result.montant_gnf === 0
+                          ? (result.montantClient
+                              | currency : "" : "" : "1.0-0") + " GNF"
+                          : (result.montant_gnf
+                              | currency : "" : "" : "1.0-0") + " GNF"
+                      }}
+                    </td>
+                    <!-- <td>
+                      {{ result.montant_gnf | currency : "" : "" : "1.0-0" }}
+                      {{ result.signe_1 }}
+                    </td> -->
+                    <td class="p-1 border">
+                      {{ result.montant_payer | currency : "" : "" : "1.0-0" }}
+                      {{ result.signe_1 }}
+                    </td>
+                    <td class="p-1 border">
+                      {{
+                        result.montant_restant | currency : "" : "" : "1.0-0"
+                      }}
+                      {{ result.signe_1 }}
+                    </td>
+                    <td>{{ result.status }}</td>
+                    <!-- <td *ngIf="result.status === 'NON PAYEE'">
+                      <button
+                        class="btn btn-warning btn-sm"
+                        data-toggle="modal"
+                        data-target="#valider-sortie-modal"
+                        (click)="validerSortieModal(result)"
+                      >
+                        Valider
+                      </button>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="valider-sortie-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProjectModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Valider sortie</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="valideSortieForm" (ngSubmit)="valideSortie()">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="code_sortie">Code</label>
+              <input
+                id="code_sortie"
+                name="code_sortie"
+                formControlName="code_sortie"
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="prix_2">Prix</label>
+              <input
+                id="prix_2"
+                name="prix_2"
+                formControlName="prix_2"
+                class="form-control"
+                type="number"
+              />
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="devise">Partenaire</label>
+              <select
+                class="form-control"
+                id="partenaire"
+                formControlName="partenaireId"
+                required
+              >
+                <option value="" disabled selected>
+                  Sélectionnez un partenaire
+                </option>
+                <option
+                  *ngFor="let partenaire of allPartenaire"
+                  [value]="partenaire.id"
+                >
+                  {{
+                    partenaire.prenom +
+                      " " +
+                      partenaire.nom +
+                      " " +
+                      partenaire.pays +
+                      " " +
+                      (partenaire.montant_preter | currency : "" : "" : "1.0-0")
+                  }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="valideSortieForm.invalid || isLoadingValiderSortie"
+            >
+              <span *ngIf="isLoadingValiderSortie">Validation en cours...</span>
+              <span *ngIf="!isLoadingValiderSortie">Valider</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modifier-devise-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <table
+          class="table data-table table-striped table-flush"
+          style="width: 100%"
+        >
+          <thead>
+            <tr class="text-muted">
+              <th class="border px-4 py-2">Pays depart</th>
+              <th class="border px-4 py-2">Pays arriver</th>
+              <th class="border px-4 py-2">Prix devise</th>
+              <th class="border px-4 py-2">Prix correspond</th>
+              <th class="border px-4 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let result of allDevise">
+              <td class="border px-4 py-2">{{ result.paysDepart }}</td>
+              <td class="border px-4 py-2">{{ result.paysArriver }}</td>
+              <td class="border px-4 py-2">
+                {{
+                  (result.prix_1 | currency : "" : "" : "1.0-0") +
+                    " " +
+                    result.signe_2
+                }}
+              </td>
+              <td class="border px-4 py-2">
+                {{
+                  (result.prix_2 | currency : "" : "" : "1.0-0") +
+                    " " +
+                    result.signe_1
+                }}
+              </td>
+              <td>
+                <button
+                  class="btn btn-warning btn-sm"
+                  data-toggle="modal"
+                  data-target="#edit-modifier-modal"
+                  (click)="onEdit(result)"
+                >
+                  Modifier
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="edit-modifier-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProjectModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Modifier la devise</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editDeviseForm" (ngSubmit)="onUpdate()">
+          <div class="form-group">
+            <label for="edit_paysArriver">Pays Arriver</label>
+            <input
+              id="edit_paysArriver"
+              formControlName="paysArriver"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_signe_2">Signe 2</label>
+            <input
+              id="edit_signe_2"
+              formControlName="signe_2"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_prix_1">Prix 1</label>
+            <input
+              id="edit_prix_1"
+              formControlName="prix_1"
+              class="form-control"
+              type="number"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_prix_2">Prix 2</label>
+            <input
+              id="edit_prix_2"
+              formControlName="prix_2"
+              class="form-control"
+              type="number"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="editDeviseForm.invalid || isLoadingModifier"
+            >
+              <span *ngIf="isLoadingModifier">Modification en cours...</span>
+              <span *ngIf="!isLoadingModifier">Modifier</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="annuler-entre-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Annuler une sortie</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="annulerForm" (ngSubmit)="annulerSortie()">
+          <div class="form-row">
+            <!-- Champ Code -->
+            <div class="form-group col-lg-12">
+              <label for="code">Code</label>
+              <input
+                type="text"
+                id="code"
+                class="form-control"
+                formControlName="codeAnnuler"
+                placeholder="Entrez le code"
+              />
+              <div
+                *ngIf="
+                  annulerForm?.get('codeAnnuler')?.invalid &&
+                  annulerForm?.get('codeAnnuler')?.touched
+                "
+                class="text-danger"
+              >
+                Ce champ est obligatoire. Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger"
+              [disabled]="annulerForm.invalid || isLoadingAnnuler"
+            >
+              <span *ngIf="isLoadingAnnuler">Annulation en cours...</span>
+              <span *ngIf="!isLoadingAnnuler">Valider</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="new-project-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Ajouter une nouvelle sortie</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              id="details-tab"
+              data-toggle="tab"
+              href="#details"
+              role="tab"
+              aria-controls="details"
+              aria-selected="true"
+            >
+              Sortie
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="paiement-tab"
+              data-toggle="tab"
+              href="#paiement"
+              role="tab"
+              aria-controls="paiement"
+              aria-selected="false"
+            >
+              Autre
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+          <!-- Onglet Détails -->
+          <div
+            class="tab-pane fade show active"
+            id="details"
+            role="tabpanel"
+            aria-labelledby="details-tab"
+          >
+            <form [formGroup]="sortieForm" (ngSubmit)="ajouterSortie()">
+              <div class="form-row">
+                <div class="form-group col-lg-12">
+                  <label for="codeEnvoyer">Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="codeEnvoyer"
+                    formControlName="codeEnvoyer"
+                    placeholder="Code du sortie"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="expediteur">Expéditeur</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="expediteur"
+                    formControlName="expediteur"
+                    placeholder="Nom de l'expéditeur"
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="receveur">Receveur</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="receveur"
+                    formControlName="receveur"
+                    placeholder="Nom du receveur"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="telephoneReceveur">Téléphone du receveur</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="telephoneReceveur"
+                    formControlName="telephone_receveur"
+                    placeholder="Téléphone"
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="devise">Pays destination</label>
+                    <select
+                      class="form-control"
+                      id="devise"
+                      formControlName="deviseId"
+                      required
+                    >
+                      <option value="" disabled selected>
+                        Sélectionnez un pays
+                      </option>
+                      <option
+                        *ngFor="let devise of allDevise"
+                        [value]="devise.id"
+                      >
+                        {{ devise.paysArriver }}
+                        {{ devise.prix_1 | currency : "" : "" : "1.0-0" }}
+                        {{ devise.signe_2 }} →
+                        {{ devise.prix_2 | currency : "" : "" : "1.0-0" }}
+                        {{ devise.signe_1 }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="devise">Partenaire</label>
+                    <select
+                      class="form-control"
+                      id="partenaire"
+                      formControlName="partenaireId"
+                      required
+                    >
+                      <option value="" disabled selected>
+                        Sélectionnez un partenaire
+                      </option>
+                      <option
+                        *ngFor="let partenaire of allPartenaire"
+                        [value]="partenaire.id"
+                      >
+                        {{
+                          partenaire.prenom +
+                            " " +
+                            partenaire.nom +
+                            " " +
+                            partenaire.pays +
+                            " " +
+                            (partenaire.montant_preter
+                              | currency : "" : "" : "1.0-0")
+                        }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="montant">Montant</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="montant"
+                    formControlName="montant"
+                    placeholder="Montant en CFA"
+                    [(ngModel)]="montant"
+                    [ngModel]="montant | currencyFormat"
+                    (input)="onInputChange($event)"
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Annuler
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <span *ngIf="loading">Création en cours...</span>
+                  <span *ngIf="!loading">Ajouter</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="paiement"
+            role="tabpanel"
+            aria-labelledby="paiement-tab"
+          >
+            <form
+              [formGroup]="sortieFormAutre"
+              (ngSubmit)="ajouterSortieAutres()"
+            >
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="nomCLient">Nom client</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nomCLient"
+                    formControlName="nomCLient"
+                    placeholder="Nom CLient"
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="montantClient">Montant</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="montantClient"
+                    formControlName="montantClient"
+                    placeholder="Montant client"
+                    [(ngModel)]="montantClient"
+                    [ngModel]="montantClient | currencyFormat"
+                    (input)="onInputChangeMontantClient($event)"
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="!sortieFormAutre.valid || isloadingEntreAutre"
+                >
+                  <span *ngIf="isloadingEntreAutre">Création en cours...</span>
+                  <span *ngIf="!isloadingEntreAutre">Ajouter</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

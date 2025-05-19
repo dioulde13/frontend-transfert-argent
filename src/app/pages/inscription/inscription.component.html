@@ -1,0 +1,163 @@
+<div
+  class="flex justify-center items-center min-h-screen bg-gray-100 bg-cover bg-center bg-no-repeat"
+  style="
+    background: url('/assets/images/inscription.jpg')
+      no-repeat center center / cover;
+  "
+>
+<div class="container mt-4">
+  <div class="card shadow-sm p-4">
+    <h4 class="text-center mb-4 text-primary">Ajouter un Utilisateur</h4>
+    <form [formGroup]="userForm" (ngSubmit)="addUser()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="nom" class="form-label fw-bold">Nom</label>
+          <input
+            type="text"
+            class="form-control rounded-3"
+            id="nom"
+            formControlName="nom" 
+            placeholder="Nom"
+          />
+          <small
+            class="text-danger"
+            *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched"
+          >
+            Nom requis (min 2 caractères)
+          </small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="prenom" class="form-label fw-bold">Prénom</label>
+          <input
+            type="text"
+            class="form-control rounded-3"
+            id="prenom"
+            formControlName="prenom"
+            placeholder="Prénom"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              userForm.get('prenom')?.invalid && userForm.get('prenom')?.touched
+            "
+          >
+            Prénom requis (min 2 caractères)
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="telephone" class="form-label fw-bold">Téléphone</label>
+          <input
+            type="text"
+            class="form-control rounded-3"
+            id="telephone"
+            formControlName="telephone"
+            placeholder="Téléphone"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              userForm.get('telephone')?.invalid &&
+              userForm.get('telephone')?.touched
+            "
+          >
+            Numéro invalide (8-15 chiffres)
+          </small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label fw-bold">Email</label>
+          <input
+            type="email"
+            class="form-control rounded-3"
+            id="email"
+            formControlName="email"
+            placeholder="Email"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              userForm.get('email')?.invalid && userForm.get('email')?.touched
+            "
+          >
+            Email invalide
+          </small>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="sign" class="form-label fw-bold">Signe</label>
+          <input
+            type="text"
+            class="form-control rounded-3"
+            id="sign"
+            formControlName="sign"
+            placeholder="Signe"
+          />
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="sign_dollar" class="form-label fw-bold"
+            >Signe Dollars</label
+          >
+          <input
+            type="text"
+            class="form-control rounded-3"
+            id="sign_dollar"
+            formControlName="sign_dollar"
+            placeholder="Signe Dollars"
+          />
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="sign_euro" class="form-label fw-bold">Signe Euro</label>
+          <input
+            type="text"
+            class="form-control rounded-3"
+            id="sign_euro"
+            formControlName="sign_euro"
+            placeholder="Signe Euro"
+          />
+        </div>
+      </div> -->
+
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label for="password" class="form-label fw-bold">Mot de passe</label>
+          <input
+            type="password"
+            class="form-control rounded-3"
+            id="password"
+            formControlName="password"
+            placeholder="Mot de passe"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              userForm.get('password')?.invalid &&
+              userForm.get('password')?.touched
+            "
+          >
+            Minimum 6 caractères
+          </small>
+        </div>
+      </div>
+
+      <div class="d-grid">
+        <button
+          type="submit"
+          class="btn btn-primary rounded-3 fw-bold"
+          [disabled]="userForm.invalid || isSubmitting"
+        >
+          {{ isSubmitting ? "Ajout en cours..." : "Ajouter" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+

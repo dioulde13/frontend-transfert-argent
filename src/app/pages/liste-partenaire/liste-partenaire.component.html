@@ -1,0 +1,339 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card bg-transparent">
+          <div class="card-body p-0">
+            <div class="profile-image relative">
+              <img
+              src="/assets/images/transfert.jpg"
+              class="img-fluid rounded w-full"
+              alt="profile-image"
+              style="height: 200px; object-fit: cover;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row m-0">
+      <div class="col-lg-12 card-profile">
+        <div class="card card-stretch h-full">
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex flex-wrap items-center justify-between breadcrumb-content"
+                    >
+                      <h5>Liste des partenaires</h5>
+                      <div
+                        class="d-flex flex-wrap items-center justify-between"
+                      >
+                        <div class="pl-3 btn-new border-left">
+                          <a
+                            href="#"
+                            class="btn btn-primary"
+                            data-target="#new-project-modal"
+                            data-toggle="modal"
+                            >Ajouter nouveau</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <table
+                datatable
+                [dtOptions]="dtoptions"
+                [dtTrigger]="dtTrigger"
+                class="table data-table table-striped table-flush"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr class="text-muted">
+                    <th class="border px-4 py-2">Nom</th>
+                    <th class="border px-4 py-2">Prenom</th>
+                    <th class="border px-4 py-2">Pays</th>
+                    <th class="border px-4 py-2">Solde</th>
+                    <!-- <th class="border px-4 py-2">Solde avec echange</th> -->
+                    <th>Action</th> 
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let result of allresultat"
+                    class="hover:bg-gray-100 even:bg-gray-50"
+                  >
+                    <td class="border px-4 py-2">{{ result.nom }}</td>
+                    <td class="border px-4 py-2">{{ result.prenom }}</td>
+                    <td class="border px-4 py-2">{{ result.pays }}</td>
+                    <td class="border px-4 py-2">
+                      {{ result.montant_preter | currency : "" : "" : "1.0-0" }}
+                      {{
+                        result.pays === "Sénégal" ||
+                        result.pays === "Guinée-Bissau"
+                          ? "XOF"
+                          : result.pays === "France"
+                          ? "EURO"
+                          : "USD"
+                      }}
+                    </td>
+                     <td>
+                      <button
+                        class="btn btn-warning btn-sm"
+                        data-toggle="modal"
+                        data-target="#edit-project-modal"
+                        (click)="onEdit(result)"
+                      >
+                        Modifier
+                      </button>
+                    </td>
+                    <!-- <td class="border px-4 py-2">
+                      <p>
+                        {{
+                          result.montant_credit | currency : "" : "" : "1.0-0"
+                        }}
+                        {{ userInfo.sign }}
+                      </p>
+                      <p>
+                        {{
+                          result.montant_credit_dollar
+                            | currency : "" : "" : "1.0-0"
+                        }}
+                        {{ userInfo.sign_dollar }}
+                      </p>
+                      <p>
+                        {{
+                          result.montant_credit_euro
+                            | currency : "" : "" : "1.0-0"
+                        }}
+                        {{ userInfo.sign_euro }}
+                      </p>
+                    </td> -->
+                    <!-- <td>
+                      <button
+                        class="btn btn-warning btn-sm"
+                        data-toggle="modal"
+                        data-target="#edit-rembourser-modal"
+                        (click)="onPartenaireEdit(result)"
+                      >
+                        rembourser
+                      </button>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div
+  class="modal fade"
+  id="edit-project-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProjectModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Modifier un Partenaire</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="modifierPartenaireForm" (ngSubmit)="onUpdate()">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input
+              id="nom"
+              formControlName="nom"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prenom</label>
+            <input
+              id="prenom"
+              formControlName="prenom"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="pays">Pays</label>
+            <input
+              id="pays"
+              formControlName="pays"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="montant_preter">Montant</label>
+            <input
+              id="montant_preter"
+              formControlName="montant_preter"
+              class="form-control"
+              type="number"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="modifierPartenaireForm.invalid || isLoadingModif"
+            >
+              <span *ngIf="isLoadingModif">Modification en cours...</span>
+              <span *ngIf="!isLoadingModif">Modifier</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="edit-rembourser-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProjectModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Rembourser un partenaire</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="editPartenaireForm"
+          (ngSubmit)="onPartenaireUpdate()"
+        >
+          <div class="form-group col-lg-12">
+            <label for="deviseId">Devise</label>
+            <select
+              class="form-control"
+              id="deviseId"
+              formControlName="deviseId"
+            >
+              <option value="" disabled selected>
+                Sélectionnez une devise
+              </option>
+              <option *ngFor="let devise of uniqueDevise" [value]="devise.id">
+                <span>{{ devise.signe_2 }}</span>
+              </option>
+            </select>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!editPartenaireForm.valid">Valider</button>
+          </div> -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!editPartenaireForm.valid || loadingRembourser"
+            >
+              <span *ngIf="loadingRembourser">Validation en cours...</span>
+              <span *ngIf="!loadingRembourser">Valider</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="new-project-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="container">
+        <h2>Ajouter un Partenaire</h2>
+        <form [formGroup]="partenaireForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input id="nom" formControlName="nom" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input id="prenom" formControlName="prenom" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="pays">Selectioner un pays</label>
+            <select id="pays" class="form-control" formControlName="pays">
+              <option value="Sénégal">Sénégal</option>
+              <option value="Guinée-Bissau">Guinée-Bissau</option>
+              <!-- <option value="France">France</option>
+              <option value="ETATS-UNIS">ETATS-UNIS</option> -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="montant_preter">Montant Prêté</label>
+            <input
+              id="montant_preter"
+              formControlName="montant_preter"
+              class="form-control"
+              type="text"
+              [(ngModel)]="montant_preter"
+              [ngModel]="montant_preter | currencyFormat"
+              (input)="onInputChange($event)"
+              [disabled]="isDisabled"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <span *ngIf="isLoading">Création en cours...</span>
+              <span *ngIf="!isLoading">Ajouter</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

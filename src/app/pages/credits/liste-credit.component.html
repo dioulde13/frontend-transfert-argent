@@ -1,0 +1,295 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card bg-transparent">
+          <div class="card-body p-0">
+            <div class="profile-image relative">
+              <img
+                class="img-fluid rounded w-full"
+                alt="profile-image"
+                src="/assets/images/transfert.jpg"
+                alt="profile-image"
+                style="height: 200px; object-fit: cover;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row m-0">
+      <div class="col-lg-12 card-profile">
+        <div class="card card-stretch h-full">
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex flex-wrap items-center justify-between breadcrumb-content"
+                    >
+                      <h5>Liste des credit</h5>
+                      <div
+                        class="d-flex flex-wrap items-center justify-between"
+                      >
+                       <div>
+                      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#annuler-credit-modal">Annuler
+                        crédit</a>
+                    </div>
+                        <div class="pl-3 btn-new border-left">
+                          <a
+                            href="#"
+                            class="btn btn-primary"
+                            data-target="#new-project-modal"
+                            data-toggle="modal"
+                            >Ajouter nouveau</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-md-3 d-flex mb-3 mb-md-0">
+                  <input
+                    type="date"
+                    id="startDate"
+                    class="form-control"
+                    placeholder="Date Début"
+                    style="border-radius: 25px"
+                  />
+                </div>
+                <div class="col-md-3 d-flex mb-3 mb-md-0">
+                  <input
+                    type="date"
+                    id="endDate"
+                    class="form-control"
+                    placeholder="Date Fin"
+                    style="border-radius: 25px"
+                  />
+                </div>
+                <div class="col-md-3 d-flex">
+                  <button
+                    id="btnFilter"
+                    class="btn btn-primary"
+                    (click)="filtrerEntreDates()"
+                    style="
+                      border-radius: 60px;
+                      padding: 5px 10px;
+                      font-size: 14px;
+                    "
+                  >
+                    Filtrer
+                  </button>
+                </div>
+                <div class="col-md-3">
+                  <div style="font-weight: bold; font-size: 15px; margin-top: 10px">
+                    Montant entre : {{ totalMontantEntre | number }} GNF
+                  </div>
+                  <div style="font-weight: bold; font-size: 15px; margin-top: 10px">
+                    Montant sortie : {{ totalMontantSortie | number }} GNF
+                  </div>
+                </div>
+              </div>
+
+              <table
+                id="datatable"
+                class="w-full border-collapse border border-gray-300"
+              >
+                <thead>
+                  <tr class="bg-blue-500 text-white">
+                    <th class="border px-4 py-2">Reference</th>
+                    <th class="border px-4 py-2">Nom</th>
+                    <th class="border px-4 py-2">Date</th>
+                    <th class="border px-4 py-2">Montant</th>
+                    <th class="border px-4 py-2">Montant Paye</th>
+                    <th class="border px-4 py-2">Montant Restant</th>
+                    <th class="border px-4 py-2">Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let result of allresultat"
+                    class="hover:bg-gray-100 even:bg-gray-50"
+                  >
+                    <td class="border px-4 py-2">{{ result.reference }}</td>
+                    <td class="border px-4 py-2">{{ result.nom }}</td>
+                    <td>
+                      {{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}
+                    </td>
+                    <td class="border px-4 py-2">
+                      {{ result.montant | currency : "" : "" : "1.0-0" }} GNF
+                    </td>
+                    <td class="border px-4 py-2">
+                      {{ result.montantPaye | currency : "" : "" : "1.0-0" }}
+                      GNF
+                    </td>
+                    <td class="border px-4 py-2">
+                      {{ result.montantRestant | currency : "" : "" : "1.0-0" }}
+                      GNF
+                    </td>
+                    <td class="border px-4 py-2">
+                      {{ result.type }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal d'annulation -->
+    <div class="modal fade" id="annuler-credit-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Annuler un crédit</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form [formGroup]="annulerCreditForm" (ngSubmit)="annulerCredit()">
+              <div class="form-row">
+                <!-- Champ Code -->
+                <div class="form-group col-md-12">
+                  <label for="reference">Code</label>
+                  <input type="text" id="reference" class="form-control" formControlName="reference"
+                    placeholder="Entrez le code" />
+                  <div *ngIf="
+                      annulerCreditForm?.get('reference')?.invalid &&
+                      annulerCreditForm?.get('reference')?.touched
+                    " class="text-danger">
+                    Ce champ est obligatoire. Ce champ est obligatoire.
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  Annuler
+                </button>
+                <button type="submit" class="btn btn-danger" [disabled]="annulerCreditForm.invalid || isLoadingAnnuler">
+                  <span *ngIf="isLoadingAnnuler">Annulation en cours...</span>
+                  <span *ngIf="!isLoadingAnnuler">Valider</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<div
+  class="modal fade"
+  id="new-project-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="container">
+        <h2>Ajouter un credit</h2>
+        <form [formGroup]="creditForm" (ngSubmit)="onSubmit()">
+          <!-- Champ Nom -->
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input
+              id="nom"
+              formControlName="nom"
+              class="form-control"
+              placeholder="Entrez le nom"
+            />
+            <!-- Message d'erreur -->
+            <div
+              *ngIf="
+                creditForm.get('nom')?.invalid && creditForm.get('nom')?.touched
+              "
+              class="text-danger"
+            >
+              <small>Le nom est obligatoire.</small>
+            </div>
+          </div>
+
+          <!-- Champ Montant -->
+          <div class="form-group">
+            <label for="montant">Montant</label>
+            <input
+              id="montant"
+              formControlName="montant"
+              class="form-control"
+              type="text"
+              placeholder="Entrez le montant"
+              [(ngModel)]="montant"
+              [ngModel]="montant | currencyFormat"
+              (input)="onInputChange($event)"
+            />
+            <!-- Messages d'erreur -->
+            <div
+              *ngIf="
+                creditForm.get('montant')?.invalid &&
+                creditForm.get('montant')?.touched
+              "
+              class="text-danger"
+            >
+              <small *ngIf="creditForm.get('montant')?.hasError('required')"
+                >Le montant est obligatoire.</small
+              >
+              <small *ngIf="creditForm.get('montant')?.hasError('min')"
+                >Le montant doit être supérieur ou égal à 0.</small
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <select id="type" class="form-control" formControlName="type">
+              <option value="ENTRE">Entre</option>
+              <option value="SORTIE">Sortie</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              [disabled]="!creditForm.valid"
+              class="btn btn-primary"
+            >
+              <span *ngIf="loading">Création en cours...</span>
+              <span *ngIf="!loading">Ajouter</span>
+            </button>
+          </div>
+
+          <!-- Bouton de soumission -->
+          <!-- <button 
+              type="submit" 
+              [disabled]="creditForm.invalid" 
+              class="btn btn-primary mt-3">
+              <span *ngIf="loading">Création en cours...</span>
+              <span *ngIf="!loading">Ajouter</span></button>     -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

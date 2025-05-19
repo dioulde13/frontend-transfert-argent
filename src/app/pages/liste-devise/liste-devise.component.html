@@ -1,0 +1,313 @@
+<!-- <div class="container mx-auto p-4 font-sans">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Liste des devises</h1>
+  
+    <div *ngIf="allresultat.length > 0; else noResults">
+      <table class="w-full border-collapse table-auto">
+        <thead>
+          <tr class="bg-gray-200 text-left text-sm font-semibold">
+            <th class="border px-4 py-2">Id</th>
+            <th class="border px-4 py-2">Pays depart</th>
+            <th class="border px-4 py-2">Pays arriver</th>
+            <th class="border px-4 py-2">Prix devise</th>
+            <th class="border px-4 py-2">Prix correspond</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr 
+            *ngFor="let result of allresultat; let i = index"
+            class="hover:bg-gray-100 even:bg-gray-50">
+            <td class="border px-4 py-2">{{ i + 1 }}</td>
+            <td class="border px-4 py-2">{{ result.paysDepart }}</td>
+            <td class="border px-4 py-2">{{ result.paysArriver }}</td>
+            <td class="border px-4 py-2">{{ result.prix_1 +" "+result.signe_2}}</td>
+            <td class="border px-4 py-2">{{ result.prix_2 +" "+result.signe_1}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <ng-template #noResults>
+      <p class="text-center text-gray-600 mt-4">Aucun résultat trouvé.</p>
+    </ng-template>
+  </div>
+   -->
+
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card car-transparent">
+          <div class="card-body p-0">
+            <div class="profile-image position-relative">
+              <img
+              src="/assets/images/transfert.jpg"
+              class="img-fluid rounded w-full"
+              class="img-fluid rounded w-100"
+              alt="profile-image"
+              style="height: 200px; object-fit: cover;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row m-sm-0">
+      <div class="col-lg-12 card-profile">
+        <div class="card card-block card-stretch card-height">
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content"
+                    >
+                      <h5>Liste des devises</h5>
+                      <div
+                        class="d-flex flex-wrap align-items-center justify-content-between"
+                      >
+                        <div class="pl-3 btn-new border-left">
+                          <a
+                            href="#"
+                            class="btn btn-primary"
+                            data-target="#new-project-modal"
+                            data-toggle="modal"
+                            >Ajouter nouveau</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <table
+                id="devise-table"
+                datatable
+                [dtOptions]="dtoptions"
+                [dtTrigger]="dtTrigger"
+                class="table data-table table-striped table-flush"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr class="text-muted">
+                    <th class="border px-4 py-2">Pays depart</th>
+                    <th class="border px-4 py-2">Pays arriver</th>
+                    <th class="border px-4 py-2">Prix devise</th>
+                    <th class="border px-4 py-2">Prix correspond</th>
+                    <th class="border px-4 py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let result of allresultat">
+                    <td class="border px-4 py-2">{{ result.paysDepart }}</td>
+                    <td class="border px-4 py-2">{{ result.paysArriver }}</td>
+                    <td class="border px-4 py-2">
+                      {{
+                        (result.prix_1 | currency : "" : "" : "1.0-0") +
+                          " " +
+                          result.signe_2
+                      }}
+                    </td>
+                    <td class="border px-4 py-2">
+                      {{
+                        (result.prix_2 | currency : "" : "" : "1.0-0") +
+                          " " +
+                          result.signe_1
+                      }}
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-warning btn-sm"
+                        data-toggle="modal"
+                        data-target="#edit-project-modal"
+                        (click)="onEdit(result)"
+                      >
+                        Modifier
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal list start -->
+<div class="modal fade" role="dialog" aria-modal="true" id="new-project-modal">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div
+        class="modal-header d-block text-center pb-3 border-bttom"
+        style="background-color: #d0b72a; color: white"
+      >
+       <img src="/assets/images/transfert.jpg" class="img-fluid rounded w-full" alt="profile-image"
+                style="height: 180px; object-fit: cover;" />
+      </div>
+
+      <div class="container">
+        <!-- <h2>Ajouter une Devise</h2> -->
+        <form [formGroup]="deviseForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="paysArriver">Selectioner un pays</label>
+                <select
+                  id="paysArriver"
+                  class="form-control"
+                  formControlName="paysArriver"
+                >
+                  <option value="Sénégal">Sénégal</option>
+                  <option value="Guinée-Bissau">Guinée-Bissau</option>
+                  <!-- <option value="France">France</option>
+                  <option value="ETATS-UNIS">ETATS-UNIS</option> -->
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="signe_2">Selectioner un signe</label>
+                <select
+                  id="signe_2"
+                  class="form-control"
+                  formControlName="signe_2"
+                >
+                  <option value="XOF">XOF</option>
+                  <option value="USD">USD</option>
+                  <option value="EURO">EURO</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prix_1">Prix 1</label>
+                <input
+                  id="prix_1"
+                  name="prix_1"
+                  formControlName="prix_1"
+                  type="number"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prix_2">Prix 2</label>
+                <input
+                  id="prix_2"
+                  name="prix_2"
+                  formControlName="prix_2"
+                  class="form-control"
+                  type="number"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="deviseForm.invalid || isLoading"
+            >
+              <span *ngIf="isLoading">Création en cours...</span>
+              <span *ngIf="!isLoading">Ajouter</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de modification -->
+<div
+  class="modal fade"
+  id="edit-project-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProjectModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Modifier la devise</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editDeviseForm" (ngSubmit)="onUpdate()">
+          <div class="form-group">
+            <label for="edit_paysArriver">Pays Arriver</label>
+            <input
+              id="edit_paysArriver"
+              formControlName="paysArriver"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_signe_2">Signe 2</label>
+            <input
+              id="edit_signe_2"
+              formControlName="signe_2"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_prix_1">Prix 1</label>
+            <input
+              id="edit_prix_1"
+              formControlName="prix_1"
+              class="form-control"
+              type="number"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_prix_2">Prix 2</label>
+            <input
+              id="edit_prix_2"
+              formControlName="prix_2"
+              class="form-control"
+              type="number"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="editDeviseForm.invalid || isLoadingModif"
+            >
+              <span *ngIf="isLoadingModif">Modification en cours...</span>
+              <span *ngIf="!isLoadingModif">Modifier</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
