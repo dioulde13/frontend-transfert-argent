@@ -2,12 +2,220 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>FrontendTransfertArgent</title>
+  <title>Gestion Transfert Argent</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/assets/css/backend-plugin.min.css">
+  <link rel="stylesheet" href="/assets/css/Scolarité-plus.css?v=1.0.0">
+  <link rel="stylesheet" href="/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+  <link rel="stylesheet" href="/assets/vendor/remixicon/fonts/remixicon.css">
+  
+  <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-calendar/dist/tui-calendar.css">
+  <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css">
+  <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css"> 
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 <body>
+   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+<!-- Backend Bundle JavaScript -->		        
+<script src="/assets/js/backend-bundle.min.js"></script>
+    
+<!-- Table Treeview JavaScript -->
+<script src="/assets/js/table-treeview.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script async src="/assets/js/chart-custom.js"></script>
+<!-- Chart Custom JavaScript -->
+<script async src="/assets/js/slider.js"></script>
+
+<!-- app JavaScript -->
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/datatables-demo.js"></script>
+<script src="/assets/vendor/moment.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>		
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+
+<script>
+(function(jQuery) {
+
+"use strict";
+
+// for apexchart
+function apexChartUpdate(chart, detail) {
+let color = getComputedStyle(document.documentElement).getPropertyValue('--dark');
+if (detail.dark) {
+  color = getComputedStyle(document.documentElement).getPropertyValue('--white');
+}
+chart.updateOptions({
+  chart: {
+    foreColor: color
+  }
+})
+}
+
+// for am chart
+function amChartUpdate(chart, detail) {
+// let color = getComputedStyle(document.documentElement).getPropertyValue('--dark');
+if (detail.dark) {
+// color = getComputedStyle(document.documentElement).getPropertyValue('--white');
+chart.stroke = am4core.color(getComputedStyle(document.documentElement).getPropertyValue('--white'));
+}
+chart.validateData();
+}
+
+/*---------------------------------------------------------------------
+Statisque
+-----------------------------------------------------------------------*/
+
+if (jQuery("#apex-column").length) {
+options = {
+chart: {
+  height: 350,
+  type: "bar"
+},
+plotOptions: {
+  bar: {
+    horizontal: !1,
+    columnWidth: "40%",
+    endingShape: "rounded"
+  }
+},
+dataLabels: {
+  enabled: !1
+},
+stroke: {
+  show: !0,
+  width: 2,
+  colors: ["transparent"]
+},
+colors: ["#234667", "#faaa2d"],
+series: [{
+  name: "Transcations",
+  data: [44, 55, 57, 56, 61, 58, 44, 55, 57, 56, 61, 58]
+}, {
+  name: "Transcations",
+  data: [10, 50, 17, 61, 41, 80, 24, 15, 17, 76, 21, 38]
+}],
+xaxis: {
+  categories: ["Feb", "Feb", "Mar", "Avr", "Mai", "Jun", "Jul", "Jul", "Sept", "Oct", "Dec"]
+},
+yaxis: {
+  title: {
+    text: "GNF (total)"
+  }
+},
+fill: {
+  opacity: 1
+},
+tooltip: {
+  y: {
+    formatter: function(e) {
+      return "GNF " + e + " total"
+    }
+  }
+}
+};
+(chart = new ApexCharts(document.querySelector("#apex-column"), options)).render()
+const body = document.querySelector('body')
+if (body.classList.contains('dark')) {
+apexChartUpdate(chart, {
+  dark: true
+})
+}
+
+document.addEventListener('ChangeColorMode', function (e) {
+apexChartUpdate(chart, e.detail)
+})
+}
+
+
+
+//Chart for Webkit
+
+if (jQuery("#layout1-chart01").length) {   
+var options = {
+series: [75],
+colors: ["#ffffff"],
+chart: {
+height: 250,
+type: 'radialBar',
+toolbar: {
+  show: false
+}
+},
+plotOptions: {
+radialBar: {
+  startAngle: -135,
+  endAngle: 225,
+   hollow: {
+    margin: '10px',
+    size: '70%',
+    background: '#fff',
+    image: undefined,
+    imageOffsetX: 0,
+    imageOffsetY: 0,
+    position: 'front'
+  },
+  track: {
+    background: '#5773FF',
+    strokeWidth: '67%',
+    margin: 0,// margin is in pixels
+  },
+
+  dataLabels: {
+    show: true,
+    name: {
+      offsetY: -10,
+      show: true,
+      color: '#ffffff',
+      fontSize: '17px'
+    },
+    value: {
+      formatter: function(val) {
+        return parseInt(val);
+      },
+      color: '#ffffff',
+      fontSize: '36px',
+      show: true,
+    }
+  }
+}
+},
+stroke: {
+lineCap: 'round'
+},
+labels: ['Percent'],
+};
+
+var chart = new ApexCharts(document.querySelector("#layout1-chart01"), options);
+chart.render();
+}
+})(jQuery);
+</script>
   <app-root></app-root>
 </body>
 </html>
