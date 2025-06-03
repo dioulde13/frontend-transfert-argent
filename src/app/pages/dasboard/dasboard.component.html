@@ -40,6 +40,9 @@
 <div *ngIf="showMontantModal" class="modal fade show d-block" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
     <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+      <div class="modal-header">
+        <button type="button" (click)="closeMontantModal()" class="btn-close" data-bs-dismiss="modal"  aria-label="Close"></button>
+      </div>
       <form class="p-4 shadow rounded" [formGroup]="formRecharger" (ngSubmit)="rechargerSolde()">
         <div class="modal-body">
           <div>
@@ -160,13 +163,13 @@
           </div>
         </div>
 
-        <div class="row justify-content-end">
+        <!-- <div class="row justify-content-end">
           <div class="col-auto">
             <button type="button" class="btn btn-secondary" (click)="closeMontantModal()">
               Annuler
             </button>
           </div>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
@@ -526,7 +529,7 @@
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
             <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Solde avec code</span>
+              <span style="font-size: 20px">Solde</span>
             </div>
             <div>
               <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">

@@ -230,7 +230,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  userInfo: any = null;
+userInfo: any = {}; // au lieu de null
   idUser: string = '';
 
 
@@ -451,6 +451,10 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showMontantModal: boolean = false;
+
+   closeMontantModal() {
+    this.showMontantModal = false;
+  }
   showListeModal: boolean = false;
 
 
@@ -458,9 +462,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showMontantModal = true;
   }
 
-  closeMontantModal() {
-    this.showMontantModal = false;
-  }
+ 
 
   showUserModal: boolean = false;
 

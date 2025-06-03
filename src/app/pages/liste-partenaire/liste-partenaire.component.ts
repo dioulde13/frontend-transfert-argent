@@ -51,7 +51,9 @@ export class ListePartenaireComponent implements OnInit {
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
       pays: [{ value: 0, disabled: true }, Validators.required],
-     montant_preter: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]],
+     montant_preter: [
+      // { value: 0, disabled: true },
+       [Validators.required, Validators.min(0)]],
     });
 
     this.dtoptions = {

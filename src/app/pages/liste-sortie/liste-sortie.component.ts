@@ -354,7 +354,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
             render: (data: string, type: string, row: any) => {
               console.log(row); 
               if (row.montant === 0){
-                return `${row.status} (${row.type_annuler})`;
+                return `${row.status}`;
               } else if(row.montant > 0 && row.type ==="R"){
                 return `${row.status} (${row.type})`;
               }

@@ -4,7 +4,7 @@
   <div class="flex h-full">
     <div class="iq-sidebar sidebar-default">
       <div class="iq-sidebar-logo d-flex align-items-center">
-        <a href="index.html" class="header-logo">
+        <a routerLink="/dashboard" class="header-logo">
           <img src="/assets/images/logo2.png" alt="logo" style="width: 100%" />
         </a>
         <div class="iq-menu-bt-sidebar ml-0">
@@ -16,24 +16,13 @@
           <ul id="iq-sidebar-toggle" class="iq-menu">
             <li class="active">
               <a routerLink="/dashboard" class="svg-icon">
-                <svg
-                  width="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="icon-20"
-                >
-                  <path
-                    opacity="0.4"
+                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-20">
+                  <path opacity="0.4"
                     d="M16.0756 2H19.4616C20.8639 2 22.0001 3.14585 22.0001 4.55996V7.97452C22.0001 9.38864 20.8639 10.5345 19.4616 10.5345H16.0756C14.6734 10.5345 13.5371 9.38864 13.5371 7.97452V4.55996C13.5371 3.14585 14.6734 2 16.0756 2Z"
-                    fill="currentColor"
-                  ></path>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fill="currentColor"></path>
+                  <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z"
-                    fill="currentColor"
-                  ></path>
+                    fill="currentColor"></path>
                 </svg>
                 <span class="ml-4">Tableau de bord</span>
               </a>
@@ -60,24 +49,13 @@
             </li>
 
             <li class="">
-              <a
-                routerLink="/rembourser"
-                style="
+              <a routerLink="/rembourser" style="
                   padding: 1px 30px 15px 30px;
                   display: flex;
                   align-items: center;
-                "
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M10 6L4 12L10 18V14H20V10H10V6Z"
-                  />
+                ">
+                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M10 6L4 12L10 18V14H20V10H10V6Z" />
                 </svg>
                 <span class="ml-4">Retour</span>
               </a>
@@ -120,15 +98,9 @@
 
             <li class="">
               <a routerLink="/depense" style="padding: 1px 30px 15px 30px">
-                <svg
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14v-2H8v-2h3V9l4 4-4 4zm7 0h-2v-2h2v2z"
-                  />
+                <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14v-2H8v-2h3V9l4 4-4 4zm7 0h-2v-2h2v2z" />
                 </svg>
                 <span class="ml-4">Dépense</span>
               </a>
@@ -136,34 +108,19 @@
 
             <li class="">
               <a routerLink="/credit" style="padding: 1px 30px 15px 30px">
-                <svg
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 14h16V6H4v12zm2-7h12v2H6v-2z"
-                  />
+                <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 14h16V6H4v12zm2-7h12v2H6v-2z" />
                 </svg>
                 <span class="ml-4">Crédit</span>
               </a>
             </li>
 
             <li class="">
-              <a
-                routerLink="/payementCredit"
-                style="padding: 1px 30px 15px 30px"
-              >
-                <svg
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h5l-7 7-7-7h5V7z"
-                  />
+              <a routerLink="/payementCredit" style="padding: 1px 30px 15px 30px">
+                <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h5l-7 7-7-7h5V7z" />
                 </svg>
                 <span class="ml-4">Paiement Crédit</span>
               </a>
@@ -171,15 +128,9 @@
 
             <li class="">
               <a routerLink="/partenaire" style="padding: 1px 30px 15px 30px">
-                <svg
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h5l-7 7-7-7h5V7z"
-                  />
+                <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h5l-7 7-7-7h5V7z" />
                 </svg>
                 <span class="ml-4">Partenaire</span>
               </a>
@@ -187,15 +138,9 @@
 
             <li class="">
               <a routerLink="/devise" style="padding: 1px 30px 15px 30px">
-                <svg
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22ZM11 6V12L8 9H10V15L12 12L14 15V9H16L13 12V6H11Z"
-                  />
+                <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22ZM11 6V12L8 9H10V15L12 12L14 15V9H16L13 12V6H11Z" />
                 </svg>
                 <span class="ml-4">Devises</span>
               </a>
@@ -217,47 +162,33 @@
       <div class="iq-top-navbar">
         <div class="iq-navbar-custom">
           <nav class="navbar navbar-expand-lg navbar-light p-0">
-            <div
-              class="iq-navbar-logo d-flex align-items-center justify-content-between"
-            >
+            <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
               <i class="ri-menu-line wrapper-menu"></i>
               <a href="index.html" class="header-logo">
-                <img
-                  src="/assets/images/logo2.png"
-                  alt="logo"
-                  style="width: 100%"
-                />
+                <img src="/assets/images/logo2.png" alt="logo" style="width: 100%" />
               </a>
             </div>
             <div class="navbar-breadcrumb">
               <h5>Tableau de bord</h5>
             </div>
 
-            <div class="dropdown ms-auto">
-              <button
-                class="btn btn-secondary dropdown-toggle d-flex align-items-center"
-                type="button"
-                id="dropdownMenuButton"
-                (click)="toggleDropdown()"
-                [attr.aria-expanded]="isDropdownOpen"
-              >
+            <div class="dropdown ms-auto position-relative">
+              <button class="btn btn-secondary dropdown-toggle d-flex align-items-center" type="button"
+                id="dropdownMenuButton" (click)="toggleDropdown()" [attr.aria-expanded]="isDropdownOpen">
                 <i class="fa-solid fa-user me-2"></i>
               </button>
-              <ul
-                class="dropdown-menu dropdown-menu-start"
-                [class.show]="isDropdownOpen"
-                aria-labelledby="dropdownMenuButton"
-              >
+              <ul class="dropdown-menu" [class.show]="isDropdownOpen" aria-labelledby="dropdownMenuButton"
+                style="left: auto; right: 0;">
                 <li>
-                  <a class="dropdown-item" routerLink="/parametres"
-                    >Paramètres</a
-                  >
+                  <a class="dropdown-item" routerLink="/utilisateur">Paramètres</a>
                 </li>
                 <li>
-                  <a (click)="logout()" class="dropdown-item"> Déconnexion </a>
+                  <a (click)="logout()" class="dropdown-item">Déconnexion</a>
                 </li>
               </ul>
             </div>
+
+
           </nav>
         </div>
       </div>

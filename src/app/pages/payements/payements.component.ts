@@ -70,7 +70,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
   conversionDeviseForm!: FormGroup;
 
 
-   private initFormCaisse(): void {
+  private initFormCaisse(): void {
     this.conversionDeviseForm = this.fb.group({
       montantDevise: ['', Validators.required],
       prixDevise: ['', Validators.required],
@@ -83,16 +83,16 @@ export class PayementsComponent implements OnInit, AfterViewInit {
   soldeTotal: number = 0;
   montantDevise: number = 0;
   prixDevise: number = 0;
-   signe2: string = '';
+  signe2: string = '';
 
   onInputChangeMontantDevise(event: any): void {
     this.montantDevise = event.target.value.replace(/[^0-9,]/g, '');
   }
-   onInputChangePrixDevise(event: any): void {
+  onInputChangePrixDevise(event: any): void {
     this.prixDevise = event.target.value.replace(/[^0-9,]/g, '');
   }
 
- conversionDevise(): void {
+  conversionDevise(): void {
     const formData = this.conversionDeviseForm.value;
 
     const montant = parseFloat(formData.montantDevise.toString().replace(/,/g, ''));
@@ -258,11 +258,17 @@ export class PayementsComponent implements OnInit, AfterViewInit {
                 row.signe === "USD" ? "$" :
                   row.signe === "XOF" ? "XOF" : "GNF";
 
-              const montantTotal = Number(prix / 100) * Number(data);
-
-              return Number(prix) === 0
+              if (row.signe === "XOF") {
+                const montantTotal = Number(prix / 5000) * Number(data);
+                  return Number(prix) === 0
                 ? `${formatted} ${devise}`
                 : `${formatted} ${devise} -> ${formattedPrix} GNF = ${montantTotal.toLocaleString('fr-FR')} GNF`;
+              } else {
+                const montantTotal = Number(prix / 100) * Number(data);
+                  return Number(prix) === 0
+                ? `${formatted} ${devise}`
+                : `${formatted} ${devise} -> ${formattedPrix} GNF = ${montantTotal.toLocaleString('fr-FR')} GNF`;
+              }
             },
           }
           ,
