@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class CalculBeneficeService {
 
-  private apiUrl = 'http://localhost:3000/api/calculBenefices';  // L'URL de votre API
+  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app/api/calculBenefices';  // L'URL de votre API
+  // private apiUrl = 'http://localhost:3000'; 
+
 
   constructor(private http: HttpClient) {}
 

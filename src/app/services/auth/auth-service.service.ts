@@ -6,7 +6,10 @@ import { Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://transferer-hasla-gui-cfyacgvau.up.railway.app'; // Base URL de l'API
+  
+  // private apiUrl = 'http://localhost:3000'; 
+
+  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; 
 
   constructor(private http: HttpClient) {}
 

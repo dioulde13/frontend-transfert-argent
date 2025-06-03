@@ -8,7 +8,9 @@ import { Observable } from 'rxjs';
 export class PayementEchangeService {
 
 // URL de l'API
-   private apiUrl = 'http://localhost:3000'; 
+   private apiUrl = 'https://transferer-hasla-gui-cfyacgvau.up.railway.app'; 
+  // private apiUrl = 'http://localhost:3000'; 
+
  
    constructor(private http: HttpClient) { }
 

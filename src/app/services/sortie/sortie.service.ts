@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class SortieService {
   // URL de l'API
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app';
+  // private apiUrl = 'http://localhost:3000'; 
+
 
   constructor(private http: HttpClient) {}
 
@@ -32,7 +34,7 @@ export class SortieService {
 
   validerSortie(code: number, data: any): Observable<any> {
     return this.http.put(
-      `http://localhost:3000/api/sorties/valider/${code}`,
+      `${this.apiUrl}/api/sorties/valider/${code}`,
       data
     );
   }

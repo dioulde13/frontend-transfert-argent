@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FinanceService {
-  private apiUrl = 'http://localhost:3000/api/benefices'; // URL de l'API Node.js
+  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app/api/benefices';
+  // private apiUrl = 'http://localhost:3000'; 
+
 
   constructor(private http: HttpClient) {}
 

@@ -8,8 +8,10 @@ import { catchError } from 'rxjs/operators';
 })
 export class UtilisateurService {
   constructor(private http: HttpClient) {}
+  // private apiUrl = 'http://localhost:3000'; 
 
-  private apiUrl = 'https://transferer-hasla-gui-cfyacgvau.up.railway.app'; // L'URL de l'API
+
+  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; // L'URL de l'API
 
   // Méthode pour obtenir les utilisateurs
   getUsers(): Observable<any> {
