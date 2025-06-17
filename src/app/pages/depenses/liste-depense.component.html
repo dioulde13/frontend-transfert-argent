@@ -5,12 +5,8 @@
         <div class="card bg-transparent">
           <div class="card-body p-0">
             <div class="profile-image relative">
-              <img
-              src="/assets/images/transfert.jpg"
-              class="img-fluid rounded w-full"
-              alt="profile-image"
-              style="height: 200px; object-fit: cover;"
-              />
+              <img src="/assets/images/transfert.jpg" class="img-fluid rounded w-full" alt="profile-image"
+                style="height: 200px; object-fit: cover;" />
             </div>
           </div>
         </div>
@@ -25,21 +21,12 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
-                    <div
-                      class="d-flex flex-wrap items-center justify-between breadcrumb-content"
-                    >
+                    <div class="d-flex flex-wrap items-center justify-between breadcrumb-content">
                       <h5>Liste des depenses</h5>
-                      <div
-                        class="d-flex flex-wrap items-center justify-between"
-                      >
+                      <div class="d-flex flex-wrap items-center justify-between">
                         <div class="pl-3 btn-new border-left">
-                          <a
-                            href="#"
-                            class="btn btn-primary"
-                            data-target="#new-project-modal"
-                            data-toggle="modal"
-                            >Ajouter nouveau</a
-                          >
+                          <a href="#" class="btn btn-primary" data-target="#new-project-modal"
+                            data-toggle="modal">Ajouter nouveau</a>
                         </div>
                       </div>
                     </div>
@@ -48,10 +35,7 @@
               </div>
 
               <div class="overflow-x-auto">
-                <table
-                  id="datatable"
-                  class="w-full border-collapse border border-gray-300"
-                >
+                <table id="datatable" class="w-full border-collapse border border-gray-300">
                   <thead>
                     <tr class="bg-blue-500 text-white">
                       <th class="border px-4 py-2">Date</th>
@@ -60,10 +44,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      *ngFor="let result of allresultat"
-                      class="hover:bg-gray-100"
-                    >
+                    <tr *ngFor="let result of allresultat" class="hover:bg-gray-100">
                       <td class="p-1 border">
                         {{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}
                       </td>
@@ -82,41 +63,29 @@
     </div>
   </div>
 </div>
-<div
-  class="modal fade"
-  id="new-project-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="modalTitle"
-  aria-hidden="true"
->
+<div class="modal fade" id="new-project-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="container">
         <h2>Ajouter un depense</h2>
         <form [formGroup]="depenseForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
+            <label for="date_creation">Date</label>
+            <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+              placeholder="La date" />
+          </div>
+          <div class="form-group">
             <label for="motif">Motif</label>
             <input id="motif" formControlName="motif" class="form-control" />
           </div>
           <div class="form-group">
             <label for="montant">Montant</label>
-            <input
-              id="montant"
-              formControlName="montant"
-              class="form-control"
-              type="text"
-              [(ngModel)]="montant"
-              [ngModel]="montant | currencyFormat"
-              (input)="onInputChange($event)"
-            />
+            <input id="montant" formControlName="montant" class="form-control" type="text" [(ngModel)]="montant"
+              [ngModel]="montant | currencyFormat" (input)="onInputChange($event)" />
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Annuler
             </button>
             <button type="submit" class="btn btn-primary">

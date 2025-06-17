@@ -1,0 +1,157 @@
+<div class="content-page">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card bg-transparent">
+                    <div class="card-body p-0">
+                        <div class="profile-image relative">
+                            <img src="assets/images/transfert.jpg" class="img-fluid rounded w-full" alt="profile-image"
+                                style="height: 200px; object-fit: cover;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+  class="modal fade"
+  id="valider-orange-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProjectModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Valider</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="valideOrangeForm" (ngSubmit)="valideSortie()">
+          <div class="col-md-12">
+            <div class="form-group"> 
+              <label for="reference">Reference</label>
+              <input
+                id="reference"
+                name="reference"
+                formControlName="reference"
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="valideOrangeForm.invalid || isLoadingValiderSortie"
+            >
+              <span *ngIf="isLoadingValiderSortie">Validation en cours...</span>
+              <span *ngIf="!isLoadingValiderSortie">Valider</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <div class="row m-0">
+            <div class="col-lg-12 card-profile">
+                <div class="card card-stretch h-full">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap items-center justify-between breadcrumb-content">
+                                            <h5>Liste des partenaires OM</h5>
+                                            <div class="d-flex flex-wrap items-center justify-between">
+                                                <div>
+                                                    <a href="#" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#valider-orange-modal">Valider</a>
+                                                </div>
+                                                <div class="pl-3 btn-new border-left">
+                                                    <a href="#" class="btn btn-primary" data-target="#new-project-modal"
+                                                        data-toggle="modal">Ajouter nouveau</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table datatable [dtOptions]="dtoptions" [dtTrigger]="dtTrigger"
+                                class="table data-table table-striped table-flush" style="width: 100%">
+                                <thead>
+                                    <tr class="text-muted">
+                                        <th class="border px-4 py-2">Reference</th>
+                                        <th class="border px-4 py-2">Date</th>
+                                        <th class="border px-4 py-2">Montant</th>
+                                        <th class="border px-4 py-2">Type</th>
+                                        <th class="border px-4 py-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let result of allresultat" class="hover:bg-gray-100 even:bg-gray-50">
+                                        <td class="border px-4 py-2">{{ result.reference }}</td>
+                                        <td>{{ result.createdAt | date : "dd/MM/yyyy HH:mm" }} </td>
+                                        <td class="border px-4 py-2">{{ result.montant | currency : "" : "" : "1.0-0" }}
+                                        </td>
+                                        <td class="border px-4 py-2">{{ result.type }}</td>
+                                        <td class="border px-4 py-2">{{ result.status }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="new-project-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="container">
+                <h2>Ajouter un Partenaire</h2>
+                <form [formGroup]="orangeMoneyForm" (ngSubmit)="onSubmit()">
+
+                    <div class="form-group">
+                        <label for="montant">Montant</label>
+                        <input id="montant" formControlName="montant" class="form-control" type="text"
+                            [(ngModel)]="montant" (input)="onInputChange($event)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <select id="type" class="form-control" formControlName="type">
+                            <option value="DEPOT">Depot</option>
+                            <option value="RETRAIT">Retrait</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Annuler
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span *ngIf="isLoading">Création en cours...</span>
+                            <span *ngIf="!isLoading">Ajouter</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,7 +17,7 @@ import { CurrencyFormatPipe } from '../dasboard/currency-format.pipe';
     ReactiveFormsModule,
     DataTablesModule,
     CurrencyFormatPipe,
-  ], // Enlever BrowserModule
+  ], 
   templateUrl: './liste-partenaire.component.html',
   styleUrls: ['./liste-partenaire.component.css'], // Correction de 'styleUrl' en 'styleUrls'
 })

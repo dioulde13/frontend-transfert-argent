@@ -543,11 +543,11 @@
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
             <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Solde sans code</span>
+              <span style="font-size: 20px">Solde PDV</span>
             </div>
             <div>
               <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ userInfo.autre_solde | currency : "" : "" : "1.0-0" }} GNF
+                {{ userInfo.soldePDV | currency : "" : "" : "1.0-0" }} GNF
               </span>
             </div>
           </div>

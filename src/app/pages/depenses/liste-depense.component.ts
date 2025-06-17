@@ -122,6 +122,7 @@ export class ListeDepenseComponent implements OnInit {
   private initDepenseForm() {
     this.depenseForm = this.fb.group({
       utilisateurId: [this.idUser],
+      date_creation: ['', Validators.required],
       motif: ['', Validators.required],
       montant: [0, [Validators.required, Validators.min(0)]],
     });
@@ -176,6 +177,7 @@ export class ListeDepenseComponent implements OnInit {
           alert('Deppense ajouté avec succès!');
           this.depenseForm.patchValue({
             motif: '',
+            date_creation:'',
             montant: '',
           });
           this.loading = false;

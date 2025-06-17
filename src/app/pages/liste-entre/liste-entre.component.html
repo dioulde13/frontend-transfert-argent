@@ -400,6 +400,11 @@
               <!-- Onglet Détails -->
               <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                 <form [formGroup]="entreForm" (ngSubmit)="ajouterEntres()">
+                 <div class="form-group">
+                      <label for="date_creation">Date</label>
+                      <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+                        placeholder="La date" />
+                    </div>
                   <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="expediteur">Expéditeur</label>
@@ -417,11 +422,9 @@
                     <div class="form-group col-md-6">
                       <label for="telephoneReceveur">Téléphone du receveur</label>
                       <div class="input-group">
-
                         <input type="text" class="form-control" id="telephone_receveur"
                           formControlName="telephone_receveur" placeholder="Téléphone" />
                       </div>
-
                     </div>
 
 

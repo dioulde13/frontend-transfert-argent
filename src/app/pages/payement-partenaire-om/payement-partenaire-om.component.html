@@ -1,0 +1,112 @@
+<div class="content-page">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card bg-transparent">
+                    <div class="card-body p-0">
+                        <div class="profile-image relative">
+                            <img src="assets/images/transfert.jpg" class="img-fluid rounded w-full" alt="profile-image"
+                                style="height: 200px; object-fit: cover;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-0">
+            <div class="col-lg-12 card-profile">
+                <div class="card card-stretch h-full">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap items-center justify-between breadcrumb-content">
+                                            <h5>Liste des partenaires OM</h5>
+                                            <div class="d-flex flex-wrap items-center justify-between">
+                                                <div class="pl-3 btn-new border-left">
+                                                    <a href="#" class="btn btn-primary" data-target="#new-project-modal"
+                                                        data-toggle="modal">Ajouter nouveau</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table datatable [dtOptions]="dtoptions" [dtTrigger]="dtTrigger"
+                                class="table data-table table-striped table-flush" style="width: 100%">
+                                <thead>
+                                    <tr class="text-muted">
+                                        <th class="border px-4 py-2">Date</th>
+                                        <th class="border px-4 py-2">Nom partenaire</th>
+                                        <th class="border px-4 py-2">Montant</th>
+                                        <th class="border px-4 py-2">Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let result of allresultat" class="hover:bg-gray-100 even:bg-gray-50">
+                                       <td>{{ result.createdAt | date : "dd/MM/yyyy HH:mm" }} </td>
+                                        <td class="border px-4 py-2">{{ result.PartenaireOM.nom }}</td>
+                                        <td class="border px-4 py-2">{{ result.montant_depot | currency : "" : "" : "1.0-0" }}</td>
+                                        <td class="border px-4 py-2">{{ result.type }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="new-project-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="container">
+                <h2>Ajouter un Partenaire</h2>
+                <form [formGroup]="partenaireForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="partenaireOMId">Partenaire</label>
+                        <select class="form-control" id="partenaireOMId" formControlName="partenaireOMId" required>
+                            <option value="" disabled selected>
+                                Sélectionnez un partenaire
+                            </option>
+                            <option *ngFor="let partenaire of allPartenaire" [value]="partenaire.id">
+                                {{ partenaire.nom }} ->
+                                {{
+                                partenaire.montant
+                                | currency : "" : "" : "1.0-0"
+                                }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="montant_depot">Montant</label>
+                        <input id="montant_depot" formControlName="montant_depot" class="form-control" type="text"
+                            [(ngModel)]="montant_depot" (input)="onInputChange($event)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <select id="type" class="form-control" formControlName="type">
+                            <option value="DEPOT">Depot</option>
+                            <option value="REMBOURSEMENT">Remboursement</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Annuler
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span *ngIf="isLoading">Création en cours...</span>
+                            <span *ngIf="!isLoading">Ajouter</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

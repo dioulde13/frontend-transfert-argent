@@ -136,6 +136,7 @@ export class ListeCreditComponent implements OnInit {
 
       // Champ pour le nom, obligatoire
       nom: ['', Validators.required],
+      date_creation: ['', Validators.required],
       // Champ pour le montant, obligatoire et doit être un nombre positif ou zéro
       montant: [0, [Validators.required, Validators.min(0)]],
 

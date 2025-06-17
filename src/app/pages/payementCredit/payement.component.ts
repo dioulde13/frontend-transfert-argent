@@ -110,6 +110,7 @@ export class PayementComponent implements OnInit, AfterViewInit {
     this.payementCreditForm = this.fb.group({
       utilisateurId: [this.idUser],
       reference: ['', Validators.required],
+      date_creation: ['', Validators.required],
       montant: ['', Validators.required],
     });
     this.getAllPayementCredit();

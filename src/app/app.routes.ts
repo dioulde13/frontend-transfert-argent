@@ -16,6 +16,9 @@ import { PayementComponent } from './pages/payementCredit/payement.component';
 import { PayementEchangeComponent } from './pages/payement-echange/payement-echange.component';
 import { ListeEchangeComponent } from './pages/liste-echange/liste-echange.component';
 import { InscriptionComponent } from './pages/inscription/inscription.component';
+import { PartenaireOMComponent } from './pages/partenaire-om/partenaire-om.component';
+import { PayementPartenaireOMComponent } from './pages/payement-partenaire-om/payement-partenaire-om.component';
+import { OrangeMoneyComponent } from './pages/orange-money/orange-money.component';
 
 export const routes: Routes = [
   {
@@ -64,10 +67,25 @@ export const routes: Routes = [
         path: 'sortie',
         component: ListeSortieComponent,
         canActivate: [AuthGuard],
-      },
+      }, 
       {
         path: 'partenaire',
         component: ListePartenaireComponent,
+        canActivate: [AuthGuard],
+      }, 
+      {
+        path: 'partenaireOM',
+        component: PartenaireOMComponent,
+        canActivate: [AuthGuard],
+      },
+       {
+        path: 'orangeMoney',
+        component: OrangeMoneyComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'payementPartenaireOM',
+        component: PayementPartenaireOMComponent,
         canActivate: [AuthGuard],
       },
       {

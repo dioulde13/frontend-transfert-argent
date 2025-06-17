@@ -5,12 +5,8 @@
         <div class="card bg-transparent">
           <div class="card-body p-0">
             <div class="profile-image relative">
-              <img
-              src="/assets/images/transfert.jpg"
-              class="img-fluid rounded w-full"
-                alt="profile-image"
-                style="height: 200px; object-fit: cover;"
-              />
+              <img src="/assets/images/transfert.jpg" class="img-fluid rounded w-full" alt="profile-image"
+                style="height: 200px; object-fit: cover;" />
             </div>
           </div>
         </div>
@@ -25,21 +21,12 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
-                    <div
-                      class="d-flex flex-wrap items-center justify-between breadcrumb-content"
-                    >
+                    <div class="d-flex flex-wrap items-center justify-between breadcrumb-content">
                       <h5>Liste des payements</h5>
-                      <div
-                        class="d-flex flex-wrap items-center justify-between"
-                      >
+                      <div class="d-flex flex-wrap items-center justify-between">
                         <div class="pl-3 btn-new border-left">
-                          <a
-                            href="#"
-                            class="btn btn-primary"
-                            data-target="#new-project-modal"
-                            data-toggle="modal"
-                            >Ajouter nouveau</a
-                          >
+                          <a href="#" class="btn btn-primary" data-target="#new-project-modal"
+                            data-toggle="modal">Ajouter nouveau</a>
                         </div>
                       </div>
                     </div>
@@ -48,34 +35,19 @@
               </div>
               <div class="row mb-4">
                 <div class="col-md-3 d-flex mb-3 mb-md-0">
-                  <input
-                    type="date"
-                    id="startDate"
-                    class="form-control"
-                    placeholder="Date Début"
-                    style="border-radius: 25px"
-                  />
+                  <input type="date" id="startDate" class="form-control" placeholder="Date Début"
+                    style="border-radius: 25px" />
                 </div>
                 <div class="col-md-3 d-flex mb-3 mb-md-0">
-                  <input
-                    type="date"
-                    id="endDate"
-                    class="form-control"
-                    placeholder="Date Fin"
-                    style="border-radius: 25px"
-                  />
+                  <input type="date" id="endDate" class="form-control" placeholder="Date Fin"
+                    style="border-radius: 25px" />
                 </div>
                 <div class="col-md-3 d-flex">
-                  <button
-                    id="btnFilter"
-                    class="btn btn-primary"
-                    (click)="filtrerEntreDates()"
-                    style="
+                  <button id="btnFilter" class="btn btn-primary" (click)="filtrerEntreDates()" style="
                       border-radius: 60px;
                       padding: 5px 10px;
                       font-size: 14px;
-                    "
-                  >
+                    ">
                     Filtrer
                   </button>
                 </div>
@@ -95,10 +67,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    *ngFor="let result of allresultat"
-                    class="hover:bg-gray-100 even:bg-gray-50"
-                  >
+                  <tr *ngFor="let result of allresultat" class="hover:bg-gray-100 even:bg-gray-50">
                     <td class="border px-4 py-2">
                       {{ " " + result.reference + " / "
                       }}{{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}
@@ -116,53 +85,33 @@
     </div>
   </div>
 </div>
-<div
-  class="modal fade"
-  id="new-project-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="modalTitle"
-  aria-hidden="true"
->
+<div class="modal fade" id="new-project-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="container">
         <h2>Ajouter un payement credit</h2>
         <form [formGroup]="payementCreditForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
+            <label for="date_creation">Date</label>
+            <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+              placeholder="La date" />
+          </div>
+          <div class="form-group">
             <label for="reference">Reference credit</label>
-            <input
-              id="reference"
-              formControlName="reference"
-              class="form-control"
-            />
+            <input id="reference" formControlName="reference" class="form-control" />
           </div>
 
           <div class="form-group">
             <label for="montant">Montant</label>
-            <input
-              id="montant"
-              formControlName="montant"
-              class="form-control"
-              type="text"
-              [(ngModel)]="montant"
-              [ngModel]="montant | currencyFormat"
-              (input)="onInputChange($event)"
-            />
+            <input id="montant" formControlName="montant" class="form-control" type="text" [(ngModel)]="montant"
+              [ngModel]="montant | currencyFormat" (input)="onInputChange($event)" />
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Annuler
             </button>
-            <button
-              type="submit"
-              [disabled]="!payementCreditForm.valid"
-              class="btn btn-primary"
-            >
+            <button type="submit" [disabled]="!payementCreditForm.valid" class="btn btn-primary">
               <span *ngIf="loading">Création en cours...</span>
               <span *ngIf="!loading">Ajouter</span>
             </button>

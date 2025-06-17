@@ -336,6 +336,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
         this.entreForm.patchValue({
           partenaireId: '',
           deviseId: '',
+          date_creation:'',
           expediteur: '',
           receveur: '',
           montant_cfa: '',
@@ -498,8 +499,9 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
       utilisateurId: [this.idUser], // Liaison utilisateurId
       partenaireId: ['', Validators.required],
       deviseId: ['', Validators.required], // Initialisé à vide
-      expediteur: ['', Validators.required],
+      expediteur: ['', Validators.required], 
       receveur: ['', Validators.required],
+      date_creation: ['', Validators.required],
       montant_cfa: [0, Validators.required],
       montant: [0, Validators.required],
       telephone_receveur: [

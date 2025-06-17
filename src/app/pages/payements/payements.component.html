@@ -38,17 +38,15 @@
                   <div class="col-lg-6 mb-3 mb-lg-0">
                     <label for="montantDevise" class="form-label fw-semibold">Montant</label>
                     <input type="text" id="montantDevise" class="form-control" placeholder="Entrez le montant"
-                      formControlName="montantDevise" (input)="onInputChangeMontantDevise($event)" [(ngModel)]="montantDevise"
-                      [ngModel]="montantDevise | currencyFormat" />
+                      formControlName="montantDevise" (input)="onInputChangeMontantDevise($event)"
+                      [(ngModel)]="montantDevise" [ngModel]="montantDevise | currencyFormat" />
                   </div>
 
                   <div class="col-lg-6">
                     <label for="prixDevise" class="form-label fw-semibold">Prix de la devise</label>
                     <input type="text" id="prixDevise" class="form-control" placeholder="Entrez le prix"
-                      formControlName="prixDevise" 
-                       (input)="onInputChangePrixDevise($event)" [(ngModel)]="prixDevise"
-                      [ngModel]="prixDevise | currencyFormat"
-                      />
+                      formControlName="prixDevise" (input)="onInputChangePrixDevise($event)" [(ngModel)]="prixDevise"
+                      [ngModel]="prixDevise | currencyFormat" />
                   </div>
                 </div>
 
@@ -184,6 +182,11 @@
       <div class="container">
         <h2>Ajouter un payement</h2>
         <form [formGroup]="payementForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="date_creation">Date</label>
+            <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+              placeholder="La date" />
+          </div>
           <div class="form-group">
             <label for="code">Code</label>
             <input id="code" formControlName="code" class="form-control" />

@@ -113,8 +113,9 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
   startDate: Date | null = null;
   endDate: Date | null = null;
 
-  totalMontant: number = 0; // Initialisation
+  totalMontant: number = 0; // Initialisation 
   totalMontantDevise: number = 0; // Initialisation
+  totalMontantFrais: number = 0; // Initialisation
 
   filtrerSortieDates(): void {
     const startDateInput = (
@@ -130,6 +131,8 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     // Réinitialiser le total
     this.totalMontant = 0;
     this.totalMontantDevise = 0;
+    this.totalMontantFrais = 0;
+
 
     // Filtrer d'abord par date
     let filteredResults = this.allresultat.filter(
@@ -164,6 +167,12 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
        // Calculer le total montant en devise (CFA)
       this.totalMontantDevise = filteredDataTable.reduce(
         (sum: number, row: { montant: number }) => sum + (row.montant || 0),
+        0
+      );
+
+       // Calculer le total de frais (CFA)
+      this.totalMontantFrais = filteredDataTable.reduce(
+        (sum: number, row: { frais: number }) => sum + (row.frais || 0),
         0
       );
 
@@ -284,7 +293,12 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount} ${row.signe_2}`;
+               const formattedFrais = new Intl.NumberFormat('fr-FR', {
+                style: 'decimal',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).format(row.frais);
+              return `${formattedAmount} (${formattedFrais}) ${row.signe_2}`;
             },
           },
           {
@@ -345,7 +359,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount} ${row.signe_1}`;
+              return `${formattedAmount}  ${row.signe_1}`;
             },
           },
           {
@@ -357,6 +371,9 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
                 return `${row.status}`;
               } else if(row.montant > 0 && row.type ==="R"){
                 return `${row.status} (${row.type})`;
+              }
+               else if(row.montant > 0 ){
+                return `${row.status} (${row.etat})`;
               }
               return data + (data === `ANNULEE` ? `(${row.type})` : ``);
             },
@@ -532,17 +549,24 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
       partenaireId: ['', Validators.required],
       deviseId: ['', Validators.required],
       expediteur: ['', Validators.required],
+      date_creation: ['', Validators.required],
       codeEnvoyer: ['', Validators.required],
       receveur: ['', Validators.required],
       montant: [0, Validators.required],
+      frais: [0, Validators.required],
       telephone_receveur: ['', Validators.required],
     });
   }
 
+  frais: number = 0;
   montant: number = 0;
 
   onInputChange(event: any): void {
     this.montant = event.target.value.replace(/[^0-9,]/g, '');
+  }
+
+   onInputChangeFrais(event: any): void {
+    this.frais = event.target.value.replace(/[^0-9,]/g, '');
   }
 
   loading: boolean = false;
@@ -555,8 +579,9 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
       const formData = this.sortieForm.value; // Récupérer les valeurs du formulaire
 
       const montant = parseInt(formData.montant.replace(/,/g, ''), 10);
+      const frais = parseInt(formData.frais.replace(/,/g, ''), 10);
 
-      this.sortieService.ajouterSortie({ ...formData, montant }).subscribe({
+      this.sortieService.ajouterSortie({ ...formData, montant, frais }).subscribe({
         next: (response) => {
           console.log('Sortie ajoutée avec succès:', response);
           this.fetchAllSortie();

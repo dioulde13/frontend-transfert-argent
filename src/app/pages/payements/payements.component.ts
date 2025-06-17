@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
 } from '@angular/core';
@@ -58,6 +57,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
       utilisateurId: [this.idUser],
       code: ['', Validators.required],
       montant: ['', Validators.required],
+      date_creation: ['', Validators.required],
       type: ['', Validators.required],
       prix: [''],
       signe: [''],
@@ -230,7 +230,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
                 minute: '2-digit',
               });
               return `${row.entreId === null ? row.Sortie.pays_exp : row.Entre.pays_dest
-                } / ${row.entreId === null ? row.Sortie.code : row.Entre.code
+                } / ${row.entreId === null ? row.Sortie.codeEnvoyer : row.Entre.code
                 } / ${row.entreId === null
                   ? row.Sortie.expediteur
                   : row.Entre.expediteur
@@ -325,6 +325,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
           this.payementForm.patchValue({
             code: '',
             montant: '',
+            date_creation:'',
             type: '',
             prix: '',
             signe: ''
