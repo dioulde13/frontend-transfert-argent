@@ -87,7 +87,7 @@
                     <div class="form-group">
                         <label for="montant_depot">Montant</label>
                         <input id="montant_depot" formControlName="montant_depot" class="form-control" type="text"
-                            [(ngModel)]="montant_depot" (input)="onInputChange($event)" />
+                            [(ngModel)]="montant_depot" [ngModel]="montant_depot | currencyFormat" (input)="onInputChange($event)" />
                     </div>
                     <div class="form-group">
                         <label for="type">Type</label>

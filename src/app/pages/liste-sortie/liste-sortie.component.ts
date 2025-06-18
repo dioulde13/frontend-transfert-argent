@@ -72,7 +72,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     private partenaireService: PartenaireServiceService,
     private cd: ChangeDetectorRef,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   private dataTable: any;
 
@@ -136,7 +136,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Filtrer d'abord par date
     let filteredResults = this.allresultat.filter(
-      (result: { date_creation: string , status: string }) => {
+      (result: { date_creation: string, status: string }) => {
         const resultDate = new Date(result.date_creation);
         return (
           result.status !== 'ANNULEE' &&
@@ -164,13 +164,13 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
         0
       );
 
-       // Calculer le total montant en devise (CFA)
+      // Calculer le total montant en devise (CFA)
       this.totalMontantDevise = filteredDataTable.reduce(
         (sum: number, row: { montant: number }) => sum + (row.montant || 0),
         0
       );
 
-       // Calculer le total de frais (CFA)
+      // Calculer le total de frais (CFA)
       this.totalMontantFrais = filteredDataTable.reduce(
         (sum: number, row: { frais: number }) => sum + (row.frais || 0),
         0
@@ -235,6 +235,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
           this.valideSortieForm.patchValue({
             partenaireId: '',
             code_sortie: '',
+            type_payement: '',
             prix_2: '',
           });
           this.isLoadingValiderSortie = false;
@@ -285,6 +286,15 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
           { title: 'Receveur', data: 'receveur' },
           { title: 'Téléphone', data: 'telephone_receveur' },
           {
+            title: 'Téléphone',
+            data: 'telephone_receveur',
+            render: (data: string, type: string, row: any) => {
+              return data
+                ? `${data} (${row.type_payement || ''})`
+                : '';
+            },
+          },
+          {
             title: 'Montant',
             data: 'montant',
             render: (data: number, type: string, row: any) => {
@@ -293,7 +303,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-               const formattedFrais = new Intl.NumberFormat('fr-FR', {
+              const formattedFrais = new Intl.NumberFormat('fr-FR', {
                 style: 'decimal',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
@@ -366,13 +376,13 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
             title: 'Status',
             data: 'status',
             render: (data: string, type: string, row: any) => {
-              console.log(row); 
-              if (row.montant === 0){
+              console.log(row);
+              if (row.montant === 0) {
                 return `${row.status}`;
-              } else if(row.montant > 0 && row.type ==="R"){
+              } else if (row.montant > 0 && row.type === "R") {
                 return `${row.status} (${row.type})`;
               }
-               else if(row.montant > 0 ){
+              else if (row.montant > 0) {
                 return `${row.status} (${row.etat})`;
               }
               return data + (data === `ANNULEE` ? `(${row.type})` : ``);
@@ -399,6 +409,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     this.valideSortieForm = this.fb.group({
       utilisateurId: [this.idUser],
       partenaireId: [''],
+      type_payement: ['CASH', Validators.required],
       code_sortie: ['', Validators.required],
       prix_2: ['', Validators.required],
     });
@@ -565,7 +576,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     this.montant = event.target.value.replace(/[^0-9,]/g, '');
   }
 
-   onInputChangeFrais(event: any): void {
+  onInputChangeFrais(event: any): void {
     this.frais = event.target.value.replace(/[^0-9,]/g, '');
   }
 
@@ -593,6 +604,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
             codeEnvoyer: '',
             receveur: '',
             montant: '',
+            frais: '',
             telephone_receveur: '',
           });
           this.loading = false;

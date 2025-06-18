@@ -185,6 +185,12 @@
               <input id="prix_2" name="prix_2" formControlName="prix_2" class="form-control" type="number" />
             </div>
           </div>
+           <div class="form-group">
+            <select id="type_payement" class="form-control" formControlName="type_payement">
+              <option value="CASH">CASH</option>
+              <option value="OM">Orange money</option>
+            </select>
+          </div>
           <div class="col-md-12">
             <div class="form-group">
               <label for="devise">Partenaire</label>
@@ -418,7 +424,7 @@
                     placeholder="Téléphone" />
                 </div>
                 <div class="form-group col-md-6">
-                  <div class="form-group mb-3">
+                  <div class="form-group">
                     <label for="devise">Pays destination</label>
                     <select class="form-control" id="devise" formControlName="deviseId" required>
                       <option value="" disabled selected>
@@ -437,7 +443,7 @@
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <div class="form-group mb-3">
+                  <div class="form-group">
                     <label for="devise">Partenaire</label>
                     <select class="form-control" id="partenaire" formControlName="partenaireId" required>
                       <option value="" disabled selected>
@@ -468,7 +474,6 @@
               </div>
               <div class="form-group">
                   <label for="frais">Frais</label>
-
                   <input type="text" class="form-control" id="frais" formControlName="frais"
                     placeholder="frais en CFA" [(ngModel)]="frais" [ngModel]="frais | currencyFormat"
                     (input)="onInputChangeFrais($event)" />

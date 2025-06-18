@@ -6,13 +6,16 @@ import { AuthService } from '../../services/auth/auth-service.service';
 import { Subject } from 'rxjs';
 import { DataTablesModule } from 'angular-datatables';
 import { OrangeMoneyService } from '../../services/orangeMoney/orange-money.service';
+import { CurrencyFormatPipe } from '../dasboard/currency-format.pipe';
+
 
 @Component({
   selector: 'app-orange-money',
   imports: [
-     CommonModule,
+    CommonModule,
     ReactiveFormsModule,
     DataTablesModule,
+    CurrencyFormatPipe
   ],
   templateUrl: './orange-money.component.html',
   styleUrl: './orange-money.component.css'
@@ -39,7 +42,7 @@ export class OrangeMoneyComponent implements OnInit {
     private orangeMoneyServices: OrangeMoneyService,
   ) { }
 
-  
+
 
   ngOnInit(): void {
     this.dtoptions = {
@@ -49,14 +52,14 @@ export class OrangeMoneyComponent implements OnInit {
     };
     this.orangeMoneyFormIntial();
     this.getAllOrangeMoney();
-    this.getUserInfo(); 
+    this.getUserInfo();
     this.initValiderOrange();
   }
 
   valideOrangeForm!: FormGroup;
 
 
-   private initValiderOrange() {
+  private initValiderOrange() {
     this.valideOrangeForm = this.fb.group({
       utilisateurId: [this.idUser],
       reference: ['', Validators.required],
@@ -135,10 +138,11 @@ export class OrangeMoneyComponent implements OnInit {
   onSubmit() {
     if (this.orangeMoneyForm.valid) {
       const formData = this.orangeMoneyForm.value;
-      console.log(formData);
+      const montant = parseInt(formData.montant.replace(/,/g, ''), 10);
+      // console.log(formData);
       this.isLoading = true;
       this.orangeMoneyServices
-        .ajouterOrangeMoney(formData)
+        .ajouterOrangeMoney({ ...formData, montant })
         .subscribe(
           (response) => {
             this.isLoading = false;

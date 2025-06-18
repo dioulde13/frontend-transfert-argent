@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { DataTablesModule } from 'angular-datatables';
 import { PartenaireOMService } from '../../services/partenaireOM/partenaire-om.service';
 import { PayementPartenaireOMService } from '../../services/payementPartenaireOM/payement-partenaire-om.service';
+import { CurrencyFormatPipe } from '../dasboard/currency-format.pipe';
 
 @Component({
   selector: 'app-payement-partenaire-om',
@@ -15,6 +16,7 @@ import { PayementPartenaireOMService } from '../../services/payementPartenaireOM
     CommonModule,
     ReactiveFormsModule,
     DataTablesModule,
+    CurrencyFormatPipe
   ],
   templateUrl: './payement-partenaire-om.component.html',
   styleUrl: './payement-partenaire-om.component.css'
@@ -42,7 +44,7 @@ export class PayementPartenaireOMComponent implements OnInit {
     private payementPartenaireOMService: PayementPartenaireOMService,
   ) { }
 
-   allPartenaire: any[] = [];
+  allPartenaire: any[] = [];
 
   fetchPartenaire(): void {
     this.partenaireOMService.getAllPartenaireOM().subscribe({
@@ -116,14 +118,15 @@ export class PayementPartenaireOMComponent implements OnInit {
   onSubmit() {
     if (this.partenaireForm.valid) {
       const formData = this.partenaireForm.value;
+      const montant_depot = parseInt(formData.montant_depot.replace(/,/g, ''), 10);
       console.log(formData);
       this.isLoading = true;
       this.payementPartenaireOMService
-        .ajouterPayementPartenaireOM(formData)
+        .ajouterPayementPartenaireOM({ ...formData, montant_depot })
         .subscribe(
           (response) => {
             this.isLoading = false;
-            console.log('Partenaire ajouté avec succès:', response);
+            // console.log('Partenaire ajouté avec succès:', response);
             this.partenaireForm.patchValue({
               partenaireOMId: '',
               type: '',
@@ -134,8 +137,8 @@ export class PayementPartenaireOMComponent implements OnInit {
           },
           (error) => {
             this.isLoading = false;
-            console.error("Erreur lors de l'ajout du partenaire:", error.message);
-            alert("Erreur lors de l'ajout du partenaire.");
+            // console.error("Erreur lors de l'ajout du partenaire:", error.message);
+            alert(error.error.message);
           }
         );
     } else {

@@ -400,11 +400,18 @@
               <!-- Onglet Détails -->
               <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                 <form [formGroup]="entreForm" (ngSubmit)="ajouterEntres()">
-                 <div class="form-group">
+                  <div class="form-row">
+                    <div class="form-group col-lg-6">
+                      <label for="code_envoyer">Code</label>
+                      <input type="text" class="form-control" id="code_envoyer" formControlName="code_envoyer"
+                        placeholder="Code du entre" />
+                    </div>
+                    <div class="form-group col-lg-6">
                       <label for="date_creation">Date</label>
                       <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
                         placeholder="La date" />
                     </div>
+                  </div>
                   <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="expediteur">Expéditeur</label>

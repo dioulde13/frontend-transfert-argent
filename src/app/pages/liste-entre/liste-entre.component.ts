@@ -126,10 +126,10 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
         0
       );
 
-      console.log(
-        'Total Montant après filtre et recherche :',
-        this.totalMontant
-      );
+      // console.log(
+      //   'Total Montant après filtre et recherche :',
+      //   this.totalMontant
+      // );
       console.log(
         'Total Montant Devise après filtre et recherche :',
         this.totalMontantDevise
@@ -169,7 +169,8 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
         data: this.allresultat,
         order: [1, 'desc'],
         columns: [
-          { title: 'Code', data: 'code' },
+          { title: 'Code generer', data: 'code' },
+          { title: 'Code', data: 'code_envoyer' },
           {
             title: 'Date du jour',
             data: 'date_creation',
@@ -337,6 +338,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
           partenaireId: '',
           deviseId: '',
           date_creation:'',
+          code_envoyer:'',
           expediteur: '',
           receveur: '',
           montant_cfa: '',
@@ -488,6 +490,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.entreFormAutre = this.fb.group({
       utilisateurId: [this.idUser],
       nomCLient: ['', Validators.required],
+      date_creation: ['', Validators.required],
       montantClient: [0, Validators.required],
     });
   }
@@ -500,6 +503,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
       partenaireId: ['', Validators.required],
       deviseId: ['', Validators.required], // Initialisé à vide
       expediteur: ['', Validators.required], 
+      code_envoyer: ['', Validators.required], 
       receveur: ['', Validators.required],
       date_creation: ['', Validators.required],
       montant_cfa: [0, Validators.required],

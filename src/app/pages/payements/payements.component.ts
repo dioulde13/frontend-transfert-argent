@@ -230,7 +230,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
                 minute: '2-digit',
               });
               return `${row.entreId === null ? row.Sortie.pays_exp : row.Entre.pays_dest
-                } / ${row.entreId === null ? row.Sortie.codeEnvoyer : row.Entre.code
+                } / ${row.entreId === null ? row.Sortie.codeEnvoyer +" / "+ row.Sortie.telephone_receveur +" ("+row.Sortie.type_payement+")" : row.Entre.code_envoyer
                 } / ${row.entreId === null
                   ? row.Sortie.expediteur
                   : row.Entre.expediteur
