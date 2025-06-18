@@ -493,6 +493,11 @@
               <!-- Onglet Paiement -->
               <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
                 <form [formGroup]="entreFormAutre" (ngSubmit)="ajouterEntreeAutres()">
+                  <div class="form-group">
+                      <label for="date_creation">Date</label>
+                      <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+                        placeholder="La date" />
+                    </div>
                   <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="nomCLient">Nom client</label>

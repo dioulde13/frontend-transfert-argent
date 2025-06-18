@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 export class OrangeMoneyService {
 
   // URL de l'API
-  // private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app';
-  private apiUrl = 'http://localhost:3000'; 
+  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app';
+  // private apiUrl = 'http://localhost:3000'; 
 
 
   constructor(private http: HttpClient) {}

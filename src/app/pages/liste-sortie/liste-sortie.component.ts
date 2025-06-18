@@ -440,6 +440,7 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sortieFormAutre = this.fb.group({
       utilisateurId: [this.idUser],
       nomCLient: ['', Validators.required],
+      date_creation: ['', Validators.required],
       montantClient: [0, Validators.required],
     });
   }
@@ -470,7 +471,8 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('Sortie ajoutée avec succès:', response);
           this.fetchAllSortie();
           this.sortieFormAutre.patchValue({
-            nomCLient: '',
+            nomCLient: '', 
+            date_creation: '',
             montantClient: '',
           });
           this.isloadingEntreAutre = false;
