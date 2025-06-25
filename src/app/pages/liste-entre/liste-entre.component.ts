@@ -497,23 +497,28 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  private initForm(): void {
-    this.entreForm = this.fb.group({
-      utilisateurId: [this.idUser], // Liaison utilisateurId
-      partenaireId: ['', Validators.required],
-      deviseId: ['', Validators.required], // Initialisé à vide
-      expediteur: ['', Validators.required], 
-      code_envoyer: ['', Validators.required], 
-      receveur: ['', Validators.required],
-      date_creation: ['', Validators.required],
-      montant_cfa: [0, Validators.required],
-      montant: [0, Validators.required],
-      telephone_receveur: [
-        '',
-        [Validators.required],
-      ],
-    });
-  }
+ private initForm(): void {
+  this.entreForm = this.fb.group({
+    utilisateurId: [this.idUser], // Liaison utilisateurId
+    partenaireId: ['', Validators.required],
+    deviseId: ['', Validators.required], // Initialisé à vide
+    expediteur: ['', Validators.required],
+    code_envoyer: ['', Validators.required],
+    receveur: ['', Validators.required],
+    date_creation: [this.getCurrentDateTimeLocal(), Validators.required], // ✅ Fixé à l'heure locale
+    montant_cfa: [0, Validators.required],
+    montant: [0, Validators.required],
+    telephone_receveur: ['', [Validators.required]],
+  });
+}
+
+private getCurrentDateTimeLocal(): string {
+  const now = new Date();
+  const tzoffset = now.getTimezoneOffset() * 60000; // Décalage timezone
+  const localISOTime = (new Date(now.getTime() - tzoffset)).toISOString().slice(0, 16);
+  return localISOTime; // Format "YYYY-MM-DDTHH:mm"
+}
+
 
 
   allPartenaire: any[] = [];

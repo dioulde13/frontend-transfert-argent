@@ -408,7 +408,7 @@
                     </div>
                     <div class="form-group col-lg-6">
                       <label for="date_creation">Date</label>
-                      <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+                      <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
                         placeholder="La date" />
                     </div>
                   </div>
@@ -494,10 +494,11 @@
               <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
                 <form [formGroup]="entreFormAutre" (ngSubmit)="ajouterEntreeAutres()">
                   <div class="form-group">
-                      <label for="date_creation">Date</label>
-                      <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
-                        placeholder="La date" />
-                    </div>
+                    <label for="date_creation">Date et Heure</label>
+                    <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
+                      placeholder="Sélectionnez la date et l'heure" />
+                  </div>
+
                   <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="nomCLient">Nom client</label>

@@ -202,6 +202,10 @@ export class ListeRembourserComponent implements OnInit, AfterViewInit {
               return ` ${row.Partenaire.prenom} ${row.Partenaire.nom} (${row.Partenaire.pays})`;
             },
           },
+           {
+            title: 'Type',
+            data: 'type',
+          },
         ],
       });
       this.cd.detectChanges(); 
@@ -269,8 +273,10 @@ export class ListeRembourserComponent implements OnInit, AfterViewInit {
     // Initialisation du formulaire avec les validations
     this.rembourserForm = this.fb.group({
       utilisateurId: [this.idUser],
-      partenaireId: ['', Validators.required],
+      partenaireId: ['', Validators.required], 
+      date_creation: ['', Validators.required],
       nom: [''],
+      type: ['R', Validators.required],
       prix: [0],
       montant: [0, [Validators.required, Validators.min(0)]],
     });

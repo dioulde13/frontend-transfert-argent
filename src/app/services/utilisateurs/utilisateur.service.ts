@@ -16,7 +16,9 @@ export class UtilisateurService {
 
   // Méthode pour obtenir les utilisateurs
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/auth/all`).pipe(
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/api/auth/all`, {headers}).pipe(
       catchError((error) => {
         console.error('Erreur de requête API:', error);
         throw error; // Vous pouvez aussi afficher une erreur plus détaillée

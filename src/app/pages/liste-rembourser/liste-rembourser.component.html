@@ -75,6 +75,7 @@
                     <th class="border px-4 py-2">Montant</th>
                     <th class="border px-4 py-2">Montant GNF</th>
                     <th class="border px-4 py-2">Partenaire</th>
+                    <th class="border px-4 py-2">Type</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -106,6 +107,7 @@
                       result.Partenaire.prenom + " " + result.Partenaire.nom +" "+ (result.Partenaire.pays)
                       }}
                     </td>
+                    <td class="border px-4 py-2">{{ result.type }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -168,8 +170,8 @@
             <table class="table data-table table-striped table-flush" style="width: 100%">
               <thead>
                 <tr class="text-muted">
+                  <th class="border px-4 py-2">Case à cocher</th>
                   <th class="border px-4 py-2">Code</th>
-                  <th class="border px-4 py-2">Type</th>
                   <th class="border px-4 py-2">Date</th>
                   <th class="border px-4 py-2">Montant</th>
                   <th class="border px-4 py-2">Prix</th>
@@ -213,7 +215,8 @@
             </div>
             <!-- <div class="modal fade" id="payer-partenaire-sortie" tabindex="-1" role="dialog"
               aria-labelledby="modalTitle" aria-hidden="true"> -->
-              <div class="modal fade show d-block" *ngIf="modalRemboursementOuvert" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
+            <div class="modal fade show d-block" *ngIf="modalRemboursementOuvert" tabindex="-1" role="dialog"
+              style="background: rgba(0,0,0,0.5);">
               <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -228,9 +231,9 @@
                           <option value="" disabled selected>Sélectionnez un partenaire</option>
                           <option *ngFor="let partenaire of allPartenaireEntre" [value]="partenaire.id">
                             {{
-                              partenaire.prenom + " " +
-                              partenaire.nom + " " +
-                              (partenaire.montant_preter | currency : "" : "" : "1.0-0") + " XOF"
+                            partenaire.prenom + " " +
+                            partenaire.nom + " " +
+                            (partenaire.montant_preter | currency : "" : "" : "1.0-0") + " XOF"
                             }} ({{ partenaire.pays }})
                           </option>
                         </select>
@@ -238,24 +241,27 @@
 
                       <div class="form-group mb-3">
                         <label for="partenaireSortie">Partenaire Guinée-Bissau</label>
-                        <select class="form-control" id="partenaireSortie" formControlName="partenaireSortieId" required>
+                        <select class="form-control" id="partenaireSortie" formControlName="partenaireSortieId"
+                          required>
                           <option value="" disabled selected>Sélectionnez un partenaire</option>
                           <option *ngFor="let partenaire of allPartenaireSortie" [value]="partenaire.id">
                             {{
-                              partenaire.prenom + " " +
-                              partenaire.nom + " " +
-                              (partenaire.montant_preter | currency : "" : "" : "1.0-0") + " XOF"
+                            partenaire.prenom + " " +
+                            partenaire.nom + " " +
+                            (partenaire.montant_preter | currency : "" : "" : "1.0-0") + " XOF"
                             }} ({{ partenaire.pays }})
                           </option>
                         </select>
                       </div>
 
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" (click)="fermerModalRemboursement()">Annuler</button>
-                        <button type="submit" class="btn btn-primary" [disabled]="!rembourserPartenaireForm.valid">Valider</button>
+                        <button type="button" class="btn btn-secondary"
+                          (click)="fermerModalRemboursement()">Annuler</button>
+                        <button type="submit" class="btn btn-primary"
+                          [disabled]="!rembourserPartenaireForm.valid">Valider</button>
                       </div>
                     </form>
-                    
+
                   </div>
                 </div>
               </div>
@@ -420,25 +426,33 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="rembourserForm" (ngSubmit)="onSubmit()">
-          <div class="form-group mb-3">
-            <label for="devise">Partenaire</label>
-            <select class="form-control" id="partenaire" formControlName="partenaireId" required>
-              <option value="" disabled selected>
-                Sélectionnez un partenaire
-              </option>
-              <option *ngFor="let partenaire of allPartenaire" [value]="partenaire.id">
-                {{
-                partenaire.prenom +
-                " " +
-                partenaire.nom +
-                " " +
-                (partenaire.montant_preter | currency : "" : "" : "1.0-0") +
-                "
-                XOF"
-                }} ({{partenaire.pays}})
-              </option>
-            </select>
+          <div class="form-row">
+            <div class="form-group col-lg-6">
+              <label for="date_creation">Date</label>
+              <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
+                placeholder="La date" />
+            </div>
+            <div class="form-group col-lg-6 mb-3">
+              <label for="devise">Partenaire</label>
+              <select class="form-control" id="partenaire" formControlName="partenaireId" required>
+                <option value="" disabled selected>
+                  Sélectionnez un partenaire
+                </option>
+                <option *ngFor="let partenaire of allPartenaire" [value]="partenaire.id">
+                  {{
+                  partenaire.prenom +
+                  " " +
+                  partenaire.nom +
+                  " " +
+                  (partenaire.montant_preter | currency : "" : "" : "1.0-0") +
+                  "
+                  XOF"
+                  }} ({{partenaire.pays}})
+                </option>
+              </select>
+            </div>
           </div>
+
           <div class="form-group mb-3">
             <label for="nom">Nom client</label>
             <input type="text" class="form-control" id="nom" formControlName="nom" placeholder="Nom du client" />
@@ -453,6 +467,12 @@
             <label for="montant">Montant</label>
             <input id="montant" formControlName="montant" class="form-control" type="text" [(ngModel)]="montant"
               [ngModel]="montant | currencyFormat" (input)="onInputChange($event)" />
+          </div>
+          <div class="form-group">
+            <select id="type" class="form-control" formControlName="type">
+              <option value="R">Rembourser</option>
+              <option value="BÉNÉFICE">Bénéfice</option>
+            </select>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">

@@ -1,45 +1,51 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SortieService {
-  // URL de l'API
   private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app';
   // private apiUrl = 'http://localhost:3000'; 
 
-
   constructor(private http: HttpClient) {}
 
-  // Méthode pour récupérer les données de l'API
   getCompteSortie(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/sorties/compte`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/api/sorties/compte`, { headers });
   }
 
-  // Méthode pour récupérer les données de l'API
   getAllSortie(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/sorties/liste`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/api/sorties/liste`, { headers });
   }
 
-  // Méthode pour ajouter une nouvelle entrée
   ajouterSortie(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/sorties/create`, data);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/api/sorties/create`, data, { headers });
   }
 
   annulerSortie(code: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/api/sorties/annuler/${code}`, {}); // Ajouter un corps vide
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    // Pas de corps, donc null en second argument
+    return this.http.put(`${this.apiUrl}/api/sorties/annuler/${code}`, null, { headers }); 
   }
 
   validerSortie(code: number, data: any): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/api/sorties/valider/${code}`,
-      data
-    );
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    // data en corps, headers en options
+    return this.http.put(`${this.apiUrl}/api/sorties/valider/${code}`, data, { headers });
   }
 
   ajouterSortieAutres(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/sorties/ajouterAutre`, data);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/api/sorties/ajouterAutre`, data, { headers });
   }
 }
