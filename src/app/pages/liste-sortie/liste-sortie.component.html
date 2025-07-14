@@ -65,7 +65,7 @@
                 <div class="col-md-4">
                   <div style="font-weight: bold; font-size: 14px; margin-top: 10px">
                     Total Montant : {{ totalMontant | number }} GNF
-                  </div> 
+                  </div>
                   <div style="font-weight: bold; font-size: 14px; margin-top: 2px">
                     Total Montant : {{ totalMontantDevise | number }} ({{ totalMontantFrais | number }}) XOF
                   </div>
@@ -185,7 +185,7 @@
               <input id="prix_2" name="prix_2" formControlName="prix_2" class="form-control" type="number" />
             </div>
           </div>
-           <div class="form-group">
+          <div class="form-group">
             <select id="type_payement" class="form-control" formControlName="type_payement">
               <option value="CASH">CASH</option>
               <option value="OM">Orange money</option>
@@ -392,13 +392,13 @@
           <!-- Onglet Détails -->
           <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
             <form [formGroup]="sortieForm" (ngSubmit)="ajouterSortie()">
-              
+
               <div class="form-row">
                 <div class="form-group col-lg-6">
-                <label for="date_creation">Date</label>
-                <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
-                  placeholder="La date" />
-              </div>
+                  <label for="date_creation">Date</label>
+                  <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
+                    placeholder="La date" />
+                </div>
                 <div class="form-group col-lg-6">
                   <label for="codeEnvoyer">Code</label>
                   <input type="text" class="form-control" id="codeEnvoyer" formControlName="codeEnvoyer"
@@ -463,7 +463,7 @@
                       </option>
                     </select>
                   </div>
-                </div> 
+                </div>
                 <div class="form-group col-md-6">
                   <label for="montant">Montant</label>
 
@@ -473,11 +473,10 @@
                 </div>
               </div>
               <div class="form-group">
-                  <label for="frais">Frais</label>
-                  <input type="text" class="form-control" id="frais" formControlName="frais"
-                    placeholder="frais en CFA" [(ngModel)]="frais" [ngModel]="frais | currencyFormat"
-                    (input)="onInputChangeFrais($event)" />
-                </div>
+                <label for="frais">Frais</label>
+                <input type="text" class="form-control" id="frais" formControlName="frais" placeholder="frais en CFA"
+                  [(ngModel)]="frais" [ngModel]="frais | currencyFormat" (input)="onInputChangeFrais($event)" />
+              </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                   Annuler

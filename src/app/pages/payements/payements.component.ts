@@ -221,6 +221,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
             title: 'Date paiement',
             data: 'date_creation',
             render: (data: string, type: any, row: any) => {
+              console.log(row);
               const date = new Date(row.date_creation);
               const formattedDate = date.toLocaleString('fr-FR', {
                 day: '2-digit',
@@ -229,12 +230,22 @@ export class PayementsComponent implements OnInit, AfterViewInit {
                 hour: '2-digit',
                 minute: '2-digit',
               });
-              return `${row.entreId === null ? row.Sortie.pays_exp : row.Entre.pays_dest
-                } / ${row.entreId === null ? row.Sortie.codeEnvoyer +" / "+ row.Sortie.telephone_receveur +" ("+row.Sortie.type_payement+")" : row.Entre.code_envoyer
-                } / ${row.entreId === null
-                  ? row.Sortie.expediteur
-                  : row.Entre.expediteur
-                } / ${formattedDate}`;
+              return `${row.entreId === null ?  
+                 row.Sortie?.pays_exp : row.Entre?.pays_dest
+                }
+                 / ${row.entreId === null ? row.Sortie?.codeEnvoyer 
+                  : 
+                  row.Entre?.code_envoyer
+                } 
+                / ${row.entreId === null ? row.Sortie?.codeEnvoyer 
+                  : 
+                  row.Entre?.code_envoyer
+                }
+                / ${row.entreId === null
+                  ? row.Sortie?.telephone_receveur +" ("+row.Sortie?.type_payement+")"
+                  : row.Entre?.telephone_receveur +" ("+row.Entre?.type_payement+")"
+                } 
+                / ${formattedDate}`;
             },
           },
           {

@@ -25,8 +25,9 @@ import { NgxPrintModule } from 'ngx-print';
 import { CurrencyFormatPipe } from '../dasboard/currency-format.pipe';
 
 
-interface Result {
+interface Result { 
   code: string;
+  code_envoyer: string;
   date_creation: string;
   pays_dest: string;
   expediteur: string;
@@ -194,6 +195,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
             title: 'Montant',
             data: 'montant_cfa',
             render: (data: number, type: string, row: any) => {
+              console.log(data);
               if (data === 0) return '';
               return `${new Intl.NumberFormat('fr-FR').format(data)} ${row.signe_2
                 }`;
@@ -256,6 +258,12 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
                 return `${row.status} (${row.type_annuler})`;
               } else if (row.montant_cfa > 0 && row.type === "R") {
                 return `${row.status} (${row.type})`;
+              }
+              else if (row.type_payement === "ORANGE MONEY") {
+                return `${row.status} (${row.type_payement})`;
+              }
+              else if (row.type_payement === "CASH") {
+                return `${row.status} (${row.type_payement})`;
               }
               return data + (data === `ANNULEE` ? `(${row.type_annuler})` : ``);
             },
@@ -508,6 +516,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     date_creation: [this.getCurrentDateTimeLocal(), Validators.required], // ✅ Fixé à l'heure locale
     montant_cfa: [0, Validators.required],
     montant: [0, Validators.required],
+    type_payement: ['CASH', Validators.required],
     telephone_receveur: ['', [Validators.required]],
   });
 }
@@ -525,10 +534,9 @@ private getCurrentDateTimeLocal(): string {
 
   fetchPartenaire(): void {
     this.partenaireService.getAllPartenaire().subscribe({
-      next: (response: any[]) => {
-        this.allPartenaire = response.filter(
-          (partenaire: any) => partenaire.pays !== 'Guinée-Bissau'
-        );
+      next: (response) => {
+        this.allPartenaire = response;
+        console.log(this.allPartenaire);
       },
       error: (error) => {
         console.error('Erreur lors de la récupération des partenaires:', error);
@@ -541,10 +549,9 @@ private getCurrentDateTimeLocal(): string {
   // Récupération des devises
   fetchDevise(): void {
     this.deviseService.getAllDevise().subscribe({
-      next: (response: any[]) => {
-        this.allDevise = response.filter(
-          (devise: any) => devise.paysArriver !== 'Guinée-Bissau'
-        );
+      next: (response) => {
+        this.allDevise = response;
+        console.log(this.allDevise);
       },
       // (response) => {
       //   this.allDevise = response;

@@ -88,7 +88,7 @@ export class ListeCreditComponent implements OnInit {
         .data()
         .toArray();
 
-  
+
       this.totalMontantSortie = filteredDataTable.reduce(
         (sum: number, row: { type: string, montant: number }) => {
           if (row.type === "SORTIE") {
@@ -141,6 +141,7 @@ export class ListeCreditComponent implements OnInit {
       montant: [0, [Validators.required, Validators.min(0)]],
 
       type: ['', Validators.required],
+      status: ['CASH', Validators.required],
     });
 
     this.getAllCredit();
@@ -285,7 +286,10 @@ export class ListeCreditComponent implements OnInit {
           {
             title: 'Type',
             data: 'type',
-          },
+            render: (data: string, type: string, row: any) => {
+              return `${row.type} (${row.status})`;
+            },
+          }
         ],
       });
       this.cd.detectChanges();
@@ -325,7 +329,8 @@ export class ListeCreditComponent implements OnInit {
           this.creditForm.patchValue({
             nom: '',
             montant: '',
-            type: ''
+            type: '',
+            status: ''
           });
           this.loading = false;
           alert('Credit ajouté avec succès!');

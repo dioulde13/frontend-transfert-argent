@@ -186,7 +186,7 @@
                   <td>
                     <input type="checkbox" [(ngModel)]="result.selected" />
                   </td>
-                  <td>{{ result.code}}</td>
+                  <td>{{ result.code_envoyer}}</td>
                   <td>{{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}</td>
                   <td>
                     {{ result.montant_cfa | currency : "" : "" : "1.0-0" }} XOF
@@ -290,8 +290,8 @@
             <table class="table data-table table-striped table-flush" style="width: 100%">
               <thead>
                 <tr class="text-muted">
+                  <th class="border px-4 py-2">Case à cocher</th>
                   <th class="border px-4 py-2">Code</th>
-                  <th class="border px-4 py-2">Type</th>
                   <th class="border px-4 py-2">Date</th>
                   <th class="border px-4 py-2">Montant</th>
                   <th class="border px-4 py-2">Prix</th>
@@ -306,7 +306,7 @@
                   <td>
                     <input type="checkbox" [(ngModel)]="result.selected" />
                   </td>
-                  <td>{{ result.code}}</td>
+                  <td>{{ result.codeEnvoyer}}</td>
                   <td>{{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}</td>
                   <td>
                     {{ result.montant | currency : "" : "" : "1.0-0" }} XOF

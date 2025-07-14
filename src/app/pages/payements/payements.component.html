@@ -184,7 +184,7 @@
         <form [formGroup]="payementForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="date_creation">Date</label>
-            <input type="date" class="form-control" id="date_creation" formControlName="date_creation"
+            <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
               placeholder="La date" />
           </div>
           <div class="form-group">
