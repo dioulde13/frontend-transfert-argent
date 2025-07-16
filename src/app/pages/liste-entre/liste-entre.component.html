@@ -472,6 +472,7 @@
                         </option>
                       </select>
                     </div>
+                    
 
                     <div class="form-group col-md-6">
                       <label for="montant_cfa">Montant</label>
@@ -480,6 +481,12 @@
                         (input)="onInputChange($event)" />
                     </div>
                   </div>
+                  <div class="form-group">
+                      <label for="prix">Prix</label>
+                      <input type="text" class="form-control" id="prix" formControlName="prix"
+                        placeholder="prix" [(ngModel)]="prix" [ngModel]="prix | currencyFormat"
+                        (input)="onInputChangePrix($event)" />
+                    </div>
                   <div class="form-group">
                     <label for="type_payement">Type Paiement</label>
                     <select id="type_payement" class="form-control" formControlName="type_payement">

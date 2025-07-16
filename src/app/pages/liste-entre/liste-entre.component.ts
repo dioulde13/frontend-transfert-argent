@@ -330,14 +330,21 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.montant_cfa = event.target.value.replace(/[^0-9,]/g, '');
   }
 
+   prix: number = 0;
+
+  onInputChangePrix(event: any): void {
+    this.prix = event.target.value.replace(/[^0-9,]/g, '');
+  }
+
   ajouterEntres(): void {
     console.log(this.entreForm.value);
     this.isLoading = true;
     const formData = this.entreForm.value;
 
     const montant_cfa = parseInt(formData.montant_cfa.replace(/,/g, ''), 10);
+    const prix = parseInt(formData.prix.replace(/,/g, ''), 10);
 
-    this.entreService.ajouterEntree({ ...formData, montant_cfa }).subscribe({
+    this.entreService.ajouterEntree({ ...formData, montant_cfa, prix }).subscribe({
       next: (response) => {
         console.log('Entrée ajoutée avec succès:', response);
         this.fetchAllEntre();
@@ -350,6 +357,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
           expediteur: '',
           receveur: '',
           montant_cfa: '',
+          prix:'',
           telephone_receveur: '',
         });
         this.isLoading = false;
@@ -515,6 +523,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     receveur: ['', Validators.required],
     date_creation: [this.getCurrentDateTimeLocal(), Validators.required], // ✅ Fixé à l'heure locale
     montant_cfa: [0, Validators.required],
+    prix: [0, Validators.required],
     montant: [0, Validators.required],
     type_payement: ['CASH', Validators.required],
     telephone_receveur: ['', [Validators.required]],
