@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environnement/environnement';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,9 @@ export class UtilisateurService {
   constructor(private http: HttpClient) {}
 
 
-  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; // L'URL de l'API
+  // private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; // L'URL de l'API
     // private apiUrl = 'http://localhost:3000'; 
+   private apiUrl = environment.apiUrl; 
 
 
   // Méthode pour obtenir les utilisateurs

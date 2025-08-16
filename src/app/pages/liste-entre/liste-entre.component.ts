@@ -1,7 +1,5 @@
 import {
-  AfterViewInit,
   Component,
-  OnDestroy,
   OnInit,
   ChangeDetectorRef,
 } from '@angular/core';
@@ -25,7 +23,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { CurrencyFormatPipe } from '../dasboard/currency-format.pipe';
 
 
-interface Result { 
+interface Result {
   code: string;
   code_envoyer: string;
   date_creation: string;
@@ -63,13 +61,12 @@ interface Result {
   templateUrl: './liste-entre.component.html',
   styleUrls: ['./liste-entre.component.css'],
 })
-export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListeEntreComponent implements OnInit {
   // dtoptions: any = {};
 
   dtTrigger: Subject<any> = new Subject<any>();
 
   allresultat: Result[] = [];
-  private dataTable: any;
 
   editDeviseForm!: FormGroup;
 
@@ -106,11 +103,11 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     // Mettre à jour la DataTable avec les résultats filtrés
-    this.dataTable.clear().rows.add(filteredResults).draw();
+    this.dataTableEntre.clear().rows.add(filteredResults).draw();
 
     // Attendre la fin de l’application du filtre de recherche par DataTable
     setTimeout(() => {
-      const filteredDataTable = this.dataTable
+      const filteredDataTable = this.dataTableEntre
         .rows({ search: 'applied' })
         .data()
         .toArray();
@@ -152,23 +149,50 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  private dataTableEntre: any;
+
+
   private initDataTable(): void {
     setTimeout(() => {
-      if (this.dataTable) {
-        this.dataTable.destroy();
+      if (this.dataTableEntre) {
+        this.dataTableEntre.destroy();
       }
-      this.dataTable = ($('#datatable') as any).DataTable({
+      this.dataTableEntre = ($('#dataTableEntre') as any).DataTable({
+        ordering: false,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        buttons: ['csv', 'excel', 'pdf', 'print'],
+        buttons: ['excel', 'pdf', 'print'],
         paging: true,
         searching: true,
         pageLength: 10,
         lengthMenu: [10, 25, 50],
         data: this.allresultat,
         order: [1, 'desc'],
+        language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          buttons: {
+            copy: "Copier",
+            excel: "Exporter Excel",
+            pdf: "Exporter PDF",
+            print: "Imprimer"
+          }
+        },
         columns: [
           { title: 'Code generer', data: 'code' },
           { title: 'Code', data: 'code_envoyer' },
@@ -268,21 +292,78 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
               return data + (data === `ANNULEE` ? `(${row.type_annuler})` : ``);
             },
           },
+          {
+            title: 'Action',
+            data: null,
+            orderable: false,
+            render: (data: any) => {
+              return `<button class="btn btn-light p-1 btn-view-entre" data-entre='${JSON.stringify(
+                data
+              )}'>
+                  <i class="fas fa-eye text-primary"></i>
+                  </button>
+                            `;
+            },
+          },
         ],
+      });
+
+      $('#dataTableEntre tbody').on('click', '.btn-view-entre', (event) => {
+        const user = JSON.parse(
+          $(event.currentTarget).attr('data-entre') || '{}'
+        );
+        this.openEntreModal(user);
+        this.cd.detectChanges();
       });
       this.cd.detectChanges();
     }, 100);
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(null);
+  selectedEntre: any = null;
+  showModal: boolean = false;
+
+  // Ouvrir le modal
+  // openEntreModal(entre: any) {
+  //   this.selectedEntre = { ...entre }; // on clone pour éviter de modifier directement la liste
+  //   console.log('Données à modifier :', this.selectedEntre);
+  //   this.showModal = true;
+  //   this.cd.detectChanges();
+  // }
+
+  openEntreModal(entre: any) {
+  this.selectedEntre = { ...entre };
+
+  // Vérifier si la date existe et la convertir au bon format
+  if (this.selectedEntre.date_creation) {
+    const date = new Date(this.selectedEntre.date_creation);
+    // format YYYY-MM-DDTHH:mm
+    this.selectedEntre.date_creation = date.toISOString().slice(0,16);
   }
 
-  ngOnDestroy(): void {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-    }
-    this.dtTrigger.unsubscribe();
+  console.log('Données à modifier :', this.selectedEntre);
+  this.showModal = true;
+  this.cd.detectChanges();
+}
+
+
+  // Fermer le modal
+  closeModal() {
+    this.showModal = false;
+  }
+  // Modifier l'entrée
+  updateEntre() {
+    if (!this.selectedEntre) return;
+
+    this.entreService.updateEntre(this.selectedEntre).subscribe({
+      next: (res) => {
+        this.fetchAllEntre();
+        alert("Modification effectuée avec succès !");
+        this.closeModal();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   isloadingEntreAutre: boolean = false;
@@ -330,7 +411,7 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.montant_cfa = event.target.value.replace(/[^0-9,]/g, '');
   }
 
-   prix: number = 0;
+  prix: number = 0;
 
   onInputChangePrix(event: any): void {
     this.prix = event.target.value.replace(/[^0-9,]/g, '');
@@ -352,12 +433,12 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
         this.entreForm.patchValue({
           partenaireId: '',
           deviseId: '',
-          date_creation:'',
-          code_envoyer:'',
+          date_creation: '',
+          code_envoyer: '',
           expediteur: '',
           receveur: '',
           montant_cfa: '',
-          prix:'',
+          prix: '',
           telephone_receveur: '',
         });
         this.isLoading = false;
@@ -513,29 +594,29 @@ export class ListeEntreComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
- private initForm(): void {
-  this.entreForm = this.fb.group({
-    utilisateurId: [this.idUser], // Liaison utilisateurId
-    partenaireId: ['', Validators.required],
-    deviseId: ['', Validators.required], // Initialisé à vide
-    expediteur: ['', Validators.required],
-    code_envoyer: ['', Validators.required],
-    receveur: ['', Validators.required],
-    date_creation: [this.getCurrentDateTimeLocal(), Validators.required], // ✅ Fixé à l'heure locale
-    montant_cfa: [0, Validators.required],
-    prix: [0, Validators.required],
-    montant: [0, Validators.required],
-    type_payement: ['CASH', Validators.required],
-    telephone_receveur: ['', [Validators.required]],
-  });
-}
+  private initForm(): void {
+    this.entreForm = this.fb.group({
+      utilisateurId: [this.idUser], // Liaison utilisateurId
+      partenaireId: ['', Validators.required],
+      deviseId: ['', Validators.required], // Initialisé à vide
+      expediteur: ['', Validators.required],
+      code_envoyer: ['', Validators.required],
+      receveur: ['', Validators.required],
+      date_creation: [this.getCurrentDateTimeLocal(), Validators.required], // ✅ Fixé à l'heure locale
+      montant_cfa: [0, Validators.required],
+      prix: [0, Validators.required],
+      montant: [0, Validators.required],
+      type_payement: ['CASH', Validators.required],
+      telephone_receveur: ['', [Validators.required]],
+    });
+  }
 
-private getCurrentDateTimeLocal(): string {
-  const now = new Date();
-  const tzoffset = now.getTimezoneOffset() * 60000; // Décalage timezone
-  const localISOTime = (new Date(now.getTime() - tzoffset)).toISOString().slice(0, 16);
-  return localISOTime; // Format "YYYY-MM-DDTHH:mm"
-}
+  private getCurrentDateTimeLocal(): string {
+    const now = new Date();
+    const tzoffset = now.getTimezoneOffset() * 60000; // Décalage timezone
+    const localISOTime = (new Date(now.getTime() - tzoffset)).toISOString().slice(0, 16);
+    return localISOTime; // Format "YYYY-MM-DDTHH:mm"
+  }
 
 
 

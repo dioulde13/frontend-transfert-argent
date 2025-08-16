@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { environment } from '../../../environnement/environnement';
 
 @Injectable({
   providedIn: 'root',
@@ -8,8 +9,9 @@ import { Observable, throwError } from 'rxjs';
 export class AuthService {
   
   // private apiUrl = 'http://localhost:3000'; 
+   private apiUrl = environment.apiUrl; 
 
-  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; 
+  // private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; 
 
   constructor(private http: HttpClient) {}
 

@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environnement/environnement';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class FinanceService {
-  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app/api/benefices';
+  // private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app/api/benefices';
   // private apiUrl = 'http://localhost:3000'; 
 
+   private apiUrl = environment.apiUrl; 
 
   constructor(private http: HttpClient) {}
 

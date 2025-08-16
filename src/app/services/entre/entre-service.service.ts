@@ -1,16 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { environment } from '../../../environnement/environnement';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EntreServiceService {
 
-  private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; 
+  // private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app'; 
   // private apiUrl = 'http://localhost:3000';
+   private apiUrl = environment.apiUrl; 
 
   constructor(private http: HttpClient) { }
+
+
+  updateEntre(entre: any) {
+  return this.http.put(`${this.apiUrl}/api/entrees/modifier/${entre.id}`, entre);
+}
+
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

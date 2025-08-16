@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environnement/environnement';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +9,9 @@ import { Observable } from 'rxjs';
 export class PayementEchangeService {
 
 // URL de l'API
-   private apiUrl = 'https://transferer-hasla-gui-cfyacgvau.up.railway.app'; 
+  //  private apiUrl = 'https://transferer-hasla-gui-cfyacgvau.up.railway.app'; 
   // private apiUrl = 'http://localhost:3000'; 
+   private apiUrl = environment.apiUrl; 
 
  
    constructor(private http: HttpClient) { }

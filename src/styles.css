@@ -5,3 +5,42 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+#dataTableEntre {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableEntre {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableEntre td {
+  border: 1px solid #ccc;
+  padding: 10px 14px; /* Plus d'espace pour un meilleur rendu */
+  /* text-align: center; */
+  font-weight: normal;
+  font-size: 14px; /* Taille du texte dans les cellules */
+}
+
+#dataTableEntre th {
+  border: 1px solid #ccc;
+  background-color: #f3f4f6;
+  font-weight: bold;
+  color: #333;
+  font-size: 17px; /* Taille du texte dans les en-têtes */
+  padding: 6px 18px;
+  white-space: nowrap;
+}
+
+#dataTableEntre tr:hover {
+  background-color: #e4e4ee;
+}
