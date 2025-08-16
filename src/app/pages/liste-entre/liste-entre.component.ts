@@ -322,45 +322,44 @@ export class ListeEntreComponent implements OnInit {
   selectedEntre: any = null;
   showModal: boolean = false;
 
-  // Ouvrir le modal
-  // openEntreModal(entre: any) {
-  //   this.selectedEntre = { ...entre }; // on clone pour éviter de modifier directement la liste
-  //   console.log('Données à modifier :', this.selectedEntre);
-  //   this.showModal = true;
-  //   this.cd.detectChanges();
-  // }
-
   openEntreModal(entre: any) {
-  this.selectedEntre = { ...entre };
+    this.selectedEntre = { ...entre };
 
-  // Vérifier si la date existe et la convertir au bon format
-  if (this.selectedEntre.date_creation) {
-    const date = new Date(this.selectedEntre.date_creation);
-    // format YYYY-MM-DDTHH:mm
-    this.selectedEntre.date_creation = date.toISOString().slice(0,16);
+    // Vérifier si la date existe et la convertir au bon format
+    if (this.selectedEntre.date_creation) {
+      const date = new Date(this.selectedEntre.date_creation);
+      // format YYYY-MM-DDTHH:mm
+      this.selectedEntre.date_creation = date.toISOString().slice(0, 16);
+    }
+
+    console.log('Données à modifier :', this.selectedEntre);
+    this.showModal = true;
+    this.cd.detectChanges();
   }
-
-  console.log('Données à modifier :', this.selectedEntre);
-  this.showModal = true;
-  this.cd.detectChanges();
-}
 
 
   // Fermer le modal
   closeModal() {
     this.showModal = false;
   }
+
+  isloadindEntre: boolean = false;
+
   // Modifier l'entrée
   updateEntre() {
+    this.isloadindEntre = true;
     if (!this.selectedEntre) return;
 
     this.entreService.updateEntre(this.selectedEntre).subscribe({
       next: (res) => {
+        this.isloadindEntre = false;
         this.fetchAllEntre();
         alert("Modification effectuée avec succès !");
         this.closeModal();
       },
       error: (err) => {
+        this.isloadindEntre = false;
+
         console.error(err);
       }
     });

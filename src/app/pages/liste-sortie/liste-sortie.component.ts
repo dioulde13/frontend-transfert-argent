@@ -51,7 +51,7 @@ interface Result {
   templateUrl: './liste-sortie.component.html',
   styleUrl: './liste-sortie.component.css',
 })
-export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListeSortieComponent implements OnInit{
   // Tableau pour stocker les résultats des entrées
   allresultat: Result[] = [];
 
@@ -74,7 +74,6 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder
   ) { }
 
-  private dataTable: any;
 
   selectedDevise: any = null; // Devise sélectionnée pour modification
 
@@ -147,11 +146,11 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     // Mettre à jour DataTable avec les résultats filtrés par date
-    this.dataTable.clear().rows.add(filteredResults).draw();
+    this.dataTableSortie.clear().rows.add(filteredResults).draw();
 
     // Attendre que DataTable applique son propre filtre (search)
     setTimeout(() => {
-      const filteredDataTable = this.dataTable
+      const filteredDataTable = this.dataTableSortie
         .rows({ search: 'applied' })
         .data()
         .toArray();
@@ -247,23 +246,48 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  private dataTableSortie: any;
   private initDataTable(): void {
     setTimeout(() => {
-      if (this.dataTable) {
-        this.dataTable.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
+      if (this.dataTableSortie) {
+        this.dataTableSortie.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
       }
-      this.dataTable = ($('#datatable') as any).DataTable({
+      this.dataTableSortie = ($('#dataTableSortie') as any).DataTable({
+        ordering: false,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        buttons: ['csv', 'excel', 'pdf', 'print'],
+        buttons: ['excel', 'pdf', 'print'],
         paging: true,
         searching: true,
         pageLength: 10,
         lengthMenu: [10, 25, 50],
         data: this.allresultat,
         order: [[0, 'desc']],
+        language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          buttons: {
+            copy: "Copier",
+            excel: "Exporter Excel",
+            pdf: "Exporter PDF",
+            print: "Imprimer"
+          }
+        },
         columns: [
           { title: 'Code generer', data: 'code' },
           { title: 'Code', data: 'codeEnvoyer' },
@@ -388,22 +412,78 @@ export class ListeSortieComponent implements OnInit, AfterViewInit, OnDestroy {
               return data + (data === `ANNULEE` ? `(${row.type})` : ``);
             },
           },
+          {
+            title: 'Action',
+            data: null,
+            orderable: false,
+            render: (data: any) => {
+              return `<button class="btn btn-light p-1 btn-view-sortie" data-sortie='${JSON.stringify(
+                data
+              )}'>
+                  <i class="fas fa-eye text-primary"></i>
+                  </button>
+                            `;
+            },
+          },
         ],
+      });
+
+       $('#dataTableSortie tbody').on('click', '.btn-view-sortie', (event) => {
+        const user = JSON.parse(
+          $(event.currentTarget).attr('data-sortie') || '{}'
+        );
+        this.openSortieModal(user);
+        this.cd.detectChanges();
       });
       this.cd.detectChanges();
     }, 100);
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(null);
+  selectedModifier: any = null;
+  showModal: boolean = false;
+
+  openSortieModal(entre: any) {
+  this.selectedModifier = { ...entre };
+
+  // Vérifier si la date existe et la convertir au bon format
+  if (this.selectedModifier.date_creation) {
+    const date = new Date(this.selectedModifier.date_creation);
+    // format YYYY-MM-DDTHH:mm
+    this.selectedModifier.date_creation = date.toISOString().slice(0,16);
   }
 
-  ngOnDestroy(): void {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-    }
-    this.dtTrigger.unsubscribe();
+  console.log('Données à modifier :', this.selectedModifier);
+  this.showModal = true;
+  this.cd.detectChanges();
+}
+
+
+  // Fermer le modal
+  closeModal() {
+    this.showModal = false;
   }
+
+  isloadindSortie: boolean = false;
+
+  // Modifier l'entrée
+  updateSortie() {
+    this.isloadindSortie = true;
+    if (!this.selectedModifier) return;
+
+    this.sortieService.updateSortie(this.selectedModifier).subscribe({
+      next: (res) => {
+        this.isloadindSortie = false;
+        this.fetchAllSortie();
+        alert("Modification effectuée avec succès !");
+        this.closeModal();
+      },
+      error: (err) => {
+        this.isloadindSortie = false;
+        console.error(err);
+      }
+    });
+  }
+
 
   private initValiderSortie() {
     this.valideSortieForm = this.fb.group({

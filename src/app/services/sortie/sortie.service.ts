@@ -11,10 +11,14 @@ import { environment } from '../../../environnement/environnement';
 export class SortieService {
   // private apiUrl = 'https://sfvb-gebbbgbsg-bb44ccvbdnfsdgn3.up.railway.app';
   // private apiUrl = 'http://localhost:3000'; 
-   private apiUrl = environment.apiUrl; 
+  private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
+
+  updateSortie(sortie: any) {
+    return this.http.put(`${this.apiUrl}/api/sorties/modifier/${sortie.id}`, sortie);
+  }
   getCompteSortie(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -37,7 +41,7 @@ export class SortieService {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     // Pas de corps, donc null en second argument
-    return this.http.put(`${this.apiUrl}/api/sorties/annuler/${code}`, null, { headers }); 
+    return this.http.put(`${this.apiUrl}/api/sorties/annuler/${code}`, null, { headers });
   }
 
   validerSortie(code: number, data: any): Observable<any> {
