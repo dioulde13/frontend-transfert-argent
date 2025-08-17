@@ -416,6 +416,16 @@ export class ListeEntreComponent implements OnInit {
     this.prix = event.target.value.replace(/[^0-9,]/g, '');
   }
 
+  showModalAddEntre: boolean = false;
+
+  openModalEntre() {
+    this.showModalAddEntre = true;
+  }
+
+  closeModalEntre() {
+    this.showModalAddEntre = false;
+  }
+
   ajouterEntres(): void {
     console.log(this.entreForm.value);
     this.isLoading = true;

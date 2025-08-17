@@ -662,6 +662,29 @@ export class ListeSortieComponent implements OnInit{
     this.frais = event.target.value.replace(/[^0-9,]/g, '');
   }
 
+
+  
+   showModalValider: boolean = false;
+
+ openModalValider() {
+    this.showModalValider = true;
+  }
+
+  closeModalValider() {
+    this.showModalValider = false;
+  }
+  
+
+   showModalAddSortie: boolean = false;
+
+ openModalSortie() {
+    this.showModalAddSortie = true;
+  }
+
+  closeModalSortie() {
+    this.showModalAddSortie = false;
+  }
+
   loading: boolean = false;
 
   // Méthode pour soumettre le formulaire et ajouter une nouvelle entrée

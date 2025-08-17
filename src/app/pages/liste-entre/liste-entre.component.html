@@ -26,17 +26,18 @@
                   <div class="card-body d-flex flex-wrap items-center justify-between breadcrumb-content">
                     <h5>Liste des entrées</h5>
                     <div>
-                      <a href="#" class="btn btn-primary" data-toggle="modal"
+                      <a class="btn btn-primary" data-toggle="modal"
                         data-target="#modifier-devise-modal">Devise</a>
                     </div>
                     <div>
-                      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#annuler-entre-modal">Annuler
+                      <a class="btn btn-primary" data-toggle="modal" data-target="#annuler-entre-modal">Annuler
                         Entre</a>
                     </div>
                     <div class="pr-3 btn-new border-left">
-                      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#new-project-modal">
+                      <button class="btn btn-primary p-1" (click)="openModalEntre()">
                         Nouvelle entree
-                      </a>
+                      </button>
+
                     </div>
                   </div>
                 </div>
@@ -187,6 +188,189 @@
       </div>
     </div>
 
+
+    <div *ngIf="showModalAddEntre" class="modal fade show d-block" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">
+              Ajouter une nouvelle entrée
+            </h5>
+            <button type="button" class="close" (click)="closeModalEntre()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body" style="max-height: 90vh; overflow-y: auto;">
+            <!-- Onglets -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab"
+                  aria-controls="details" aria-selected="true">
+                  Entre
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="paiement-tab" data-toggle="tab" href="#paiement" role="tab"
+                  aria-controls="paiement" aria-selected="false">
+                  Autre
+                </a>
+              </li>
+            </ul>
+
+            <!-- Contenu des onglets -->
+            <div class="tab-content" id="myTabContent">
+              <!-- Onglet Détails -->
+              <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <form [formGroup]="entreForm" (ngSubmit)="ajouterEntres()">
+                  <div class="form-row">
+                    <div class="form-group col-lg-6">
+                      <label for="code_envoyer">Code</label>
+                      <input type="text" class="form-control" id="code_envoyer" formControlName="code_envoyer"
+                        placeholder="Code du entre" />
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label for="date_creation">Date</label>
+                      <input type="datetime-local" class="form-control" id="date_creation"
+                        formControlName="date_creation" placeholder="La date" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="expediteur">Expéditeur</label>
+                      <input type="text" class="form-control" id="expediteur" formControlName="expediteur"
+                        placeholder="Nom de l'expéditeur" />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="receveur">Receveur</label>
+                      <input type="text" class="form-control" id="receveur" formControlName="receveur"
+                        placeholder="Nom du receveur" />
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="telephoneReceveur">Téléphone du receveur</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="telephone_receveur"
+                          formControlName="telephone_receveur" placeholder="Téléphone" />
+                      </div>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                      <label for="devise">Pays de destination</label>
+                      <select class="form-control" id="devise" formControlName="deviseId" required>
+                        <option value="" disabled selected>
+                          Sélectionnez un pays
+                        </option>
+                        <option *ngFor="let devise of allDevise" [value]="devise.id">
+                          {{ devise.paysArriver }}
+                          {{ devise.prix_1 | currency : "" : "" : "1.0-0" }}
+                          {{ devise.signe_2 }} →
+                          {{ devise.prix_2 | currency : "" : "" : "1.0-0" }}
+                          {{ devise.signe_1 }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="partenaire">Partenaire</label>
+                      <select class="form-control" id="partenaire" formControlName="partenaireId" required>
+                        <option value="" disabled selected>
+                          Sélectionnez un partenaire
+                        </option>
+                        <option *ngFor="let partenaire of allPartenaire" [value]="partenaire.id">
+                          {{ partenaire.prenom }} {{ partenaire.nom }} ({{
+                          partenaire.pays
+                          }}) ->
+                          {{
+                          partenaire.montant_preter
+                          | currency : "" : "" : "1.0-0"
+                          }}
+                        </option>
+                      </select>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                      <label for="montant_cfa">Montant</label>
+                      <input type="text" class="form-control" id="montant_cfa" formControlName="montant_cfa"
+                        placeholder="Montant" [(ngModel)]="montant_cfa" [ngModel]="montant_cfa | currencyFormat"
+                        (input)="onInputChange($event)" />
+                    </div>
+                  </div>
+                  <div class="row">
+
+                    <div class="form-group col-md-6">
+                      <label for="prix">Prix</label>
+                      <input type="text" class="form-control" id="prix" formControlName="prix" placeholder="prix"
+                        [(ngModel)]="prix" [ngModel]="prix | currencyFormat" (input)="onInputChangePrix($event)" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label for="type_payement">Type Paiement</label>
+                      <select id="type_payement" class="form-control" formControlName="type_payement">
+                        <option value="CASH">CASH</option>
+                        <option value="ORANGE MONEY">ORANGE MONEY</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModalEntre()">
+                      Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!entreForm.valid || isLoading">
+                      <span *ngIf="isLoading">Création en cours...</span>
+                      <span *ngIf="!isLoading">Ajouter</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Onglet Paiement -->
+              <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
+                <form [formGroup]="entreFormAutre" (ngSubmit)="ajouterEntreeAutres()">
+                  <div class="form-group">
+                    <label for="date_creation">Date et Heure</label>
+                    <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
+                      placeholder="Sélectionnez la date et l'heure" />
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="nomCLient">Nom client</label>
+                      <input type="text" class="form-control" id="nomCLient" formControlName="nomCLient"
+                        placeholder="Nom nomCLient" />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="montantClient">Montant</label>
+                      <input type="text" class="form-control" id="montantClient" formControlName="montantClient"
+                        placeholder="Montant" [(ngModel)]="montantClient" [ngModel]="montantClient | currencyFormat"
+                        (input)="onInputChangeClient($event)" />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                      Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                      [disabled]="!entreFormAutre.valid || isloadingEntreAutre">
+                      <span *ngIf="isloadingEntreAutre">Création en cours...</span>
+                      <span *ngIf="!isloadingEntreAutre">Ajouter</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div *ngIf="showModal" class="modal fade show d-block" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -271,7 +455,7 @@
               <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
               <button type="button" class="btn btn-primary" (click)="updateEntre()">
                 <span *ngIf="isloadindEntre">Modification en cours ...</span>
-            <span *ngIf="!isloadindEntre">Modifier</span></button>
+                <span *ngIf="!isloadindEntre">Modifier</span></button>
             </div>
           </div>
         </div>
@@ -457,183 +641,6 @@
         </div>
       </div>
 
-      <div class="modal fade" id="new-project-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalTitle">
-                Ajouter une nouvelle entrée
-              </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-              <!-- Onglets -->
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab"
-                    aria-controls="details" aria-selected="true">
-                    Entre
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="paiement-tab" data-toggle="tab" href="#paiement" role="tab"
-                    aria-controls="paiement" aria-selected="false">
-                    Autre
-                  </a>
-                </li>
-              </ul>
-
-              <!-- Contenu des onglets -->
-              <div class="tab-content" id="myTabContent">
-                <!-- Onglet Détails -->
-                <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-                  <form [formGroup]="entreForm" (ngSubmit)="ajouterEntres()">
-                    <div class="form-row">
-                      <div class="form-group col-lg-6">
-                        <label for="code_envoyer">Code</label>
-                        <input type="text" class="form-control" id="code_envoyer" formControlName="code_envoyer"
-                          placeholder="Code du entre" />
-                      </div>
-                      <div class="form-group col-lg-6">
-                        <label for="date_creation">Date</label>
-                        <input type="datetime-local" class="form-control" id="date_creation"
-                          formControlName="date_creation" placeholder="La date" />
-                      </div>
-                    </div>
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="expediteur">Expéditeur</label>
-                        <input type="text" class="form-control" id="expediteur" formControlName="expediteur"
-                          placeholder="Nom de l'expéditeur" />
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label for="receveur">Receveur</label>
-                        <input type="text" class="form-control" id="receveur" formControlName="receveur"
-                          placeholder="Nom du receveur" />
-                      </div>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="telephoneReceveur">Téléphone du receveur</label>
-                        <div class="input-group">
-                          <input type="text" class="form-control" id="telephone_receveur"
-                            formControlName="telephone_receveur" placeholder="Téléphone" />
-                        </div>
-                      </div>
-
-
-                      <div class="form-group col-md-6">
-                        <label for="devise">Pays de destination</label>
-                        <select class="form-control" id="devise" formControlName="deviseId" required>
-                          <option value="" disabled selected>
-                            Sélectionnez un pays
-                          </option>
-                          <option *ngFor="let devise of allDevise" [value]="devise.id">
-                            {{ devise.paysArriver }}
-                            {{ devise.prix_1 | currency : "" : "" : "1.0-0" }}
-                            {{ devise.signe_2 }} →
-                            {{ devise.prix_2 | currency : "" : "" : "1.0-0" }}
-                            {{ devise.signe_1 }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="partenaire">Partenaire</label>
-                        <select class="form-control" id="partenaire" formControlName="partenaireId" required>
-                          <option value="" disabled selected>
-                            Sélectionnez un partenaire
-                          </option>
-                          <option *ngFor="let partenaire of allPartenaire" [value]="partenaire.id">
-                            {{ partenaire.prenom }} {{ partenaire.nom }} ({{
-                            partenaire.pays
-                            }}) ->
-                            {{
-                            partenaire.montant_preter
-                            | currency : "" : "" : "1.0-0"
-                            }}
-                          </option>
-                        </select>
-                      </div>
-
-
-                      <div class="form-group col-md-6">
-                        <label for="montant_cfa">Montant</label>
-                        <input type="text" class="form-control" id="montant_cfa" formControlName="montant_cfa"
-                          placeholder="Montant" [(ngModel)]="montant_cfa" [ngModel]="montant_cfa | currencyFormat"
-                          (input)="onInputChange($event)" />
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="prix">Prix</label>
-                      <input type="text" class="form-control" id="prix" formControlName="prix" placeholder="prix"
-                        [(ngModel)]="prix" [ngModel]="prix | currencyFormat" (input)="onInputChangePrix($event)" />
-                    </div>
-                    <div class="form-group">
-                      <label for="type_payement">Type Paiement</label>
-                      <select id="type_payement" class="form-control" formControlName="type_payement">
-                        <option value="CASH">CASH</option>
-                        <option value="ORANGE MONEY">ORANGE MONEY</option>
-                      </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        Annuler
-                      </button>
-                      <button type="submit" class="btn btn-primary" [disabled]="!entreForm.valid || isLoading">
-                        <span *ngIf="isLoading">Création en cours...</span>
-                        <span *ngIf="!isLoading">Ajouter</span>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-
-                <!-- Onglet Paiement -->
-                <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
-                  <form [formGroup]="entreFormAutre" (ngSubmit)="ajouterEntreeAutres()">
-                    <div class="form-group">
-                      <label for="date_creation">Date et Heure</label>
-                      <input type="datetime-local" class="form-control" id="date_creation"
-                        formControlName="date_creation" placeholder="Sélectionnez la date et l'heure" />
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="nomCLient">Nom client</label>
-                        <input type="text" class="form-control" id="nomCLient" formControlName="nomCLient"
-                          placeholder="Nom nomCLient" />
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label for="montantClient">Montant</label>
-                        <input type="text" class="form-control" id="montantClient" formControlName="montantClient"
-                          placeholder="Montant" [(ngModel)]="montantClient" [ngModel]="montantClient | currencyFormat"
-                          (input)="onInputChangeClient($event)" />
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        Annuler
-                      </button>
-                      <button type="submit" class="btn btn-primary"
-                        [disabled]="!entreFormAutre.valid || isloadingEntreAutre">
-                        <span *ngIf="isloadingEntreAutre">Création en cours...</span>
-                        <span *ngIf="!isloadingEntreAutre">Ajouter</span>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- Modal de modification -->
       <div class="modal fade" id="edit-modifier-modal" tabindex="-1" role="dialog"
