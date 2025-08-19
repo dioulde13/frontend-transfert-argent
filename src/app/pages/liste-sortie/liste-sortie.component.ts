@@ -250,10 +250,10 @@ export class ListeSortieComponent implements OnInit{
   private initDataTable(): void {
     setTimeout(() => {
       if (this.dataTableSortie) {
-        this.dataTableSortie.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
+        this.dataTableSortie.destroy();
       }
       this.dataTableSortie = ($('#dataTableSortie') as any).DataTable({
-        ordering: false,
+        ordering: true,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
@@ -289,9 +289,6 @@ export class ListeSortieComponent implements OnInit{
           }
         },
         columns: [
-          { title: 'Code generer', data: 'code' },
-          { title: 'Code', data: 'codeEnvoyer' },
-          { title: 'Client', data: 'nomCLient' },
           {
             title: 'Date du jour',
             data: 'date_creation',
@@ -305,6 +302,10 @@ export class ListeSortieComponent implements OnInit{
               return `${day}/${month}/${year} ${hours}:${minutes}`;
             },
           },
+          { title: 'Code generer', data: 'code' },
+          { title: 'Code', data: 'codeEnvoyer' },
+          { title: 'Client', data: 'nomCLient' },
+          
           { title: 'Pays', data: 'pays_dest' },
           { title: 'Expéditeur', data: 'expediteur' },
           { title: 'Receveur', data: 'receveur' },

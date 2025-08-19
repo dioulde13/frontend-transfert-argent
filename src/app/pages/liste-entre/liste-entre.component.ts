@@ -158,7 +158,7 @@ export class ListeEntreComponent implements OnInit {
         this.dataTableEntre.destroy();
       }
       this.dataTableEntre = ($('#dataTableEntre') as any).DataTable({
-        ordering: false,
+        ordering: true,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
@@ -169,7 +169,7 @@ export class ListeEntreComponent implements OnInit {
         pageLength: 10,
         lengthMenu: [10, 25, 50],
         data: this.allresultat,
-        order: [1, 'desc'],
+        order: [0, 'desc'],
         language: {
           processing: "Traitement en cours...",
           search: "Rechercher&nbsp;:",
@@ -194,8 +194,6 @@ export class ListeEntreComponent implements OnInit {
           }
         },
         columns: [
-          { title: 'Code generer', data: 'code' },
-          { title: 'Code', data: 'code_envoyer' },
           {
             title: 'Date du jour',
             data: 'date_creation',
@@ -210,6 +208,8 @@ export class ListeEntreComponent implements OnInit {
               });
             },
           },
+          { title: 'Code generer', data: 'code' },
+          { title: 'Code', data: 'code_envoyer' },
           { title: 'Client', data: 'nomCLient' },
           { title: 'Pays', data: 'pays_dest' },
           { title: 'Expéditeur', data: 'expediteur' },
