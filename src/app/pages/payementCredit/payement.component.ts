@@ -32,7 +32,7 @@ interface Result {
   templateUrl: './payement.component.html',
   styleUrl: './payement.component.css',
 })
-export class PayementComponent implements OnInit, AfterViewInit {
+export class PayementComponent implements OnInit {
   // Tableau pour stocker les résultats
   allresultat: Result[] = [];
 
@@ -43,7 +43,6 @@ export class PayementComponent implements OnInit, AfterViewInit {
 
   dtTrigger: Subject<any> = new Subject<any>();
 
-  private dataTable: any;
 
   filteredResults: any[] = [];
 
@@ -74,11 +73,11 @@ export class PayementComponent implements OnInit, AfterViewInit {
     );
 
     // Mettre à jour DataTable avec les résultats filtrés par date
-    this.dataTable.clear().rows.add(filteredResults).draw();
+    this.dataTablePayementCredit.clear().rows.add(filteredResults).draw();
 
     // Attendre que DataTable applique son propre filtre (search)
     setTimeout(() => {
-      const filteredDataTable: { montant: number }[] = this.dataTable
+      const filteredDataTable: { montant: number }[] = this.dataTablePayementCredit
         .rows({ search: 'applied' })
         .data()
         .toArray();
@@ -131,12 +130,15 @@ export class PayementComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private dataTablePayementCredit: any;
+
+
   private initDataTable(): void {
     setTimeout(() => {
-      if (this.dataTable) {
-        this.dataTable.destroy();
+      if (this.dataTablePayementCredit) {
+        this.dataTablePayementCredit.destroy();
       }
-      this.dataTable = ($('#datatable') as any).DataTable({
+      this.dataTablePayementCredit = ($('#dataTablePayementCredit') as any).DataTable({
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
@@ -148,6 +150,29 @@ export class PayementComponent implements OnInit, AfterViewInit {
         lengthMenu: [10, 25, 50],
         data: this.allresultat,
         order: [[0, 'desc']],
+        language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          buttons: {
+            copy: "Copier",
+            excel: "Exporter Excel",
+            pdf: "Exporter PDF",
+            print: "Imprimer"
+          }
+        },
         columns: [
           {
             title: 'Date paiement',
@@ -184,9 +209,6 @@ export class PayementComponent implements OnInit, AfterViewInit {
     }, 100);
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(null);
-  }
 
   getUserInfo() {
     this.authService.getUserInfo().subscribe({

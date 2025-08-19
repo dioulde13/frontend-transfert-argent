@@ -5,6 +5,172 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+
+#dataTableCredit {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableCredit {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableCredit td {
+  border: 1px solid #ccc;
+  padding: 10px 14px; /* Plus d'espace pour un meilleur rendu */
+  /* text-align: center; */
+  font-weight: normal;
+  font-size: 14px; /* Taille du texte dans les cellules */
+}
+
+#dataTableCredit th {
+  border: 1px solid #ccc;
+  background-color: #f3f4f6;
+  font-weight: bold;
+  color: #333;
+  font-size: 17px; /* Taille du texte dans les en-têtes */
+  padding: 6px 18px;
+  white-space: nowrap;
+}
+
+#dataTableCredit tr:hover {
+  background-color: #e4e4ee;
+}
+
+
+#dataTableDepense {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableDepense {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableDepense td {
+  border: 1px solid #ccc;
+  padding: 10px 14px; /* Plus d'espace pour un meilleur rendu */
+  /* text-align: center; */
+  font-weight: normal;
+  font-size: 14px; /* Taille du texte dans les cellules */
+}
+
+#dataTableDepense th {
+  border: 1px solid #ccc;
+  background-color: #f3f4f6;
+  font-weight: bold;
+  color: #333;
+  font-size: 17px; /* Taille du texte dans les en-têtes */
+  padding: 6px 18px;
+  white-space: nowrap;
+}
+
+#dataTableDepense tr:hover {
+  background-color: #e4e4ee;
+}
+
+
+
+#dataTableRembourser {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableRembourser {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTableRembourser td {
+  border: 1px solid #ccc;
+  padding: 10px 14px; /* Plus d'espace pour un meilleur rendu */
+  /* text-align: center; */
+  font-weight: normal;
+  font-size: 14px; /* Taille du texte dans les cellules */
+}
+
+#dataTableRembourser th {
+  border: 1px solid #ccc;
+  background-color: #f3f4f6;
+  font-weight: bold;
+  color: #333;
+  font-size: 17px; /* Taille du texte dans les en-têtes */
+  padding: 6px 18px;
+  white-space: nowrap;
+}
+
+#dataTableRembourser tr:hover {
+  background-color: #e4e4ee;
+}
+
+
+#dataTablePayement {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTablePayement {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px; /* Augmente la taille globale si besoin */
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#dataTablePayement td {
+  border: 1px solid #ccc;
+  padding: 10px 14px; /* Plus d'espace pour un meilleur rendu */
+  /* text-align: center; */
+  font-weight: normal;
+  font-size: 14px; /* Taille du texte dans les cellules */
+}
+
+#dataTablePayement th {
+  border: 1px solid #ccc;
+  background-color: #f3f4f6;
+  font-weight: bold;
+  color: #333;
+  font-size: 17px; /* Taille du texte dans les en-têtes */
+  padding: 6px 18px;
+  white-space: nowrap;
+}
+
+#dataTablePayement tr:hover {
+  background-color: #e4e4ee;
+}
+
+
 #dataTableSortie {
   border-collapse: collapse;
   width: 100%;

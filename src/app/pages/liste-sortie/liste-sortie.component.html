@@ -269,7 +269,8 @@
                                 (input)="onInputChangeFrais($event)" />
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                              <button type="button" class="close" class="btn btn-secondary" (click)="closeModalSortie()">
+
                                 Annuler
                               </button>
                               <button type="submit" class="btn btn-primary">
@@ -302,7 +303,7 @@
                               </div>
                             </div>
                             <div class="modal-footer">
-                               <button type="button" class="close" (click)="closeModalSortie()">
+                              <button type="button" class="close" class="btn btn-secondary" (click)="closeModalSortie()">
                                 Annuler
                               </button>
                               <button type="submit" class="btn btn-primary"

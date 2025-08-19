@@ -34,7 +34,6 @@ interface Result {
 })
 export class PayementsComponent implements OnInit, AfterViewInit {
   allresultat: Result[] = [];
-  private dataTable: any;
 
   userInfo: any = null;
   idUser: string = '';
@@ -161,11 +160,11 @@ export class PayementsComponent implements OnInit, AfterViewInit {
     );
 
     // Mettre à jour DataTable avec les résultats filtrés par date
-    this.dataTable.clear().rows.add(filteredResults).draw();
+    this.dataTablePayement.clear().rows.add(filteredResults).draw();
 
     // Attendre que DataTable applique son propre filtre (search)
     setTimeout(() => {
-      const filteredDataTable: { montant: number }[] = this.dataTable
+      const filteredDataTable: { montant: number }[] = this.dataTablePayement
         .rows({ search: 'applied' })
         .data()
         .toArray();
@@ -199,23 +198,50 @@ export class PayementsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private dataTablePayement: any;
+
+
   private initDataTable(): void {
     setTimeout(() => {
-      if (this.dataTable) {
-        this.dataTable.destroy();
+      if (this.dataTablePayement) {
+        this.dataTablePayement.destroy();
       }
-      this.dataTable = ($('#datatable') as any).DataTable({
+      this.dataTablePayement = ($('#dataTablePayement') as any).DataTable({
+        ordering: false,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        buttons: ['csv', 'excel', 'pdf', 'print'],
+        buttons: ['excel', 'pdf', 'print'],
         paging: true,
         searching: true,
         pageLength: 10,
         lengthMenu: [10, 25, 50],
         data: this.allresultat,
         order: [[0, 'desc']],
+        language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          buttons: {
+            copy: "Copier",
+            excel: "Exporter Excel",
+            pdf: "Exporter PDF",
+            print: "Imprimer"
+          }
+        },
         columns: [
           {
             title: 'Date paiement',
@@ -230,20 +256,20 @@ export class PayementsComponent implements OnInit, AfterViewInit {
                 hour: '2-digit',
                 minute: '2-digit',
               });
-              return `${row.entreId === null ?  
-                 row.Sortie?.pays_exp : row.Entre?.pays_dest
+              return `${row.entreId === null ?
+                row.Sortie?.pays_exp : row.Entre?.pays_dest
                 }
-                 / ${row.entreId === null ? row.Sortie?.codeEnvoyer 
-                  : 
+                 / ${row.entreId === null ? row.Sortie?.codeEnvoyer
+                  :
                   row.Entre?.code_envoyer
                 } 
-                / ${row.entreId === null ? row.Sortie?.codeEnvoyer 
-                  : 
+                / ${row.entreId === null ? row.Sortie?.codeEnvoyer
+                  :
                   row.Entre?.code_envoyer
                 }
                 / ${row.entreId === null
-                  ? row.Sortie?.telephone_receveur +" ("+row.Sortie?.type_payement+")"
-                  : row.Entre?.telephone_receveur +" ("+row.Entre?.type_payement+")"
+                  ? row.Sortie?.telephone_receveur + " (" + row.Sortie?.type_payement + ")"
+                  : row.Entre?.telephone_receveur + " (" + row.Entre?.type_payement + ")"
                 } 
                 / ${formattedDate}`;
             },
@@ -271,14 +297,14 @@ export class PayementsComponent implements OnInit, AfterViewInit {
 
               if (row.signe === "XOF") {
                 const montantTotal = Number(prix / 5000) * Number(data);
-                  return Number(prix) === 0
-                ? `${formatted} ${devise}`
-                : `${formatted} ${devise} -> ${formattedPrix} GNF = ${montantTotal.toLocaleString('fr-FR')} GNF`;
+                return Number(prix) === 0
+                  ? `${formatted} ${devise}`
+                  : `${formatted} ${devise} -> ${formattedPrix} GNF = ${montantTotal.toLocaleString('fr-FR')} GNF`;
               } else {
                 const montantTotal = Number(prix / 100) * Number(data);
-                  return Number(prix) === 0
-                ? `${formatted} ${devise}`
-                : `${formatted} ${devise} -> ${formattedPrix} GNF = ${montantTotal.toLocaleString('fr-FR')} GNF`;
+                return Number(prix) === 0
+                  ? `${formatted} ${devise}`
+                  : `${formatted} ${devise} -> ${formattedPrix} GNF = ${montantTotal.toLocaleString('fr-FR')} GNF`;
               }
             },
           }
@@ -336,7 +362,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
           this.payementForm.patchValue({
             code: '',
             montant: '',
-            date_creation:'',
+            date_creation: '',
             type: '',
             prix: '',
             signe: ''

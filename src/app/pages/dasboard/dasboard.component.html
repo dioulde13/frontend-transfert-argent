@@ -41,7 +41,8 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
     <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
       <div class="modal-header">
-        <button type="button" (click)="closeMontantModal()" class="btn-close" data-bs-dismiss="modal"  aria-label="Close"></button>
+        <button type="button" (click)="closeMontantModal()" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <form class="p-4 shadow rounded" [formGroup]="formRecharger" (ngSubmit)="rechargerSolde()">
         <div class="modal-body">
@@ -528,54 +529,45 @@
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Solde</span>
-            </div>
-            <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ userInfo.solde | currency : "" : "" : "1.0-0" }} GNF
+            <div class="top-block d-flex align-items-center justify-content-between">
+              <h2 style="font-size: 20px">Solde</h2>
+              <span class="bg-light p-2 rounded-circle">
+                <i class="fa fa-wallet text-success" style="font-size: 20px;"></i>
               </span>
             </div>
+            <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{ userInfo.solde | currency : "" : "" : "1.0-0" }}
+                GNF</span></h3>
           </div>
         </div>
       </div>
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Solde PDV</span>
+            <div class="top-block d-flex align-items-start justify-content-between">
+              <h2 style="font-size: 20px">Solde PDV</h2>
+              <span class="bg-light p-2 rounded-circle">
+                <i class="fa fa-coins text-success" style="font-size: 20px;"></i>
+              </span>
             </div>
-            <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
+            <h3>
+              <span class="counter" style="font-size: 20px; font-weight: bold;">
                 {{ userInfo.soldePDV | currency : "" : "" : "1.0-0" }} GNF
               </span>
-            </div>
+            </h3>
           </div>
+
         </div>
       </div>
-      <!-- <div class="col-lg-3 card-profile">
-        <div class="card card-block card-stretch card-height">
-          <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Solde total</span>
-            </div>
-            <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ (userInfo.autre_solde + userInfo.solde) | currency : "" : "" : "1.0-0" }} GNF
-              </span>
-            </div>
-          </div>
-        </div>
-      </div> -->
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Nombre entre par jours</span>
+            <div class="top-block d-flex align-items-start justify-content-start">
+              <span style="font-size: 18px">Nombre(s) entré(s) par jour</span>
             </div>
             <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ entreDuJour | currency : "" : "" : "1.0-0" }}
+              <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{entreDuJour | currency : "" : "" : "1.0-0" }}
+                    GNF</span></h3>
               </span>
             </div>
           </div>
@@ -584,12 +576,13 @@
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Nombre sortie par jours</span>
+            <div class="top-block d-flex align-items-start justify-content-start">
+              <span style="font-size: 18px">Nombre de sorties par jour</span>
             </div>
             <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ sortieDuJour | currency : "" : "" : "1.0-0" }}
+              <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{sortieDuJour | currency : "" : "" : "1.0-0" }}
+                    GNF</span></h3>
               </span>
             </div>
           </div>
@@ -598,12 +591,13 @@
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Payement par jours</span>
+            <div class="top-block d-flex align-items-start justify-content-start">
+              <span style="font-size: 18px">Payement par jours</span>
             </div>
             <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ payementDuJour | currency : "" : "" : "1.0-0" }}
+              <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{payementDuJour | currency : "" : "" : "1.0-0" }}
+                    GNF</span></h3>
               </span>
             </div>
           </div>
@@ -641,12 +635,13 @@
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Retour par jours</span>
+            <div class="top-block d-flex align-items-start justify-content-start">
+              <span style="font-size: 18px">Retour par jours</span>
             </div>
             <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ retourDuJour | currency : "" : "" : "1.0-0" }}
+              <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{retourDuJour | currency : "" : "" : "1.0-0" }}
+                    GNF</span></h3>
               </span>
             </div>
           </div>
@@ -655,12 +650,14 @@
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
-            <div class="top-block d-flex align-items-center justify-content-center">
-              <span style="font-size: 20px">Depenses par jours</span>
+            <div class="top-block d-flex align-items-start justify-content-start">
+              <span style="font-size: 20px">Dépenses par jour</span>
             </div>
             <div>
-              <span class="d-flex align-items-center justify-content-center" style="font-size: 30px; color: black">
-                {{ montantDepenseDuJour | currency : "" : "" : "1.0-0" }} GNF
+              <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{montantDepenseDuJour | currency : "" : "" : "1.0-0"
+                    }}
+                    GNF</span></h3>
               </span>
             </div>
           </div>

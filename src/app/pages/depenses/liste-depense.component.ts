@@ -38,25 +38,51 @@ export class ListeDepenseComponent implements OnInit {
   dtoptions: any = {};
 
   dtTrigger: Subject<any> = new Subject<any>();
-  private dataTable: any;
+
+
+  private dataTableDepense: any;
 
   private initDataTable(): void {
     setTimeout(() => {
-      if (this.dataTable) {
-        this.dataTable.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
+      if (this.dataTableDepense) {
+        this.dataTableDepense.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
       }
-      this.dataTable = ($('#datatable') as any).DataTable({
+      this.dataTableDepense = ($('#dataTableDepense') as any).DataTable({
+        ordering: false,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        buttons: ['csv', 'excel', 'pdf', 'print'],
+        buttons: ['excel', 'pdf', 'print'],
         paging: true,
         searching: true,
         pageLength: 5,
         lengthMenu: [5, 10, 50],
         data: this.allresultat,
-        order: [[0, 'desc']], // Assurez-vous que l'ordre est bien un tableau avec l'index et l'ordre
+        order: [[0, 'desc']],
+        language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          buttons: {
+            copy: "Copier",
+            excel: "Exporter Excel",
+            pdf: "Exporter PDF",
+            print: "Imprimer"
+          }
+        },
         columns: [
           {
             title: 'Date du jour',
@@ -94,16 +120,6 @@ export class ListeDepenseComponent implements OnInit {
     }, 100);
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(null);
-  }
-
-  ngOnDestroy(): void {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-    }
-    this.dtTrigger.unsubscribe();
-  }
 
   constructor(
     private fb: FormBuilder,

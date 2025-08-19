@@ -38,7 +38,6 @@ export class ListeCreditComponent implements OnInit {
   userInfo: any = null;
   idUser: string = '';
 
-  private dataTable: any;
 
   creditForm!: FormGroup;
 
@@ -79,11 +78,11 @@ export class ListeCreditComponent implements OnInit {
     );
 
     // Mettre à jour DataTable avec les résultats filtrés par date
-    this.dataTable.clear().rows.add(filteredResults).draw();
+    this.dataTableCredit.clear().rows.add(filteredResults).draw();
 
     // Attendre que DataTable applique son propre filtre (search)
     setTimeout(() => {
-      const filteredDataTable = this.dataTable
+      const filteredDataTable = this.dataTableCredit
         .rows({ search: 'applied' })
         .data()
         .toArray();
@@ -211,23 +210,50 @@ export class ListeCreditComponent implements OnInit {
     });
   }
 
+  private dataTableCredit: any;
+
+
   private initDataTable(): void {
     setTimeout(() => {
-      if (this.dataTable) {
-        this.dataTable.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
+      if (this.dataTableCredit) {
+        this.dataTableCredit.destroy(); // Détruire l'ancienne instance avant d'en créer une nouvelle
       }
-      this.dataTable = ($('#datatable') as any).DataTable({
+      this.dataTableCredit = ($('#dataTableCredit') as any).DataTable({
+        ordering: false,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        buttons: ['csv', 'excel', 'pdf', 'print'],
+        buttons: ['excel', 'pdf', 'print'],
         paging: true,
         searching: true,
         pageLength: 10,
         lengthMenu: [10, 25, 50],
         data: this.allresultat,
         order: [0, 'desc'],
+         language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donn&eacute;e disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          buttons: {
+            copy: "Copier",
+            excel: "Exporter Excel",
+            pdf: "Exporter PDF",
+            print: "Imprimer"
+          }
+        },
         columns: [
           { title: 'Reference', data: 'reference' },
           {
@@ -294,17 +320,6 @@ export class ListeCreditComponent implements OnInit {
       });
       this.cd.detectChanges();
     }, 100);
-  }
-
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(null);
-  }
-
-  ngOnDestroy(): void {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-    }
-    this.dtTrigger.unsubscribe();
   }
 
   loading: boolean = false;
