@@ -17,7 +17,7 @@ import { CurrencyFormatPipe } from '../dasboard/currency-format.pipe';
     ReactiveFormsModule,
     DataTablesModule,
     CurrencyFormatPipe,
-  ], 
+  ],
   templateUrl: './liste-partenaire.component.html',
   styleUrls: ['./liste-partenaire.component.css'], // Correction de 'styleUrl' en 'styleUrls'
 })
@@ -43,17 +43,16 @@ export class ListePartenaireComponent implements OnInit {
     private authService: AuthService,
     private partenaireService: PartenaireServiceService,
     private deviseService: DeviseService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
-     this.modifierPartenaireForm = this.fb.group({
+    this.modifierPartenaireForm = this.fb.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
       pays: [{ value: 0, disabled: true }, Validators.required],
-     montant_preter: [
-      // { value: 0, disabled: true },
-       [Validators.required, Validators.min(0)]],
+      montant_preter: [[Validators.required, Validators.min(0)]],
+      montant_credit_Xof: [[Validators.required, Validators.min(0)]],
     });
 
     this.dtoptions = {
@@ -62,7 +61,9 @@ export class ListePartenaireComponent implements OnInit {
       pageLength: 10, // Nombre d'éléments par page
     };
     this.initPartenaire();
+    this.initPartenaireCreancier();
     this.partenaireFormIntial();
+    this.getAllPartenaireCrenacier();
     this.getAllPartenaire();
     this.getUserInfo(); // Récupération des infos utilisateur
     this.fetchDevise();
@@ -115,13 +116,13 @@ export class ListePartenaireComponent implements OnInit {
 
         // Mettre à jour le champ utilisateurId dans le formulaire
         this.partenaireForm.patchValue({ utilisateurId: this.idUser });
-
+        this.initPartenaireCreancier();
         this.initPartenaire();
       },
     });
   }
 
-   selectedPartenaireEdit: any = null;
+  selectedPartenaireEdit: any = null;
 
   onEdit(partenaire: any) {
     this.selectedPartenaireEdit = partenaire;
@@ -130,9 +131,10 @@ export class ListePartenaireComponent implements OnInit {
       prenom: partenaire.prenom,
       pays: partenaire.pays,
       montant_preter: partenaire.montant_preter,
+      montant_credit_Xof: partenaire.montant_credit_Xof,
     });
   }
-isDisabled: boolean = true; // ou false
+  isDisabled: boolean = true; // ou false
 
   isLoadingModif: boolean = false;
 
@@ -159,7 +161,7 @@ isDisabled: boolean = true; // ou false
   editPartenaireForm!: FormGroup;
 
   private initPartenaire(): void {
-    this.editPartenaireForm = this.fb.group({ 
+    this.editPartenaireForm = this.fb.group({
       deviseId: ['', Validators.required],
       utilisateurId: [this.idUser],
     });
@@ -244,5 +246,121 @@ isDisabled: boolean = true; // ou false
     } else {
       alert('Veuillez remplir tous les champs obligatoires.');
     }
+  }
+
+
+  partenaireCreancierForm!: FormGroup;
+  montant: number = 0;
+  isLoadingCreancier: boolean = false;
+
+  // Initialisation du formulaire
+  private initPartenaireCreancier(): void {
+    this.partenaireCreancierForm = this.fb.group({
+      utilisateurId: [this.idUser],
+      date_creation: ['', Validators.required],
+      partenaireId: [0, Validators.required],
+      montant: [0, Validators.required], // garder string pour formatter puis convertir en number
+    });
+  }
+
+// Gestion de la saisie du montant (n'autorise que chiffres et formate avec espaces)
+onInputChangeCreancier(event: any): void {
+  // On enlève tout sauf chiffres
+  let value = event.target.value.replace(/[^0-9]/g, '');
+
+  // Si vide, on met chaîne vide
+  if (!value) {
+    this.partenaireCreancierForm.patchValue({ montant: '' }, { emitEvent: false });
+    return;
+  }
+
+  // Conversion en number
+  const numericValue = Number(value);
+
+  // Formatage (séparateur de milliers : 1 234 567)
+  const formattedValue = new Intl.NumberFormat('fr-FR').format(numericValue);
+
+  // Mise à jour de l'input et du formControl sans relancer l'event
+  this.partenaireCreancierForm.patchValue({ montant: formattedValue }, { emitEvent: false });
+}
+
+// Soumission du formulaire
+ajouterPartenaireCreancier(): void {
+  this.isLoadingCreancier = true;
+
+  if (this.partenaireCreancierForm.invalid) {
+    this.isLoadingCreancier = false;
+    return;
+  }
+
+  const formData = this.partenaireCreancierForm.value;
+  const partenaireId = Number(formData.partenaireId);
+
+  // Nettoyer les espaces avant conversion
+  const montant = parseInt(formData.montant.replace(/\s/g, ''), 10);
+
+  console.log('Formulaire:', formData);
+  console.log('Montant (number):', montant);
+  this.isLoadingCreancier = false;
+
+  // Exemple d'envoi backend
+  const payload = {
+    ...formData,
+    partenaireId: partenaireId,
+    montant: montant,
+  };
+  console.log(payload);
+
+  this.partenaireService.ajouterPartenaireCreancier(payload).subscribe(
+    (response) => {
+      this.isLoadingCreancier = false;
+      console.log('Partenaire ajouté avec succès:', response);
+      this.getAllPartenaireCrenacier();
+      alert('Partenaire ajouté avec succès!');
+    },
+    (error) => {
+      this.isLoadingCreancier = false;
+      console.error("Erreur lors de l'ajout du partenaire:", error);
+      alert("Erreur lors de l'ajout du partenaire.");
+    }
+  );
+}
+
+
+   allPartenaireCreancier: any;
+   getAllPartenaireCrenacier() {
+    // Appel à l'API et gestion des réponses
+    this.partenaireService.getAllPartenaireCreancier().subscribe({
+      next: (response) => {
+        this.allPartenaireCreancier = response;
+        console.log(this.allPartenaireCreancier);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      },
+    });
+  }
+
+
+
+
+  showListeModal: boolean = false;
+
+  showPartenaireModal: boolean = false;
+
+  openPartenaireModal() {
+    this.showPartenaireModal = true;
+  }
+
+  closeUserModal() {
+    this.showPartenaireModal = false;
+  }
+
+  openListeModal() {
+    this.showListeModal = true;
+  }
+
+  closeListeModal() {
+    this.showListeModal = false;
   }
 }

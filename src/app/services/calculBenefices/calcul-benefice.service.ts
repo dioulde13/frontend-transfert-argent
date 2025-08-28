@@ -25,7 +25,7 @@ export class CalculBeneficeService {
       .set('date_debut', dateDebut)
       .set('date_fin', dateFin);
 
-    return this.http.get<any>(`${this.apiUrl}/benefice/authomatique`, { params });
+    return this.http.get<any>(`${this.apiUrl}/api/calculBenefices/benefice/authomatique`, { params });
   }
 
 }

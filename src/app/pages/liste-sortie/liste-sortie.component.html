@@ -262,14 +262,31 @@
                                   [ngModel]="montant | currencyFormat" (input)="onInputChange($event)" />
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label for="frais">Frais</label>
-                              <input type="text" class="form-control" id="frais" formControlName="frais"
-                                placeholder="frais en CFA" [(ngModel)]="frais" [ngModel]="frais | currencyFormat"
-                                (input)="onInputChangeFrais($event)" />
+                            <div class="form-row">
+                              <div class="form-group col-md-6">
+                                <div class="form-group">
+                                  <label for="frais">Frais</label>
+                                  <input type="text" class="form-control" id="frais" formControlName="frais"
+                                    placeholder="frais en CFA" [(ngModel)]="frais" [ngModel]="frais | currencyFormat"
+                                    (input)="onInputChangeFrais($event)" />
+                                </div>
+                              </div>
+                              <div class="form-group col-md-6">
+
+                                <div class="form-group">
+                                  <label for="mode_payement_devise">Payer par:</label>
+                                  <select id="mode_payement_devise" class="form-control"
+                                    formControlName="mode_payement_devise">
+                                    <option value="GNF">GNF</option>
+                                    <option value="XOF">XOF</option>
+                                  </select>
+                                </div>
+                              </div>
                             </div>
+
                             <div class="modal-footer">
-                              <button type="button" class="close" class="btn btn-secondary" (click)="closeModalSortie()">
+                              <button type="button" class="close" class="btn btn-secondary"
+                                (click)="closeModalSortie()">
 
                                 Annuler
                               </button>
@@ -303,7 +320,8 @@
                               </div>
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="close" class="btn btn-secondary" (click)="closeModalSortie()">
+                              <button type="button" class="close" class="btn btn-secondary"
+                                (click)="closeModalSortie()">
                                 Annuler
                               </button>
                               <button type="submit" class="btn btn-primary"
@@ -342,10 +360,10 @@
                     <th>Receveur</th>
                     <th>Téléphone Recev</th>
                     <th>Montant XOF</th>
-                    <th>Prix GNF</th>
-                    <th>Montant GNF</th>
-                    <th>Montant payé (GNF)</th>
-                    <th>Montant restant (GNF)</th>
+                    <th>Prix</th>
+                    <th>Montant</th>
+                    <th>Montant payé</th>
+                    <th>Montant restant</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>

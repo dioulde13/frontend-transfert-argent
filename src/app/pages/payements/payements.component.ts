@@ -207,7 +207,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
         this.dataTablePayement.destroy();
       }
       this.dataTablePayement = ($('#dataTablePayement') as any).DataTable({
-        ordering: false,
+        ordering: true,
         dom:
           "<'row'<'col-sm-6 dt-buttons-left'B><'col-sm-6 text-end dt-search-right'f>>" +
           "<'row'<'col-sm-12'tr>>" +
@@ -259,10 +259,6 @@ export class PayementsComponent implements OnInit, AfterViewInit {
               return `${row.entreId === null ?
                 row.Sortie?.pays_exp : row.Entre?.pays_dest
                 }
-                 / ${row.entreId === null ? row.Sortie?.codeEnvoyer
-                  :
-                  row.Entre?.code_envoyer
-                } 
                 / ${row.entreId === null ? row.Sortie?.codeEnvoyer
                   :
                   row.Entre?.code_envoyer
@@ -278,6 +274,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
             title: 'Montant',
             data: 'montant',
             render: (data: number, type: any, row: any) => {
+              console.log(row);
               const prix = (row.prix);
               const formatted = new Intl.NumberFormat('fr-FR', {
                 style: 'decimal',
@@ -293,7 +290,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
 
               const devise = row.signe === "EURO" ? "€" :
                 row.signe === "USD" ? "$" :
-                  row.signe === "XOF" ? "XOF" : "GNF";
+                  row.signe === "XOF" ? "XOF": row?.Sortie?.mode_payement_devise === "XOF" ? "XOF" : "GNF";
 
               if (row.signe === "XOF") {
                 const montantTotal = Number(prix / 5000) * Number(data);

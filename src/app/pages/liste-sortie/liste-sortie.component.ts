@@ -361,20 +361,8 @@ export class ListeSortieComponent implements OnInit{
                GNF`;
             },
           },
-          // {
-          //   title: 'Montant en GNF',
-          //   data: 'montant_gnf',
-          //   render: (data: number, type: string, row: any) => {
-          //     const formattedAmount = new Intl.NumberFormat('fr-FR', {
-          //       style: 'decimal',
-          //       minimumFractionDigits: 0,
-          //       maximumFractionDigits: 0,
-          //     }).format(data);
-          //     return `${formattedAmount} ${row.signe_1}`;
-          //   },
-          // },
           {
-            title: 'Montant payé GNF',
+            title: 'Montant payé',
             data: 'montant_payer',
             render: (data: number, type: string, row: any) => {
               const formattedAmount = new Intl.NumberFormat('fr-FR', {
@@ -382,11 +370,11 @@ export class ListeSortieComponent implements OnInit{
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount} ${row.signe_1}`;
+              return `${formattedAmount} ${row.mode_payement_devise === 'GNF'?row.signe_1:row.signe_2}`;
             },
           },
           {
-            title: 'Montant restant GNF',
+            title: 'Montant restant',
             data: 'montant_restant',
             render: (data: number, type: string, row: any) => {
               const formattedAmount = new Intl.NumberFormat('fr-FR', {
@@ -394,7 +382,7 @@ export class ListeSortieComponent implements OnInit{
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount}  ${row.signe_1}`;
+              return `${formattedAmount}  ${row.mode_payement_devise === 'GNF'?row.signe_1:row.signe_2}`;
             },
           },
           {
@@ -644,6 +632,7 @@ export class ListeSortieComponent implements OnInit{
       deviseId: ['', Validators.required],
       expediteur: ['', Validators.required],
       date_creation: ['', Validators.required],
+      mode_payement_devise: ['GNF', Validators.required],
       codeEnvoyer: ['', Validators.required],
       receveur: ['', Validators.required],
       montant: [0, Validators.required],
