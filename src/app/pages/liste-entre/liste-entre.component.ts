@@ -73,8 +73,12 @@ export class ListeEntreComponent implements OnInit {
   startDate: Date | null = null;
   endDate: Date | null = null;
 
-  totalMontant: number = 0; // Initialisation
-  totalMontantDevise: number = 0; // Initialisation
+  totalMontant: number = 0;
+  totalMontantDevise: number = 0;
+  totalMontantAh: number = 0;
+  totalMontantAhGNF: number = 0;
+
+
 
   filtrerEntreDates(): void {
     const startDateInput = (
@@ -89,6 +93,8 @@ export class ListeEntreComponent implements OnInit {
 
     // Réinitialiser le total
     this.totalMontant = 0;
+    this.totalMontantAh = 0;
+    this.totalMontantAhGNF = 0;
     this.totalMontantDevise = 0;
 
     let filteredResults = this.allresultat.filter(
@@ -112,22 +118,34 @@ export class ListeEntreComponent implements OnInit {
         .data()
         .toArray();
 
-      // Calculer le total montant en GNF
-      this.totalMontant = filteredDataTable.reduce(
-        (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
-        0
-      );
+      this.totalMontant = filteredDataTable
+        .filter((row: { code_envoyer: string }) => !row.code_envoyer?.toLowerCase().includes("ah"))
+        .reduce(
+          (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
+          0
+        );
 
-      // Calculer le total montant en devise (CFA)
-      this.totalMontantDevise = filteredDataTable.reduce(
-        (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
-        0
-      );
+      this.totalMontantDevise = filteredDataTable
+        .filter((row: { code_envoyer: string }) => !row.code_envoyer?.toLowerCase().includes("ah"))
+        .reduce(
+          (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
+          0
+        );
 
-      // console.log(
-      //   'Total Montant après filtre et recherche :',
-      //   this.totalMontant
-      // );
+      this.totalMontantAh = filteredDataTable
+        .filter((row: { code_envoyer: string }) => row.code_envoyer?.toLowerCase().includes("ah"))
+        .reduce(
+          (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
+          0
+        );
+
+        this.totalMontantAhGNF = filteredDataTable
+        .filter((row: { code_envoyer: string }) => row.code_envoyer?.toLowerCase().includes("ah"))
+        .reduce(
+          (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
+          0
+        );
+
       console.log(
         'Total Montant Devise après filtre et recherche :',
         this.totalMontantDevise

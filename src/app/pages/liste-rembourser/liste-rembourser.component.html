@@ -230,11 +230,10 @@
                         <select class="form-control" id="partenaireEntre" formControlName="partenaireEntreId" required>
                           <option value="" disabled selected>Sélectionnez un partenaire</option>
                           <option *ngFor="let partenaire of allPartenaireEntre" [value]="partenaire.id">
-                            {{
-                            partenaire.prenom + " " +
-                            partenaire.nom + " " +
-                            (partenaire.montant_preter | currency : "" : "" : "1.0-0") + " XOF"
-                            }} ({{ partenaire.pays }})
+                            {{ partenaire.prenom + " " + partenaire.nom }}
+                            {{ (partenaire.montant_preter | currency : '' : '' : '1.0-0') + " XOF" }}
+                            ({{ partenaire.montant_credit_Xof | currency : '' : '' : '1.0-0' }})
+                            ({{ partenaire.pays }})
                           </option>
                         </select>
                       </div>
@@ -249,7 +248,9 @@
                             partenaire.prenom + " " +
                             partenaire.nom + " " +
                             (partenaire.montant_preter | currency : "" : "" : "1.0-0") + " XOF"
-                            }} ({{ partenaire.pays }})
+                            }}
+                            ({{ partenaire.montant_credit_Xof | currency : '' : '' : '1.0-0' }})
+                            ({{ partenaire.pays }})
                           </option>
                         </select>
                       </div>
@@ -439,15 +440,10 @@
                   Sélectionnez un partenaire
                 </option>
                 <option *ngFor="let partenaire of allPartenaire" [value]="partenaire.id">
-                  {{
-                  partenaire.prenom +
-                  " " +
-                  partenaire.nom +
-                  " " +
-                  (partenaire.montant_preter | currency : "" : "" : "1.0-0") +
-                  "
-                  XOF"
-                  }} ({{partenaire.pays}})
+                  {{ partenaire.prenom + " " + partenaire.nom }}
+                  {{ (partenaire.montant_preter | currency : '' : '' : '1.0-0') + " XOF" }}
+                  ({{ partenaire.montant_credit_Xof | currency : '' : '' : '1.0-0' }})
+                  ({{ partenaire.pays }})
                 </option>
               </select>
             </div>

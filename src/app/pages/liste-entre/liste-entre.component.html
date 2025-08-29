@@ -62,11 +62,11 @@
                     </button>
                   </div>
                   <div class="col-md-3">
-                    <div style="font-weight: bold; margin-top: 10px">
-                      Total Montant : {{ totalMontant | number }} GNF
-                    </div>
                     <div style="font-weight: bold; margin-top: 2px">
-                      Total Montant: {{totalMontantDevise | number }} XOF
+                      Total codes: {{totalMontantDevise | number }} XOF ({{ totalMontant | number }}) GNF
+                    </div>
+                     <div style="font-weight: bold; margin-top: 2px">
+                      Total codes AH: {{totalMontantAh | number }} XOF ({{totalMontantAhGNF | number }} GNF)
                     </div>
                   </div>
                 </div>

@@ -263,72 +263,79 @@ export class ListePartenaireComponent implements OnInit {
     });
   }
 
-// Gestion de la saisie du montant (n'autorise que chiffres et formate avec espaces)
-onInputChangeCreancier(event: any): void {
-  // On enlève tout sauf chiffres
-  let value = event.target.value.replace(/[^0-9]/g, '');
+  // Gestion de la saisie du montant (n'autorise que chiffres et formate avec espaces)
+  onInputChangeCreancier(event: any): void {
+    // On enlève tout sauf chiffres
+    let value = event.target.value.replace(/[^0-9]/g, '');
 
-  // Si vide, on met chaîne vide
-  if (!value) {
-    this.partenaireCreancierForm.patchValue({ montant: '' }, { emitEvent: false });
-    return;
-  }
-
-  // Conversion en number
-  const numericValue = Number(value);
-
-  // Formatage (séparateur de milliers : 1 234 567)
-  const formattedValue = new Intl.NumberFormat('fr-FR').format(numericValue);
-
-  // Mise à jour de l'input et du formControl sans relancer l'event
-  this.partenaireCreancierForm.patchValue({ montant: formattedValue }, { emitEvent: false });
-}
-
-// Soumission du formulaire
-ajouterPartenaireCreancier(): void {
-  this.isLoadingCreancier = true;
-
-  if (this.partenaireCreancierForm.invalid) {
-    this.isLoadingCreancier = false;
-    return;
-  }
-
-  const formData = this.partenaireCreancierForm.value;
-  const partenaireId = Number(formData.partenaireId);
-
-  // Nettoyer les espaces avant conversion
-  const montant = parseInt(formData.montant.replace(/\s/g, ''), 10);
-
-  console.log('Formulaire:', formData);
-  console.log('Montant (number):', montant);
-  this.isLoadingCreancier = false;
-
-  // Exemple d'envoi backend
-  const payload = {
-    ...formData,
-    partenaireId: partenaireId,
-    montant: montant,
-  };
-  console.log(payload);
-
-  this.partenaireService.ajouterPartenaireCreancier(payload).subscribe(
-    (response) => {
-      this.isLoadingCreancier = false;
-      console.log('Partenaire ajouté avec succès:', response);
-      this.getAllPartenaireCrenacier();
-      alert('Partenaire ajouté avec succès!');
-    },
-    (error) => {
-      this.isLoadingCreancier = false;
-      console.error("Erreur lors de l'ajout du partenaire:", error);
-      alert("Erreur lors de l'ajout du partenaire.");
+    // Si vide, on met chaîne vide
+    if (!value) {
+      this.partenaireCreancierForm.patchValue({ montant: '' }, { emitEvent: false });
+      return;
     }
-  );
-}
+
+    // Conversion en number
+    const numericValue = Number(value);
+
+    // Formatage (séparateur de milliers : 1 234 567)
+    const formattedValue = new Intl.NumberFormat('fr-FR').format(numericValue);
+
+    // Mise à jour de l'input et du formControl sans relancer l'event
+    this.partenaireCreancierForm.patchValue({ montant: formattedValue }, { emitEvent: false });
+  }
+
+  // Soumission du formulaire
+  ajouterPartenaireCreancier(): void {
+    this.isLoadingCreancier = true;
+
+    if (this.partenaireCreancierForm.invalid) {
+      this.isLoadingCreancier = false;
+      return;
+    }
+
+    const formData = this.partenaireCreancierForm.value;
+    const partenaireId = Number(formData.partenaireId);
+
+    // Nettoyer les espaces avant conversion
+    const montant = parseInt(formData.montant.replace(/\s/g, ''), 10);
+
+    console.log('Formulaire:', formData);
+    console.log('Montant (number):', montant);
+    this.isLoadingCreancier = false;
+
+    // Exemple d'envoi backend
+    const payload = {
+      ...formData,
+      partenaireId: partenaireId,
+      montant: montant,
+    };
+    console.log(payload);
+
+    this.partenaireService.ajouterPartenaireCreancier(payload).subscribe(
+      (response) => {
+        this.isLoadingCreancier = false;
+        console.log('Partenaire ajouté avec succès:', response);
+        this.getAllPartenaireCrenacier();
+        // ✅ Réinitialiser le formulaire après succès
+        this.partenaireCreancierForm.reset({
+          utilisateurId: this.idUser,  // garder l’utilisateur par défaut
+          date_creation: '',
+          partenaireId: 0,
+          montant: ''
+        });
+        alert('Partenaire ajouté avec succès!');
+      },
+      (error) => {
+        this.isLoadingCreancier = false;
+        console.error("Erreur lors de l'ajout du partenaire:", error);
+        alert("Erreur lors de l'ajout du partenaire.");
+      }
+    );
+  }
 
 
-   allPartenaireCreancier: any;
-   getAllPartenaireCrenacier() {
+  allPartenaireCreancier: any;
+  getAllPartenaireCrenacier() {
     // Appel à l'API et gestion des réponses
     this.partenaireService.getAllPartenaireCreancier().subscribe({
       next: (response) => {

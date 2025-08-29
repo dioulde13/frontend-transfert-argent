@@ -370,7 +370,7 @@ export class ListeSortieComponent implements OnInit{
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount} ${row.mode_payement_devise === 'GNF'?row.signe_1:row.signe_2}`;
+              return `${formattedAmount} ${row.mode_payement_devise === 'XOF'?'XOF':row.signe_1}`;
             },
           },
           {
@@ -382,7 +382,7 @@ export class ListeSortieComponent implements OnInit{
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount}  ${row.mode_payement_devise === 'GNF'?row.signe_1:row.signe_2}`;
+              return `${formattedAmount}  ${row.mode_payement_devise === 'XOF'?'XOF':row.signe_1}`;
             },
           },
           {
