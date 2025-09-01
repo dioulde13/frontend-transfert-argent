@@ -15,6 +15,7 @@ import { Subject } from 'rxjs';
 import { DataTablesModule } from 'angular-datatables';
 import { CurrencyFormatPipe } from './currency-format.pipe'; // Assurez-vous que le chemin est correct
 import { CalculBeneficeService } from '../../services/calculBenefices/calcul-benefice.service';
+import { ExchangeService } from '../../services/exchanges/exchange.service';
 
 
 
@@ -183,7 +184,8 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private verifierCaisseService: VerifierSoldeService,
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
-    private beneficeService: CalculBeneficeService
+    private beneficeService: CalculBeneficeService,
+    private exchangeService: ExchangeService
   ) { }
 
 
@@ -200,6 +202,141 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initFormRecharger();
     this.getAllVerifierCaise();
     this.getAllSoldeCaisseParJours();
+    this.initExchange();
+    this.getAllExchange();
+  }
+
+
+
+
+  exchangeForm!: FormGroup;
+  montantExchange: number = 0;
+  prix: number = 0;
+  isLoadingExchange: boolean = false;
+
+  private initExchange(): void {
+    this.exchangeForm = this.fb.group({
+      utilisateurId: [this.idUser],
+      date_creation: ['', Validators.required],
+      montantExchange: [0, Validators.required],
+      prix: [0, Validators.required],
+      signOne: ['', Validators.required],
+      signTwo: ['', Validators.required],
+    });
+  }
+
+
+    onInputChangeExcangesPrix(event: any): void {
+    let value = event.target.value.replace(/[^0-9]/g, '');
+
+    if (!value) {
+      this.exchangeForm.patchValue({ prix: '' }, { emitEvent: false });
+      return;
+    }
+
+    // Conversion en number
+    const numericValue = Number(value);
+
+    // Formatage (séparateur de milliers : 1 234 567)
+    const formattedValue = new Intl.NumberFormat('fr-FR').format(numericValue);
+
+    // Mise à jour de l'input et du formControl sans relancer l'event
+    this.exchangeForm.patchValue({ prix: formattedValue }, { emitEvent: false });
+  }
+
+  onInputChangeExcanges(event: any): void {
+    let value = event.target.value.replace(/[^0-9]/g, '');
+
+    if (!value) {
+      this.exchangeForm.patchValue({ montantExchange: '' }, { emitEvent: false });
+      return;
+    }
+
+    // Conversion en number
+    const numericValue = Number(value);
+
+    // Formatage (séparateur de milliers : 1 234 567)
+    const formattedValue = new Intl.NumberFormat('fr-FR').format(numericValue);
+
+    // Mise à jour de l'input et du formControl sans relancer l'event
+    this.exchangeForm.patchValue({ montantExchange: formattedValue }, { emitEvent: false });
+  }
+
+  // Soumission du formulaire
+  ajouterExchange(): void {
+    this.isLoadingExchange = true;
+
+    if (this.exchangeForm.invalid) {
+      this.isLoadingExchange = false;
+      return;
+    }
+
+    const formData = this.exchangeForm.value;
+
+    const montantExchange = parseInt(formData.montantExchange.replace(/\s/g, ''), 10);
+    const prix = parseInt(formData.prix.replace(/\s/g, ''), 10);
+
+    console.log('Formulaire:', formData);
+    console.log('Montant (number):', montantExchange);
+    console.log('Prix (number):', prix);
+    this.isLoadingExchange = false;
+
+    const payload = {
+      ...formData,
+      montant: montantExchange,
+      prix: prix
+    };
+    console.log(payload);
+
+    this.exchangeService.ajouterExchange(payload).subscribe(
+      (response) => {
+        this.isLoadingExchange = false;
+        console.log('Solde converti avec succès:', response);
+        this.getAllExchange();
+        this.getUserInfo();
+        alert('Solde converti avec succès!');
+      },
+      (error) => {
+        this.isLoadingExchange = false;
+        console.error("Erreur lors de la conversion du solde:", error);
+        alert(error.error.message);
+      }
+    );
+  }
+
+
+  allExchange: any;
+  getAllExchange() {
+    this.exchangeService.getAllExchange().subscribe({
+      next: (response) => {
+        this.allExchange = response;
+        console.log("All exchange",this.allExchange);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      },
+    });
+  }
+
+
+  showExchangeListeModal: boolean = false;
+
+  showExchangeModal: boolean = false;
+
+  openExchangeModal() {
+    this.showExchangeModal = true;
+  }
+
+  closeExchangeModal() {
+    this.showExchangeModal = false;
+  }
+
+  openExchangeListeModal() {
+    this.showExchangeListeModal = true;
+  }
+
+  closeExchangeListeModal() {
+    this.showExchangeListeModal = false;
   }
 
 
@@ -244,6 +381,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('Informations utilisateur:', this.userInfo);
           this.initFormCaisse();
           this.initFormRecharger();
+          this.initExchange();
           this.verifierCaisse.patchValue({ utilisateurId: this.idUser });
         }
       }

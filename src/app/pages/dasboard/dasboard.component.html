@@ -1,20 +1,3 @@
-<!-- <div class="container">
-    <div class="row">
-        <div class="col-lg-4">
-            <input type="date" id="dateDebut" [(ngModel)]="dateDebut" class="form-control" />
-        </div>
-
-        <div class="col-lg-4">
-            <input type="date" id="dateFin" [(ngModel)]="dateFin" class="form-control" />
-        </div>
-        <div class="col-lg-4">
-
-            <button (click)="calculerBenefice()" class="btn btn-primary mt-3">
-                Calculer
-            </button>
-        </div>
-    </div>
-</div> -->
 <div class="container">
   <div class="row mb-2 text-center">
     <div class="col-12 col-md-4 mb-2 mb-md-0">
@@ -32,8 +15,135 @@
         Bénéfice
       </button>
     </div>
+
+
+    <div class="col-12 col-md-4 mt-3">
+      <button class="btn btn-light w-100 p-2" (click)="openExchangeModal()">
+        Exchange
+      </button>
+    </div>
+    <div class="col-12 col-md-4 mt-3">
+      <button class="btn btn-light w-100 p-2" (click)="openExchangeListeModal()">
+        Liste exchange
+      </button>
+    </div>
   </div>
 </div>
+
+
+
+<div *ngIf="showExchangeListeModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Liste</h5>
+        <button type="button" class="close" (click)="closeExchangeListeModal()">
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-striped table-bordered table-hover">
+          <thead style="background-color: #25648ccc;">
+            <tr>
+              <th>Date de création</th>
+              <th>Montant</th>
+              <th>Prix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of allExchange; let i = index">
+              <td>{{ item.date_creation | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ item.montant | currency : "" : "" : "1.0-0" }} {{item.signTwo}}</td>
+              <td>{{ item.prix | currency : "" : "" : "1.0-0" }} {{item.signOne}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="showExchangeModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+      <form class="p-4 shadow rounded" [formGroup]="exchangeForm" (ngSubmit)="ajouterExchange()">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter</h5>
+          <button type="button" class="close" (click)="closeExchangeModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-lg-12">
+              <label for="date_creation">Date</label>
+              <input type="datetime-local" class="form-control" id="date_creation" formControlName="date_creation"
+                placeholder="La date" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="montantExchange">Montant</label>
+              <input type="text" class="form-control" id="montantExchange" formControlName="montantExchange"
+                placeholder="montantExchange" (input)="onInputChangeExcanges($event)" />
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="prix">Prix</label>
+              <input type="text" class="form-control" id="prix" formControlName="prix" placeholder="prix"
+                (input)="onInputChangeExcangesPrix($event)" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="signOne">Selectioner un signe</label>
+              <select id="signOne" class="form-control" formControlName="signOne">
+                <option value="USD">USD</option>
+                <option value="EURO">EURO</option>
+                <option value="XOF">XOF</option>
+                <option value="GNF">GNF</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="signTwo">Selectioner un signe</label>
+              <select id="signTwo" class="form-control" formControlName="signTwo">
+                <option value="USD">USD</option>
+                <option value="EURO">EURO</option>
+                <option value="XOF">XOF</option>
+                <option value="GNF">GNF</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row justify-content-end">
+          <div class="col-auto">
+            <button type="button" class="btn btn-secondary" (click)="closeExchangeModal()">
+              Annuler
+            </button>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary" [disabled]="exchangeForm.invalid || isLoadingExchange">
+              <span *ngIf="isLoadingExchange">Création en cours...</span>
+              <span *ngIf="!isLoadingExchange">Ajouter</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 
 <!-- Modal Utilisateur -->
@@ -535,7 +645,8 @@
                 <i class="fa fa-wallet text-success" style="font-size: 20px;"></i>
               </span>
             </div>
-            <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{ userInfo.solde | currency : "" : "" : "1.0-0" }}
+            <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{ userInfo.solde | currency : "" : ""
+                : "1.0-0" }}
                 GNF</span></h3>
           </div>
         </div>
@@ -549,11 +660,14 @@
                 <i class="fa fa-wallet text-success" style="font-size: 20px;"></i>
               </span>
             </div>
-            <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{ userInfo.soldeXOF | currency : "" : "" : "1.0-0" }}
+            <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{ userInfo.soldeXOF | currency : "" :
+                "" : "1.0-0" }}
                 XOF</span></h3>
           </div>
         </div>
       </div>
+
+
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
@@ -569,10 +683,68 @@
               </span>
             </h3>
           </div>
-
         </div>
       </div>
+
+
+
       <div class="col-lg-3 card-profile">
+        <div class="card card-block card-stretch card-height">
+          <div class="card-body">
+            <div class="top-block d-flex align-items-start justify-content-between">
+              <h2 style="font-size: 20px">Solde Dollars</h2>
+              <span class="bg-light p-2 rounded-circle">
+                <i class="fa fa-coins text-success" style="font-size: 20px;"></i>
+              </span>
+            </div>
+            <h3>
+              <span class="counter" style="font-size: 20px; font-weight: bold;">
+                {{ userInfo.soldePayerAvecCodeDolar | currency : "" : "" : "1.0-0" }} USD
+              </span>
+            </h3>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-lg-3 card-profile">
+        <div class="card card-block card-stretch card-height">
+          <div class="card-body">
+            <div class="top-block d-flex align-items-start justify-content-between">
+              <h2 style="font-size: 20px">Solde cfa avec code</h2>
+              <span class="bg-light p-2 rounded-circle">
+                <i class="fa fa-coins text-success" style="font-size: 20px;"></i>
+              </span>
+            </div>
+            <h3>
+              <span class="counter" style="font-size: 20px; font-weight: bold;">
+                {{ userInfo.soldePayerAvecCodeXOF | currency : "" : "" : "1.0-0" }} XOF
+              </span>
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 card-profile">
+        <div class="card card-block card-stretch card-height">
+          <div class="card-body">
+            <div class="top-block d-flex align-items-start justify-content-between">
+              <h2 style="font-size: 20px">Solde euro</h2>
+              <span class="bg-light p-2 rounded-circle">
+                <i class="fa fa-coins text-success" style="font-size: 20px;"></i>
+              </span>
+            </div>
+            <h3>
+              <span class="counter" style="font-size: 20px; font-weight: bold;">
+                {{ userInfo.soldePayerAvecCodeEuro | currency : "" : "" : "1.0-0" }} Euro
+              </span>
+            </h3>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
             <div class="top-block d-flex align-items-start justify-content-start">
@@ -580,14 +752,15 @@
             </div>
             <div>
               <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
-                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{entreDuJour | currency : "" : "" : "1.0-0" }}
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{entreDuJour | currency : "" : ""
+                    : "1.0-0" }}
                     GNF</span></h3>
               </span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-3 card-profile">
+      </div> -->
+      <!-- <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
             <div class="top-block d-flex align-items-start justify-content-start">
@@ -595,14 +768,15 @@
             </div>
             <div>
               <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
-                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{sortieDuJour | currency : "" : "" : "1.0-0" }}
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{sortieDuJour | currency : "" :
+                    "" : "1.0-0" }}
                     GNF</span></h3>
               </span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-3 card-profile">
+      </div> -->
+      <!-- <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
             <div class="top-block d-flex align-items-start justify-content-start">
@@ -610,13 +784,14 @@
             </div>
             <div>
               <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
-                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{payementDuJour | currency : "" : "" : "1.0-0" }}
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{payementDuJour | currency : "" :
+                    "" : "1.0-0" }}
                     GNF</span></h3>
               </span>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
@@ -646,7 +821,7 @@
           </div>
         </div>
       </div> -->
-      <div class="col-lg-3 card-profile">
+      <!-- <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
             <div class="top-block d-flex align-items-start justify-content-start">
@@ -654,13 +829,14 @@
             </div>
             <div>
               <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
-                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{retourDuJour | currency : "" : "" : "1.0-0" }}
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{retourDuJour | currency : "" :
+                    "" : "1.0-0" }}
                     GNF</span></h3>
               </span>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="col-lg-3 card-profile">
         <div class="card card-block card-stretch card-height">
           <div class="card-body">
@@ -669,7 +845,8 @@
             </div>
             <div>
               <span class="d-flex align-items-start justify-content-start" style="font-size: 30px; color: black">
-                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{montantDepenseDuJour | currency : "" : "" : "1.0-0"
+                <h3><span class="counter" style="font-size: 20px; font-weight: bold;">{{montantDepenseDuJour | currency
+                    : "" : "" : "1.0-0"
                     }}
                     GNF</span></h3>
               </span>

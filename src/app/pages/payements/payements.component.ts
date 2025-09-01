@@ -100,7 +100,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
     const signe2 = formData.signe2;
 
     if (!montant || !prix || !signe1 || !signe2) {
-      this.soldeTotal = 0;
+       this.soldeTotal = 0;
       return;
     }
 
