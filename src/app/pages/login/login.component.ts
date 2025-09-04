@@ -17,9 +17,9 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   // Méthode pour gérer la connexion
   login(): void {
@@ -32,7 +32,8 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false; // Désactiver l'indicateur de chargement
-        this.errorMessage = err.error.message || 'Erreur lors de la connexion.';
+        // this.errorMessage = err.error.message || 'Erreur lors de la connexion.';
+        console.log(err);
       },
       complete: () => {
         this.isLoading = false; // S'assurer de désactiver le chargement une fois l'appel terminé
