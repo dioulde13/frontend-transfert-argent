@@ -352,6 +352,15 @@
                         (input)="onInputChangeClient($event)" />
                     </div>
                   </div>
+                  <div class="form-group col-md-12">
+                      <label for="mode_payement">Mode de paiment</label>
+                      <select id="mode_payement" class="form-control" formControlName="mode_payement">
+                        <option value="GNF">GNF</option>
+                        <option value="XOF">XOF</option>
+                        <option value="USD">USD</option>
+                        <option value="EURO">EURO</option>
+                      </select>
+                    </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                       Annuler

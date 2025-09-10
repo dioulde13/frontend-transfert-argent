@@ -401,13 +401,13 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private initFormCaisse(): void {
     this.verifierCaisse = this.fb.group({
       utilisateurId: [this.idUser],
-      solde_dollars: ['', Validators.required],
-      solde_euro: ['', Validators.required],
-      solde_gnf: ['', Validators.required],
-      prix_cfa: ['', Validators.required],
-      solde_cfa: ['', Validators.required],
-      prix_euro: ['', Validators.required],
-      prix_dollar: ['', Validators.required]
+      solde_dollars: [''],
+      solde_euro: [''],
+      solde_gnf: [''],
+      prix_cfa: [''],
+      solde_cfa: [''],
+      prix_euro: [''],
+      prix_dollar: ['']
     });
   }
 

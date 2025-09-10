@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -32,7 +31,7 @@ interface Result {
   templateUrl: './payements.component.html',
   styleUrl: './payements.component.css',
 })
-export class PayementsComponent implements OnInit, AfterViewInit {
+export class PayementsComponent implements OnInit {
   allresultat: Result[] = [];
 
   userInfo: any = null;
@@ -100,7 +99,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
     const signe2 = formData.signe2;
 
     if (!montant || !prix || !signe1 || !signe2) {
-       this.soldeTotal = 0;
+      this.soldeTotal = 0;
       return;
     }
 
@@ -290,7 +289,7 @@ export class PayementsComponent implements OnInit, AfterViewInit {
 
               const devise = row.signe === "EURO" ? "€" :
                 row.signe === "USD" ? "$" :
-                  row.signe === "XOF" ? "XOF": row?.Sortie?.mode_payement_devise === "XOF" ? "XOF" : "GNF";
+                  row.signe === "XOF" ? "XOF" : row?.Sortie?.mode_payement_devise === "XOF" ? "XOF" : "GNF";
 
               if (row.signe === "XOF") {
                 const montantTotal = Number(prix / 5000) * Number(data);
@@ -310,15 +309,88 @@ export class PayementsComponent implements OnInit, AfterViewInit {
             title: 'Type',
             data: 'type',
           },
+          {
+            title: 'Action',
+            data: null,
+            orderable: false,
+            render: (data: any) => {
+              return `<button class="btn btn-light p-1 btn-view-payement" data-payement='${JSON.stringify(
+                data
+              )}'>
+                  <i class="fas fa-eye text-primary"></i>
+                  </button>
+                            `;
+            },
+          },
         ],
       });
-      this.cd.detectChanges(); // Force la détection des changements
+      $('#dataTablePayement tbody').on('click', '.btn-view-payement', (event) => {
+        const payement = JSON.parse(
+          $(event.currentTarget).attr('data-payement') || '{}'
+        );
+        this.openPayementModal(payement);
+      });
+      this.cd.detectChanges();
     }, 100);
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(null);
+  selectedPayement: any = null;
+  showModal: boolean = false;
+
+  openPayementModal(payement: any) {
+    this.selectedPayement = { ...payement };
+
+    // Vérifier si la date existe et la convertir au bon format
+    if (this.selectedPayement.date_creation) {
+      const date = new Date(this.selectedPayement.date_creation);
+      // format YYYY-MM-DDTHH:mm
+      this.selectedPayement.date_creation = date.toISOString().slice(0, 16);
+    }
+
+    console.log('Données à modifier :', this.selectedPayement);
+    this.showModal = true;
+    this.cd.detectChanges();
   }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+
+  isloadindPayement: boolean = false;
+
+updatePayement() {
+  this.isloadindPayement = true;
+  if (!this.selectedPayement) return;
+
+  this.payementService.updatePayement(this.selectedPayement).subscribe({
+    next: (res: any) => {   // <-- ajouter :any
+      this.isloadindPayement = false;
+      this.getAllPayement();
+
+      if (res.message) {
+        alert(res.message);
+      } else {
+        alert("Modification effectuée avec succès !");
+      }
+
+      this.closeModal();
+    },
+    error: (err: any) => {   // <-- ajouter :any
+      this.isloadindPayement = false;
+
+      if (err.error?.message) {
+        alert(err.error.message);
+      } else {
+        alert("Une erreur est survenue lors de la modification du paiement.");
+      }
+
+      console.error(err);
+    }
+  });
+}
+
+
 
   getUserInfo() {
     this.authService.getUserInfo().subscribe({

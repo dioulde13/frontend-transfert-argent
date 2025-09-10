@@ -507,8 +507,9 @@ export class ListeSortieComponent implements OnInit{
 
   private initFormAutres(): void {
     this.sortieFormAutre = this.fb.group({
-      utilisateurId: [this.idUser],
+      utilisateurId: [this.idUser], 
       nomCLient: ['', Validators.required],
+      mode_payement: ['', Validators.required],
       date_creation: ['', Validators.required],
       montantClient: [0, Validators.required],
     });

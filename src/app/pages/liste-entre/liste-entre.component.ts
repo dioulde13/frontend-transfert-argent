@@ -237,7 +237,7 @@ export class ListeEntreComponent implements OnInit {
             title: 'Montant',
             data: 'montant_cfa',
             render: (data: number, type: string, row: any) => {
-              console.log(data);
+              console.log(row);
               if (data === 0) return '';
               return `${new Intl.NumberFormat('fr-FR').format(data)} ${row.signe_2
                 }`;
@@ -612,8 +612,9 @@ export class ListeEntreComponent implements OnInit {
 
   private initFormAutres(): void {
     this.entreFormAutre = this.fb.group({
-      utilisateurId: [this.idUser],
+      utilisateurId: [this.idUser], 
       nomCLient: ['', Validators.required],
+      mode_payement: ['', Validators.required],
       date_creation: ['', Validators.required],
       montantClient: [0, Validators.required],
     });
