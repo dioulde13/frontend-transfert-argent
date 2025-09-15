@@ -46,7 +46,7 @@ export class PayementsComponent implements OnInit {
     private fb: FormBuilder,
     private payementService: PayementService,
     private authService: AuthService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -334,20 +334,82 @@ export class PayementsComponent implements OnInit {
     }, 100);
   }
 
-  selectedPayement: any = null;
+//   selectedPayement: any = null;
+//   showModal: boolean = false;
+
+//   openPayementModal(payement: any) {
+//     this.selectedPayement = { ...payement };
+
+//     // Vérifier si la date existe et la convertir au bon format
+//     if (this.selectedPayement.date_creation) {
+//       const date = new Date(this.selectedPayement.date_creation);
+//       // format YYYY-MM-DDTHH:mm
+//       this.selectedPayement.date_creation = date.toISOString().slice(0, 16);
+//     }
+
+//     console.log('Données à modifier :', this.selectedPayement);
+//     this.showModal = true;
+//     this.cd.detectChanges();
+//   }
+
+//   closeModal() {
+//     this.showModal = false;
+//   }
+
+
+//   isloadindPayement: boolean = false;
+
+// updatePayement() {
+//   this.isloadindPayement = true;
+//   if (!this.selectedPayement) return;
+
+//   this.payementService.updatePayement(this.selectedPayement).subscribe({
+//     next: (res: any) => {   
+//       this.isloadindPayement = false;
+//       this.getAllPayement();
+
+//       if (res.message) {
+//         alert(res.message);
+//       } else {
+//         alert("Modification effectuée avec succès !");
+//       }
+
+//       this.closeModal();
+//     },
+//     error: (err: any) => {  
+//       this.isloadindPayement = false;
+
+//       if (err.error?.message) {
+//         alert(err.error.message);
+//       } else {
+//         alert("Une erreur est survenue lors de la modification du paiement.");
+//       }
+
+//       console.error(err);
+//     }
+//   });
+// }
+
+
+selectedPayement: any = null;
   showModal: boolean = false;
+  isloadindPayement: boolean = false;
 
   openPayementModal(payement: any) {
+    console.log(payement);
+    // on clone pour ne pas modifier l’original tant que l’utilisateur ne valide pas
     this.selectedPayement = { ...payement };
 
-    // Vérifier si la date existe et la convertir au bon format
     if (this.selectedPayement.date_creation) {
       const date = new Date(this.selectedPayement.date_creation);
-      // format YYYY-MM-DDTHH:mm
       this.selectedPayement.date_creation = date.toISOString().slice(0, 16);
     }
 
-    console.log('Données à modifier :', this.selectedPayement);
+    // Si le signe est déjà 'GNF' dans les données reçues, appliquer la règle
+    if (this.selectedPayement.signe === 'GNF') {
+      this.selectedPayement.prix = 0;
+    }
+
     this.showModal = true;
     this.cd.detectChanges();
   }
@@ -356,39 +418,66 @@ export class PayementsComponent implements OnInit {
     this.showModal = false;
   }
 
-
-  isloadindPayement: boolean = false;
-
-updatePayement() {
-  this.isloadindPayement = true;
-  if (!this.selectedPayement) return;
-
-  this.payementService.updatePayement(this.selectedPayement).subscribe({
-    next: (res: any) => {   // <-- ajouter :any
-      this.isloadindPayement = false;
-      this.getAllPayement();
-
-      if (res.message) {
-        alert(res.message);
-      } else {
-        alert("Modification effectuée avec succès !");
-      }
-
-      this.closeModal();
-    },
-    error: (err: any) => {   // <-- ajouter :any
-      this.isloadindPayement = false;
-
-      if (err.error?.message) {
-        alert(err.error.message);
-      } else {
-        alert("Une erreur est survenue lors de la modification du paiement.");
-      }
-
-      console.error(err);
+  onSigneChange(newSigne: string) {
+    // Ici on est dans template-driven forms, le ngModelChange sur le select appelle ça
+    if (newSigne === 'GNF') {
+      this.selectedPayement.prix = 0;
+    } else {
+      // Peut-être réinitialiser ou ne rien faire
+      this.selectedPayement.prix = null;
     }
-  });
-}
+  }
+
+  isFormValid(): boolean {
+    if (!this.selectedPayement) return false;
+
+    const p = this.selectedPayement;
+
+    // vérifier que date, montant, signe sont remplis
+    const hasDate = !!p.date_creation;
+    const hasMontant = p.montant != null && p.montant !== '';
+    const hasSigne = !!p.signe;
+
+    // si signe ≠ GNF, il faut aussi un prix non vide / non null
+    const prixOk = (p.signe === 'GNF') || (p.prix != null && p.prix !== '');
+
+    return hasDate && hasMontant && hasSigne && prixOk;
+  }
+
+  updatePayement() {
+    if (!this.selectedPayement) return;
+
+    if (!this.isFormValid()) {
+      alert('Veuillez remplir tous les champs requis.');
+      return;
+    }
+
+    this.isloadindPayement = true;
+
+    this.payementService.updatePayement(this.selectedPayement).subscribe({
+      next: (res: any) => {
+        this.isloadindPayement = false;
+        this.getAllPayement();  // supposition que cette méthode recharge la liste
+
+        if (res.message) {
+          alert(res.message);
+        } else {
+          alert('Modification effectuée avec succès !');
+        }
+
+        this.closeModal();
+      },
+      error: (err: any) => {
+        this.isloadindPayement = false;
+        if (err.error?.message) {
+          alert(err.error.message);
+        } else {
+          alert("Une erreur est survenue lors de la modification du paiement.");
+        }
+        console.error(err);
+      }
+    });
+  }
 
 
 

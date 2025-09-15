@@ -166,11 +166,11 @@
                     </td>
                     <!-- <td>{{ result.montant | number:'1.0-0' }} {{ result.prix == 0 ? 'GNF' : (result.signe || '') }}</td> -->
                     <td>{{ result.type }}</td>
-                      <td>
-                          <button class="btn btn-light p-1" (click)="openPayementModal(result)">
-                            <i class="fas fa-eye text-primary"></i>
-                          </button>
-                        </td>
+                    <td>
+                      <button class="btn btn-light p-1" (click)="openPayementModal(result)">
+                        <i class="fas fa-eye text-primary"></i>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -190,48 +190,60 @@
         <div class="form-row">
           <div class="form-group col-lg-6">
             <label for="code_envoyer">Code</label>
-            <input [(ngModel)]="selectedPayement.code" type="text" class="form-control" id="code"
-              name="code" placeholder="Code" />
+            <input [(ngModel)]="selectedPayement.code" type="text" class="form-control" id="code" name="code"
+              placeholder="Code" disabled />
           </div>
           <div class="form-group col-lg-6">
             <label for="date_creation">Date</label>
-            <input type="datetime-local" [(ngModel)]="selectedPayement.date_creation" class="form-control"
-              id="date_creation" name="date_creation" placeholder="La date" />
+            <input [(ngModel)]="selectedPayement.date_creation" type="datetime-local" class="form-control"
+              id="date_creation" name="date_creation" placeholder="La date" required />
           </div>
         </div>
 
-
-         <div class="form-row">
+        <div class="form-row">
           <div class="form-group col-lg-6">
             <label for="montant">Montant</label>
-            <input [(ngModel)]="selectedPayement.montant" type="text" class="form-control" id="montant"
-              name="montant" placeholder="Montant" />
+            <input [(ngModel)]="selectedPayement.montant" type="text" class="form-control" id="montant" name="montant"
+              placeholder="Montant" required />
           </div>
-         <div class="form-group col-lg-6">
+          <div class="form-group col-lg-6">
             <label for="prix">Prix</label>
-            <input [(ngModel)]="selectedPayement.prix" type="text" class="form-control" id="prix"
-              name="prix" placeholder="Prix" />
+            <input [(ngModel)]="selectedPayement.prix" type="text" class="form-control" id="prix" name="prix"
+              placeholder="Prix" [disabled]="selectedPayement.signe === 'GNF'" required
+              *ngIf="selectedPayement.signe !== 'GNF'; else prixGnf" />
+            <ng-template #prixGnf>
+              <input [(ngModel)]="selectedPayement.prix" type="text" class="form-control" id="prix" name="prix"
+                placeholder="Prix" readonly [value]="0" />
+            </ng-template>
           </div>
         </div>
-     
-         <div class="form-group col-lg-12">
-            <label for="prix">Signe</label>
-            <input [(ngModel)]="selectedPayement.signe" type="text" class="form-control" id="signe"
-              name="signe" placeholder="Signe" disabled/>
-          </div>
-         
 
+        <div class="col-lg-12">
+          <label for="signe" class="form-label fw-semibold">Devise cible</label>
+          <select id="signe" class="form-select" [(ngModel)]="selectedPayement.signe" name="signe"
+            (ngModelChange)="onSigneChange($event)" required>
+            <option value="">-- Choisir --</option> 
+            <option value="EURO">EURO</option>
+            <option value="USD">DOLLAR</option>
+            <option value="XOF">XOF</option>
+            <option value="XOFSANSPRIX">XOFSANSPRIX</option>
+            <option value="GNF">GNF</option>
+          </select>
+        </div>
 
         <div class="modal-footer d-flex justify-content-end">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
-          <button type="button" class="btn btn-primary" (click)="updatePayement()">
+          <button type="button" class="btn btn-primary" (click)="updatePayement()"
+            [disabled]="!isFormValid() || isloadindPayement">
             <span *ngIf="isloadindPayement">Modification en cours ...</span>
-            <span *ngIf="!isloadindPayement">Modifier</span></button>
+            <span *ngIf="!isloadindPayement">Modifier</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 
 
