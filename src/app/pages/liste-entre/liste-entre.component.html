@@ -188,6 +188,77 @@
     </div>
 
 
+    <!-- Modal d'annulation -->
+      <div class="modal fade" id="annuler-entre-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalTitle">Annuler une entrée</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <form [formGroup]="annulerEntreForm" (ngSubmit)="annulerEntre()">
+                <div class="form-row">
+                  <!-- Champ Code -->
+                  <div class="form-group col-md-6">
+                    <label for="codeAnnuler">Code</label>
+                    <input type="text" id="codeAnnuler" class="form-control" formControlName="codeAnnuler"
+                      placeholder="Entrez le code" />
+                    <div *ngIf="
+                      annulerEntreForm?.get('codeAnnuler')?.invalid &&
+                      annulerEntreForm?.get('codeAnnuler')?.touched
+                    " class="text-danger">
+                      Ce champ est obligatoire. Ce champ est obligatoire.
+                    </div>
+                  </div>
+
+                  <!-- Sélection du type d'annulation -->
+                  <div class="form-group col-md-6">
+                    <label for="typeAnnuler">Type d'annulation</label>
+                    <select id="typeAnnuler" class="form-control" formControlName="typeAnnuler">
+                      <option value=""></option>
+                      <option value="Rembourser">Rembourser</option>
+                      <!-- <option value="EN COURS">En cours</option> -->
+                      <option value="Non Rembourser">Non Rembourser</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div *ngIf="
+                  annulerEntreForm?.get('typeAnnuler')?.value === 'Rembourser' ||  annulerEntreForm?.get('typeAnnuler')?.value === 'EN COURS'
+                " class="form-group col-md-6">
+                  <label for="montant_rembourser">Montant</label>
+                  <input type="text" id="montant_rembourser" class="form-control" formControlName="montant_rembourser"
+                    placeholder="Entrez le montant rembourser" />
+                  <div *ngIf="
+                    annulerEntreForm?.get('montant_rembourser')?.invalid &&
+                    annulerEntreForm?.get('montant_rembourser')?.touched
+                  " class="text-danger">
+                    Ce champ est obligatoire. Ce champ est obligatoire.
+                  </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Annuler
+                  </button>
+                  <button type="submit" class="btn btn-danger"
+                    [disabled]="annulerEntreForm.invalid || isLoadingAnnuler">
+                    <span *ngIf="isLoadingAnnuler">Annulation en cours...</span>
+                    <span *ngIf="!isLoadingAnnuler">Valider</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <div *ngIf="showModalAddEntre" class="modal fade show d-block" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -578,76 +649,7 @@
         </div>
       </div>
 
-      <!-- Modal d'annulation -->
-      <div class="modal fade" id="annuler-entre-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalTitle">Annuler une entrée</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-              <form [formGroup]="annulerEntreForm" (ngSubmit)="annulerEntre()">
-                <div class="form-row">
-                  <!-- Champ Code -->
-                  <div class="form-group col-md-6">
-                    <label for="codeAnnuler">Code</label>
-                    <input type="text" id="codeAnnuler" class="form-control" formControlName="codeAnnuler"
-                      placeholder="Entrez le code" />
-                    <div *ngIf="
-                      annulerEntreForm?.get('codeAnnuler')?.invalid &&
-                      annulerEntreForm?.get('codeAnnuler')?.touched
-                    " class="text-danger">
-                      Ce champ est obligatoire. Ce champ est obligatoire.
-                    </div>
-                  </div>
-
-                  <!-- Sélection du type d'annulation -->
-                  <div class="form-group col-md-6">
-                    <label for="typeAnnuler">Type d'annulation</label>
-                    <select id="typeAnnuler" class="form-control" formControlName="typeAnnuler">
-                      <option value=""></option>
-                      <option value="Rembourser">Rembourser</option>
-                      <!-- <option value="EN COURS">En cours</option> -->
-                      <option value="Non Rembourser">Non Rembourser</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div *ngIf="
-                  annulerEntreForm?.get('typeAnnuler')?.value === 'Rembourser' ||  annulerEntreForm?.get('typeAnnuler')?.value === 'EN COURS'
-                " class="form-group col-md-6">
-                  <label for="montant_rembourser">Montant</label>
-                  <input type="text" id="montant_rembourser" class="form-control" formControlName="montant_rembourser"
-                    placeholder="Entrez le montant rembourser" />
-                  <div *ngIf="
-                    annulerEntreForm?.get('montant_rembourser')?.invalid &&
-                    annulerEntreForm?.get('montant_rembourser')?.touched
-                  " class="text-danger">
-                    Ce champ est obligatoire. Ce champ est obligatoire.
-                  </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Annuler
-                  </button>
-                  <button type="submit" class="btn btn-danger"
-                    [disabled]="annulerEntreForm.invalid || isLoadingAnnuler">
-                    <span *ngIf="isLoadingAnnuler">Annulation en cours...</span>
-                    <span *ngIf="!isLoadingAnnuler">Valider</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
 
       <!-- Modal de modification -->

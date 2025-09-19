@@ -80,6 +80,51 @@
               </div>
 
 
+              <div class="modal fade" id="annuler-entre-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalTitle">Annuler une sortie</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <form [formGroup]="annulerForm" (ngSubmit)="annulerSortie()">
+                        <div class="form-row">
+                          <!-- Champ Code -->
+                          <div class="form-group col-lg-12">
+                            <label for="code">Code</label>
+                            <input type="text" id="code" class="form-control" formControlName="codeAnnuler"
+                              placeholder="Entrez le code" />
+                            <div *ngIf="
+                  annulerForm?.get('codeAnnuler')?.invalid &&
+                  annulerForm?.get('codeAnnuler')?.touched
+                " class="text-danger">
+                              Ce champ est obligatoire. Ce champ est obligatoire.
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Annuler
+                          </button>
+                          <button type="submit" class="btn btn-danger"
+                            [disabled]="annulerForm.invalid || isLoadingAnnuler">
+                            <span *ngIf="isLoadingAnnuler">Annulation en cours...</span>
+                            <span *ngIf="!isLoadingAnnuler">Valider</span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div *ngIf="showModalValider" class="modal fade show d-block" tabindex="-1" role="dialog"
                 style="background-color: rgba(0, 0, 0, 0.5); overflow-y: auto;">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -693,49 +738,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="annuler-entre-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">Annuler une sortie</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
 
-        <div class="modal-body">
-          <form [formGroup]="annulerForm" (ngSubmit)="annulerSortie()">
-            <div class="form-row">
-              <!-- Champ Code -->
-              <div class="form-group col-lg-12">
-                <label for="code">Code</label>
-                <input type="text" id="code" class="form-control" formControlName="codeAnnuler"
-                  placeholder="Entrez le code" />
-                <div *ngIf="
-                  annulerForm?.get('codeAnnuler')?.invalid &&
-                  annulerForm?.get('codeAnnuler')?.touched
-                " class="text-danger">
-                  Ce champ est obligatoire. Ce champ est obligatoire.
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                Annuler
-              </button>
-              <button type="submit" class="btn btn-danger" [disabled]="annulerForm.invalid || isLoadingAnnuler">
-                <span *ngIf="isLoadingAnnuler">Annulation en cours...</span>
-                <span *ngIf="!isLoadingAnnuler">Valider</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- <div *ngIf="showModalAddSortie" class="modal fade show d-block" tabindex="-1" role="dialog"
     style="background-color: rgba(0, 0, 0, 0.5); overflow-y: auto;">
     <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
