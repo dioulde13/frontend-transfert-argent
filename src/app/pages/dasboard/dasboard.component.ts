@@ -489,7 +489,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.entreService.getCompteEntrees().subscribe({
       next: (response) => {
         this.entreDuJour = response.nombre_entrees;
-        console.log(this.entreDuJour);
+        // console.log(this.entreDuJour);
       }
     });
   }
@@ -499,7 +499,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sortieSortie.getCompteSortie().subscribe({
       next: (response) => {
         this.sortieDuJour = response.nombre_Sortie;
-        console.log(this.sortieDuJour);
+        // console.log(this.sortieDuJour);
       }
     });
   }
@@ -552,7 +552,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.rembourserService.getCompteRembourser().subscribe({
       next: (response) => {
         this.retourDuJour = response.nombre_rembourser;
-        console.log(this.retourDuJour);
+        // console.log(this.retourDuJour);
       }
     });
   }
@@ -572,7 +572,7 @@ export class DasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // Supprimer les virgules et convertir la valeur en entier
     const montant = parseInt(formData.montant.replace(/,/g, ''), 10);  // Supprime les virgules et convertit en entier
 
-    console.log(montant); // Affiche la valeur convertie
+    // console.log(montant); // Affiche la valeur convertie
 
     // Passez la valeur convertie à la fonction rechargerSolde
     this.authService.rechargerSolde({ ...formData, montant }).subscribe({

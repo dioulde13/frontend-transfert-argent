@@ -54,8 +54,8 @@
           <tbody>
             <tr *ngFor="let item of allExchange; let i = index">
               <td>{{ item.date_creation | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td>{{ item.montant | currency : "" : "" : "1.0-0" }} {{item.signTwo}}</td>
-              <td>{{ item.prix | currency : "" : "" : "1.0-0" }} {{item.signOne}}</td>
+              <td>{{ item.montant | currency : "" : "" : "1.0-0" }} {{item.signOne}}</td>
+              <td>{{ item.prix | currency : "" : "" : "1.0-0" }} {{item.signTwo}}</td>
             </tr>
           </tbody>
         </table>
