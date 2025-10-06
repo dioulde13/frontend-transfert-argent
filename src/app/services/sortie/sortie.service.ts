@@ -25,11 +25,20 @@ export class SortieService {
     return this.http.get(`${this.apiUrl}/api/sorties/compte`, { headers });
   }
 
-  getAllSortie(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get(`${this.apiUrl}/api/sorties/liste`, { headers });
+  getAllSortie(startDate?: string, endDate?: string): Observable<any> {
+    let url = `${this.apiUrl}/api/sorties/liste`;
+
+    if (startDate && endDate) {
+      // Format YYYY-MM-DD attendu côté backend
+      url += `?startDate=${startDate}&endDate=${endDate}`;
+    }
+
+    return this.http.get(url);
   }
+
+  // getAllSortie(): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/api/sorties/liste`);
+  // }
 
   ajouterSortie(data: any): Observable<any> {
     const token = localStorage.getItem('token');

@@ -10,7 +10,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (token) {
     try {
       // Supprimer un éventuel "Bearer " mal stocké
-      const pureToken = token.startsWith("Bearer ") ? token.split(" ")[1] : token;
+      const pureToken = token.startsWith("Bearer") ? token.split(" ")[1] : token;
 
       // Décoder le token
       const decodedToken: any = jwtDecode(pureToken);

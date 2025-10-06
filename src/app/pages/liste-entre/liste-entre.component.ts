@@ -80,92 +80,170 @@ export class ListeEntreComponent implements OnInit {
 
 
 
-  filtrerEntreDates(): void {
-    const startDateInput = (
-      document.getElementById('startDate') as HTMLInputElement
-    ).value;
-    const endDateInput = (
-      document.getElementById('endDate') as HTMLInputElement
-    ).value;
+  // filtrerEntreDates(): void {
+  //   const startDateInput = (
+  //     document.getElementById('startDate') as HTMLInputElement
+  //   ).value;
+  //   const endDateInput = (
+  //     document.getElementById('endDate') as HTMLInputElement
+  //   ).value;
 
-    this.startDate = startDateInput ? new Date(startDateInput) : null;
-    this.endDate = endDateInput ? new Date(endDateInput) : null;
+  //   this.startDate = startDateInput ? new Date(startDateInput) : null;
+  //   this.endDate = endDateInput ? new Date(endDateInput) : null;
 
-    // Réinitialiser le total
-    this.totalMontant = 0;
-    this.totalMontantAh = 0;
-    this.totalMontantAhGNF = 0;
-    this.totalMontantDevise = 0;
+  //   // Réinitialiser le total
+  //   this.totalMontant = 0;
+  //   this.totalMontantAh = 0;
+  //   this.totalMontantAhGNF = 0;
+  //   this.totalMontantDevise = 0;
 
-    let filteredResults = this.allresultat.filter(
-      (result: { date_creation: string, status: string }) => {
-        const resultDate = new Date(result.date_creation);
-        return (
-          result.status !== 'ANNULEE' &&
-          (!this.startDate || resultDate >= this.startDate) &&
-          (!this.endDate || resultDate <= this.endDate)
-        );
-      }
-    );
+  //   let filteredResults = this.allresultat.filter(
+  //     (result: { date_creation: string, status: string }) => {
+  //       const resultDate = new Date(result.date_creation);
+  //       return (
+  //         result.status !== 'ANNULEE' &&
+  //         (!this.startDate || resultDate >= this.startDate) &&
+  //         (!this.endDate || resultDate <= this.endDate)
+  //       );
+  //     }
+  //   );
 
-    // Mettre à jour la DataTable avec les résultats filtrés
-    this.dataTableEntre.clear().rows.add(filteredResults).draw();
+  //   // Mettre à jour la DataTable avec les résultats filtrés
+  //   this.dataTableEntre.clear().rows.add(filteredResults).draw();
 
-    // Attendre la fin de l’application du filtre de recherche par DataTable
-    setTimeout(() => {
-      const filteredDataTable = this.dataTableEntre
-        .rows({ search: 'applied' })
-        .data()
-        .toArray();
+  //   // Attendre la fin de l’application du filtre de recherche par DataTable
+  //   setTimeout(() => {
+  //     const filteredDataTable = this.dataTableEntre
+  //       .rows({ search: 'applied' })
+  //       .data()
+  //       .toArray();
 
-      this.totalMontant = filteredDataTable
-        .filter((row: { code_envoyer: string }) => !row.code_envoyer?.toLowerCase().includes("ah"))
-        .reduce(
-          (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
-          0
-        );
+  //     this.totalMontant = filteredDataTable
+  //       .filter((row: { code_envoyer: string }) => !row.code_envoyer?.toLowerCase().includes("ah"))
+  //       .reduce(
+  //         (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
+  //         0
+  //       );
 
-      this.totalMontantDevise = filteredDataTable
-        .filter((row: { code_envoyer: string }) => !row.code_envoyer?.toLowerCase().includes("ah"))
-        .reduce(
-          (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
-          0
-        );
+  //     this.totalMontantDevise = filteredDataTable
+  //       .filter((row: { code_envoyer: string }) => !row.code_envoyer?.toLowerCase().includes("ah"))
+  //       .reduce(
+  //         (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
+  //         0
+  //       );
 
-      this.totalMontantAh = filteredDataTable
-        .filter((row: { code_envoyer: string }) => row.code_envoyer?.toLowerCase().includes("ah"))
-        .reduce(
-          (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
-          0
-        );
+  //     this.totalMontantAh = filteredDataTable
+  //       .filter((row: { code_envoyer: string }) => row.code_envoyer?.toLowerCase().includes("ah"))
+  //       .reduce(
+  //         (sum: number, row: { montant_cfa: number }) => sum + (row.montant_cfa || 0),
+  //         0
+  //       );
 
-        this.totalMontantAhGNF = filteredDataTable
-        .filter((row: { code_envoyer: string }) => row.code_envoyer?.toLowerCase().includes("ah"))
-        .reduce(
-          (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
-          0
-        );
+  //       this.totalMontantAhGNF = filteredDataTable
+  //       .filter((row: { code_envoyer: string }) => row.code_envoyer?.toLowerCase().includes("ah"))
+  //       .reduce(
+  //         (sum: number, row: { montant_gnf: number }) => sum + (row.montant_gnf || 0),
+  //         0
+  //       );
 
-      console.log(
-        'Total Montant Devise après filtre et recherche :',
-        this.totalMontantDevise
-      );
-    }, 200);
-  }
+  //     console.log(
+  //       'Total Montant Devise après filtre et recherche :',
+  //       this.totalMontantDevise
+  //     );
+  //   }, 200);
+  // }
+
+filtrerEntreDates(): void {
+  const startDateInput = (document.getElementById('startDate') as HTMLInputElement).value;
+  const endDateInput = (document.getElementById('endDate') as HTMLInputElement).value;
+
+  // Conversion en format ISO "YYYY-MM-DD"
+  this.startDate = startDateInput ? new Date(startDateInput) : null;
+  this.endDate = endDateInput ? new Date(endDateInput) : null;
+
+  const startDateStr = this.startDate ? this.startDate.toISOString().split("T")[0] : '';
+  const endDateStr = this.endDate ? this.endDate.toISOString().split("T")[0] : '';
+
+  // On appelle directement le backend avec la plage de dates
+  this.entreService.getAllEntree(startDateStr, endDateStr).subscribe({
+    next: (response) => {
+      // ✅ On filtre déjà inclusivement côté backend, 
+      //    donc ici on ne refiltre pas
+      this.allresultat = response;
+      console.log(this.allresultat);
+      
+
+      // Recalcul des totaux
+      this.totalMontant = this.allresultat
+        .filter(row => !row.code_envoyer?.toLowerCase().includes("ah") && row.status !== 'ANNULEE')
+        .reduce((sum, row) => sum + (row.montant_gnf || 0), 0);
+
+      this.totalMontantDevise = this.allresultat
+        .filter(row => !row.code_envoyer?.toLowerCase().includes("ah") && row.status !== 'ANNULEE')
+        .reduce((sum, row) => sum + (row.montant_cfa || 0), 0);
+
+      this.totalMontantAh = this.allresultat
+        .filter(row => row.code_envoyer?.toLowerCase().includes("ah") && row.status !== 'ANNULEE')
+        .reduce((sum, row) => sum + (row.montant_cfa || 0), 0);
+
+      this.totalMontantAhGNF = this.allresultat
+        .filter(row => row.code_envoyer?.toLowerCase().includes("ah") && row.status !== 'ANNULEE')
+        .reduce((sum, row) => sum + (row.montant_gnf || 0), 0);
+
+      // Mise à jour DataTable
+      this.dataTableEntre.clear().rows.add(this.allresultat).draw();
+
+      console.log("Totaux après filtrage :", {
+        totalMontant: this.totalMontant,
+        totalMontantDevise: this.totalMontantDevise,
+        totalMontantAh: this.totalMontantAh,
+        totalMontantAhGNF: this.totalMontantAhGNF
+      });
+    },
+    error: (error) => {
+      console.error("Erreur lors du filtrage par date:", error);
+    }
+  });
+}
+
+
 
   private fetchAllEntre(): void {
-    this.entreService.getAllEntree().subscribe({
-      next: (response) => {
-        this.allresultat = response;
-        console.log('Liste des entrées:', this.allresultat);
-        this.initDataTable();
-        this.cd.detectChanges();
-      },
-      error: (error) => {
-        console.error('Erreur lors de la récupération des données:', error);
-      },
-    });
-  }
+  const now = new Date();
+  const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+    .toISOString()
+    .split("T")[0]; // format YYYY-MM-DD
+  const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+    .toISOString()
+    .split("T")[0];
+
+  this.entreService.getAllEntree(startDate, endDate).subscribe({
+    next: (response) => {
+      this.allresultat = response;
+      console.log("Liste filtrée du mois en cours :", this.allresultat);
+      this.initDataTable();
+      this.cd.detectChanges();
+    },
+    error: (error) => {
+      console.error("Erreur lors de la récupération des données:", error);
+    },
+  });
+}
+
+
+  // private fetchAllEntre(): void {
+  //   this.entreService.getAllEntree().subscribe({
+  //     next: (response) => {
+  //       this.allresultat = response;
+  //       console.log('Liste des entrées:', this.allresultat);
+  //       this.initDataTable();
+  //       this.cd.detectChanges();
+  //     },
+  //     error: (error) => {
+  //       console.error('Erreur lors de la récupération des données:', error);
+  //     },
+  //   });
+  // }
 
   private dataTableEntre: any;
 

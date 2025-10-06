@@ -39,11 +39,22 @@ export class EntreServiceService {
     const headers = this.getAuthHeaders();
     return this.http.get(`${this.apiUrl}/api/devises/liste`);
   }
+  //   getAllEntree(): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/api/entrees/liste`);
+  // }
 
-  getAllEntree(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(`${this.apiUrl}/api/entrees/liste`);
+getAllEntree(startDate?: string, endDate?: string): Observable<any> {
+  let url = `${this.apiUrl}/api/entrees/liste`;
+
+  if (startDate && endDate) {
+    // Format YYYY-MM-DD attendu côté backend
+    url += `?startDate=${startDate}&endDate=${endDate}`;
   }
+
+  return this.http.get(url);
+}
+
+
 
   getCompteEntrees(): Observable<any> {
     const headers = this.getAuthHeaders();

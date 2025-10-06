@@ -39,6 +39,7 @@ interface Result {
   montant_gnf: number;
   montant_payer: number;
   montant_restant: number;
+  frais: number,
   status: string;
   type_annuler?: string;
   id: number;
@@ -51,7 +52,7 @@ interface Result {
   templateUrl: './liste-sortie.component.html',
   styleUrl: './liste-sortie.component.css',
 })
-export class ListeSortieComponent implements OnInit{
+export class ListeSortieComponent implements OnInit {
   // Tableau pour stocker les résultats des entrées
   allresultat: Result[] = [];
 
@@ -116,87 +117,211 @@ export class ListeSortieComponent implements OnInit{
   totalMontantDevise: number = 0; // Initialisation
   totalMontantFrais: number = 0; // Initialisation
 
+
   filtrerSortieDates(): void {
-    const startDateInput = (
-      document.getElementById('startDate') as HTMLInputElement
-    ).value;
-    const endDateInput = (
-      document.getElementById('endDate') as HTMLInputElement
-    ).value;
+  const startDateInput = (document.getElementById('startDate') as HTMLInputElement).value;
+  const endDateInput = (document.getElementById('endDate') as HTMLInputElement).value;
 
-    this.startDate = startDateInput ? new Date(startDateInput) : null;
-    this.endDate = endDateInput ? new Date(endDateInput) : null;
+  this.startDate = startDateInput ? new Date(startDateInput) : null;
+  this.endDate = endDateInput ? new Date(endDateInput) : null;
 
-    // Réinitialiser le total
-    this.totalMontant = 0;
-    this.totalMontantDevise = 0;
-    this.totalMontantFrais = 0;
+  const startDateStr = this.startDate ? this.startDate.toISOString().split("T")[0] : '';
+  const endDateStr = this.endDate ? this.endDate.toISOString().split("T")[0] : '';
 
+  this.sortieService.getAllSortie(startDateStr, endDateStr).subscribe({
+    next: (response) => {
+      this.allresultat = response;
+      console.log('Toutes les lignes reçues :', this.allresultat);
 
-    // Filtrer d'abord par date
-    let filteredResults = this.allresultat.filter(
-      (result: { date_creation: string, status: string }) => {
-        const resultDate = new Date(result.date_creation);
-        return (
-          result.status !== 'ANNULEE' &&
-          (!this.startDate || resultDate >= this.startDate) &&
-          (!this.endDate || resultDate <= this.endDate)
-        );
-      }
-    );
-
-    // Mettre à jour DataTable avec les résultats filtrés par date
-    this.dataTableSortie.clear().rows.add(filteredResults).draw();
-
-    // Attendre que DataTable applique son propre filtre (search)
-    setTimeout(() => {
-      const filteredDataTable = this.dataTableSortie
-        .rows({ search: 'applied' })
-        .data()
-        .toArray();
-
-      // Recalculer le total avec des types explicitement définis
-      this.totalMontant = filteredDataTable.reduce(
-        (sum: number, row: { montant_gnf: number }) => {
-          return sum + row.montant_gnf;
-        },
-        0
+      // Filtrage : pas de codeEnvoyer et pas ANNULEE
+      const filteredRows = this.allresultat.filter(row => 
+        row.codeEnvoyer?.toLowerCase() && row.status !== 'ANNULEE'
       );
+      console.log('Lignes filtrées (hors ANNULEE) :', filteredRows.length, filteredRows);
 
-      // Calculer le total montant en devise (CFA)
-      this.totalMontantDevise = filteredDataTable.reduce(
-        (sum: number, row: { montant: number }) => sum + (row.montant || 0),
-        0
-      );
+      // Calcul des totaux
+      this.totalMontant = filteredRows.reduce((sum, row) => sum + Number(row.montant_gnf || 0), 0);
+      this.totalMontantDevise = filteredRows.reduce((sum, row) => sum + Number(row.montant || 0), 0);
+      this.totalMontantFrais = filteredRows.reduce((sum, row) => sum + Number(row.frais || 0), 0);
 
-      // Calculer le total de frais (CFA)
-      this.totalMontantFrais = filteredDataTable.reduce(
-        (sum: number, row: { frais: number }) => sum + (row.frais || 0),
-        0
-      );
+      console.log('Totaux recalculés :', {
+        totalMontant: this.totalMontant,
+        totalMontantDevise: this.totalMontantDevise,
+        totalMontantFrais: this.totalMontantFrais
+      });
 
-      // console.log(
-      //   'Total Montant après filtre et recherche :',
-      //   this.totalMontant
-      // );
-    }, 200); // Timeout pour attendre la mise à jour de DataTable
-  }
+      // Mise à jour DataTable avec toutes les lignes
+      this.dataTableSortie.clear().rows.add(this.allresultat).draw();
+    },
+    error: (error) => {
+      console.error("Erreur lors du filtrage par date:", error);
+    }
+  });
+}
 
-  // Méthode pour récupérer toutes les entrées via l'API
+
+
+  // filtrerSortieDates(): void {
+  //   const startDateInput = (document.getElementById('startDate') as HTMLInputElement).value;
+  //   const endDateInput = (document.getElementById('endDate') as HTMLInputElement).value;
+
+  //   // Conversion en format ISO "YYYY-MM-DD"
+  //   this.startDate = startDateInput ? new Date(startDateInput) : null;
+  //   this.endDate = endDateInput ? new Date(endDateInput) : null;
+
+  //   const startDateStr = this.startDate ? this.startDate.toISOString().split("T")[0] : '';
+  //   const endDateStr = this.endDate ? this.endDate.toISOString().split("T")[0] : '';
+
+  //   // On appelle directement le backend avec la plage de dates
+  //   this.sortieService.getAllSortie(startDateStr, endDateStr).subscribe({
+  //     next: (response) => {
+  //       // ✅ On filtre déjà inclusivement côté backend, 
+  //       //    donc ici on ne refiltre pas
+  //       this.allresultat = response;
+  //       console.log(this.allresultat);
+
+
+  //       const filteredRows = this.allresultat.filter(row => !row.codeEnvoyer?.toLowerCase());
+
+  //       // Log de chaque ligne
+  //       filteredRows.forEach(row => console.log('Row:', row));
+
+
+  //       // Recalcul des totaux
+  //       this.totalMontant = this.allresultat
+  //         .filter(row => !row.codeEnvoyer?.toLowerCase())
+  //         .reduce((sum, row) => sum + (row.montant_gnf || 0), 0);
+
+  //       this.totalMontantDevise = this.allresultat
+  //         .filter(row => !row.codeEnvoyer?.toLowerCase())
+  //         .reduce((sum, row) => sum + (row.montant || 0), 0);
+
+  //       this.totalMontantFrais = this.allresultat
+  //         .filter(row => !row.codeEnvoyer?.toLowerCase())
+  //         .reduce((sum, row) => sum + (row.frais || 0), 0);
+
+
+  //       // Mise à jour DataTable
+  //       this.dataTableSortie.clear().rows.add(this.allresultat).draw();
+
+  //       console.log("Totaux après filtrage :", {
+  //         totalMontant: this.totalMontant,
+  //         totalMontantDevise: this.totalMontantDevise,
+  //         totalMontantFrais: this.totalMontantFrais
+  //       });
+  //     },
+  //     error: (error) => {
+  //       console.error("Erreur lors du filtrage par date:", error);
+  //     }
+  //   });
+  // }
+
+
+
   private fetchAllSortie(): void {
-    this.sortieService.getAllSortie().subscribe({
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+      .toISOString()
+      .split("T")[0]; // format YYYY-MM-DD
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+      .toISOString()
+      .split("T")[0];
+
+    this.sortieService.getAllSortie(startDate, endDate).subscribe({
       next: (response) => {
         this.allresultat = response;
-        console.log(this.allresultat);
+        console.log("Liste filtrée du mois en cours :", this.allresultat);
         this.initDataTable();
         this.cd.detectChanges();
       },
       error: (error) => {
-        // Gestion des erreurs lors de l'appel API
-        console.error('Erreur lors de la récupération des données:', error);
+        console.error("Erreur lors de la récupération des données:", error);
       },
     });
   }
+
+
+  // filtrerSortieDates(): void {
+  //   const startDateInput = (
+  //     document.getElementById('startDate') as HTMLInputElement
+  //   ).value;
+  //   const endDateInput = (
+  //     document.getElementById('endDate') as HTMLInputElement
+  //   ).value;
+
+  //   this.startDate = startDateInput ? new Date(startDateInput) : null;
+  //   this.endDate = endDateInput ? new Date(endDateInput) : null;
+
+  //   // Réinitialiser le total
+  //   this.totalMontant = 0;
+  //   this.totalMontantDevise = 0;
+  //   this.totalMontantFrais = 0;
+
+
+  //   // Filtrer d'abord par date
+  //   let filteredResults = this.allresultat.filter(
+  //     (result: { date_creation: string, status: string }) => {
+  //       const resultDate = new Date(result.date_creation);
+  //       return (
+  //         result.status !== 'ANNULEE' &&
+  //         (!this.startDate || resultDate >= this.startDate) &&
+  //         (!this.endDate || resultDate <= this.endDate)
+  //       );
+  //     }
+  //   );
+
+  //   // Mettre à jour DataTable avec les résultats filtrés par date
+  //   this.dataTableSortie.clear().rows.add(filteredResults).draw();
+
+  //   // Attendre que DataTable applique son propre filtre (search)
+  //   setTimeout(() => {
+  //     const filteredDataTable = this.dataTableSortie
+  //       .rows({ search: 'applied' })
+  //       .data()
+  //       .toArray();
+
+  //     // Recalculer le total avec des types explicitement définis
+  //     this.totalMontant = filteredDataTable.reduce(
+  //       (sum: number, row: { montant_gnf: number }) => {
+  //         return sum + row.montant_gnf;
+  //       },
+  //       0
+  //     );
+
+  //     // Calculer le total montant en devise (CFA)
+  //     this.totalMontantDevise = filteredDataTable.reduce(
+  //       (sum: number, row: { montant: number }) => sum + (row.montant || 0),
+  //       0
+  //     );
+
+  //     // Calculer le total de frais (CFA)
+  //     this.totalMontantFrais = filteredDataTable.reduce(
+  //       (sum: number, row: { frais: number }) => sum + (row.frais || 0),
+  //       0
+  //     );
+
+  //     // console.log(
+  //     //   'Total Montant après filtre et recherche :',
+  //     //   this.totalMontant
+  //     // );
+  //   }, 200); // Timeout pour attendre la mise à jour de DataTable
+  // }
+
+  // // Méthode pour récupérer toutes les entrées via l'API
+  // private fetchAllSortie(): void {
+  //   this.sortieService.getAllSortie().subscribe({
+  //     next: (response) => {
+  //       this.allresultat = response;
+  //       console.log(this.allresultat);
+  //       this.initDataTable();
+  //       this.cd.detectChanges();
+  //     },
+  //     error: (error) => {
+  //       // Gestion des erreurs lors de l'appel API
+  //       console.error('Erreur lors de la récupération des données:', error);
+  //     },
+  //   });
+  // }
 
   selectedSortie: any = null;
   valideSortieForm!: FormGroup;
@@ -305,7 +430,7 @@ export class ListeSortieComponent implements OnInit{
           { title: 'Code generer', data: 'code' },
           { title: 'Code', data: 'codeEnvoyer' },
           { title: 'Client', data: 'nomCLient' },
-          
+
           { title: 'Pays', data: 'pays_dest' },
           { title: 'Expéditeur', data: 'expediteur' },
           { title: 'Receveur', data: 'receveur' },
@@ -370,7 +495,7 @@ export class ListeSortieComponent implements OnInit{
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount} ${row.mode_payement_devise === 'XOF'?'XOF':row.signe_1}`;
+              return `${formattedAmount} ${row.mode_payement_devise === 'XOF' ? 'XOF' : row.signe_1}`;
             },
           },
           {
@@ -382,7 +507,7 @@ export class ListeSortieComponent implements OnInit{
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount}  ${row.mode_payement_devise === 'XOF'?'XOF':row.signe_1}`;
+              return `${formattedAmount}  ${row.mode_payement_devise === 'XOF' ? 'XOF' : row.signe_1}`;
             },
           },
           {
@@ -417,7 +542,7 @@ export class ListeSortieComponent implements OnInit{
         ],
       });
 
-       $('#dataTableSortie tbody').on('click', '.btn-view-sortie', (event) => {
+      $('#dataTableSortie tbody').on('click', '.btn-view-sortie', (event) => {
         const user = JSON.parse(
           $(event.currentTarget).attr('data-sortie') || '{}'
         );
@@ -432,19 +557,19 @@ export class ListeSortieComponent implements OnInit{
   showModal: boolean = false;
 
   openSortieModal(entre: any) {
-  this.selectedModifier = { ...entre };
+    this.selectedModifier = { ...entre };
 
-  // Vérifier si la date existe et la convertir au bon format
-  if (this.selectedModifier.date_creation) {
-    const date = new Date(this.selectedModifier.date_creation);
-    // format YYYY-MM-DDTHH:mm
-    this.selectedModifier.date_creation = date.toISOString().slice(0,16);
+    // Vérifier si la date existe et la convertir au bon format
+    if (this.selectedModifier.date_creation) {
+      const date = new Date(this.selectedModifier.date_creation);
+      // format YYYY-MM-DDTHH:mm
+      this.selectedModifier.date_creation = date.toISOString().slice(0, 16);
+    }
+
+    console.log('Données à modifier :', this.selectedModifier);
+    this.showModal = true;
+    this.cd.detectChanges();
   }
-
-  console.log('Données à modifier :', this.selectedModifier);
-  this.showModal = true;
-  this.cd.detectChanges();
-}
 
 
   // Fermer le modal
@@ -507,7 +632,7 @@ export class ListeSortieComponent implements OnInit{
 
   private initFormAutres(): void {
     this.sortieFormAutre = this.fb.group({
-      utilisateurId: [this.idUser], 
+      utilisateurId: [this.idUser],
       nomCLient: ['', Validators.required],
       mode_payement: ['', Validators.required],
       date_creation: ['', Validators.required],
@@ -541,7 +666,7 @@ export class ListeSortieComponent implements OnInit{
           console.log('Sortie ajoutée avec succès:', response);
           this.fetchAllSortie();
           this.sortieFormAutre.patchValue({
-            nomCLient: '', 
+            nomCLient: '',
             date_creation: '',
             montantClient: '',
           });
@@ -654,21 +779,21 @@ export class ListeSortieComponent implements OnInit{
   }
 
 
-  
-   showModalValider: boolean = false;
 
- openModalValider() {
+  showModalValider: boolean = false;
+
+  openModalValider() {
     this.showModalValider = true;
   }
 
   closeModalValider() {
     this.showModalValider = false;
   }
-  
 
-   showModalAddSortie: boolean = false;
 
- openModalSortie() {
+  showModalAddSortie: boolean = false;
+
+  openModalSortie() {
     this.showModalAddSortie = true;
   }
 

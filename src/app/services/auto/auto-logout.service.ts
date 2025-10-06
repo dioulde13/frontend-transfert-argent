@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 export class AutoLogoutService {
 
     // private inactivityTime = 2 * 60 * 1000; // 2 minutes
-  private inactivityTime = 15 * 60 * 1000; // 15 minutes
+  private inactivityTime = 20 * 60 * 1000; // 15 minutes
   private timeoutId: any;
 
   constructor(private router: Router, private ngZone: NgZone) {
@@ -36,7 +36,7 @@ export class AutoLogoutService {
   // Déconnexion automatique
   logout() {
     localStorage.removeItem('token'); // Supprime le token
-    alert('Vous avez été déconnecté pour inactivité.');
+    // alert('Vous avez été déconnecté pour inactivité.');
     this.router.navigate(['/login']);
   }
 }
