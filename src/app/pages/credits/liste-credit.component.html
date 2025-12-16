@@ -59,10 +59,10 @@
                 </div>
                 <div class="col-md-3">
                   <div style="font-weight: bold; font-size: 15px; margin-top: 10px">
-                    Montant entre : {{ totalMontantEntre | number }} GNF
+                    Montant entre : {{ totalMontantEntre | number }} 
                   </div>
                   <div style="font-weight: bold; font-size: 15px; margin-top: 10px">
-                    Montant sortie : {{ totalMontantSortie | number }} GNF
+                    Montant sortie : {{ totalMontantSortie | number }} 
                   </div>
                 </div>
               </div>
@@ -87,15 +87,15 @@
                       {{ result.date_creation | date : "dd/MM/yyyy HH:mm" }}
                     </td>
                     <td class="border px-4 py-2">
-                      {{ result.montant | currency : "" : "" : "1.0-0" }} GNF
+                      {{ result.montant | currency : "" : "" : "1.0-0" }} 
                     </td>
                     <td class="border px-4 py-2">
                       {{ result.montantPaye | currency : "" : "" : "1.0-0" }}
-                      GNF
+                      
                     </td>
                     <td class="border px-4 py-2">
                       {{ result.montantRestant | currency : "" : "" : "1.0-0" }}
-                      GNF
+                      
                     </td>
                     <td class="border px-4 py-2">
                       {{ result.type }}
