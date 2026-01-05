@@ -17,6 +17,7 @@ interface Result {
   montantRestant: number;
   type: string;
   id: number;
+  devise: number;
 }
 
 @Component({
@@ -139,8 +140,9 @@ export class ListeCreditComponent implements OnInit {
       // Champ pour le montant, obligatoire et doit être un nombre positif ou zéro
       montant: [0, [Validators.required, Validators.min(0)]],
 
-      type: ['', Validators.required],
+      type: ['', Validators.required], 
       status: ['CASH', Validators.required],
+      devise: ['GNF', Validators.required]
     });
 
     this.getAllCredit();
@@ -274,39 +276,41 @@ export class ListeCreditComponent implements OnInit {
           {
             title: 'Montant',
             data: 'montant',
-            render: (data: number) => {
+            render: (data: any,  type: any, row: any) => {
+              // console.log(row);
+              // console.log(data);
               const formattedAmount = new Intl.NumberFormat('fr-FR', {
                 style: 'decimal',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
-              return `${formattedAmount} GNF`;
+              return `${formattedAmount} ${row.devise}`;
             },
           },
           {
             title: 'Montant Payer',
             data: 'montantPaye',
-            render: (data: number) => {
+            render: (data: any,  type: any, row: any) => {
               const formattedAmount = new Intl.NumberFormat('fr-FR', {
                 style: 'decimal',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
 
-              return `${formattedAmount} GNF`;
+              return `${formattedAmount} ${row.devise}`;
             },
           },
           {
             title: 'Montant Restant GNF',
             data: 'montantRestant',
-            render: (data: number) => {
+            render: (data: any,  type: any, row: any) => {
               const formattedAmount = new Intl.NumberFormat('fr-FR', {
                 style: 'decimal',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(data);
 
-              return `${formattedAmount} GNF`;
+              return `${formattedAmount} ${row.devise}`;
             },
           },
           {
@@ -345,7 +349,8 @@ export class ListeCreditComponent implements OnInit {
             nom: '',
             montant: '',
             type: '',
-            status: ''
+            status: '',
+            devise: ''
           });
           this.loading = false;
           alert('Credit ajouté avec succès!');

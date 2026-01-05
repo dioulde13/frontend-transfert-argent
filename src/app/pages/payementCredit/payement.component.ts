@@ -193,13 +193,14 @@ export class PayementComponent implements OnInit {
           {
             title: 'Montant',
             data: 'montant',
-            render: (data: number) => {
+            render: (data: any,  type: any, row: any) => {
+              console.log(row);
               return (
                 new Intl.NumberFormat('fr-FR', {
                   style: 'decimal',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
-                }).format(data) + ' GNF'
+                }).format(data) +' '+row.Credit.devise
               );
             },
           },
